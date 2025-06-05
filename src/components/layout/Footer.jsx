@@ -6,7 +6,7 @@ const Footer = () => {
 
   const footerSections = [
     {
-      title: 'ליאה גניש',
+      title: 'לאה גניש',
       content: (
         <p>קליניקה מקצועית לטיפולי עיסוי ורפואה משלימה במרכז תל אביב</p>
       )
@@ -72,7 +72,7 @@ const Footer = () => {
         
         <div className="footer-bottom">
           <div className="footer-bottom-content">
-            <p>&copy; {currentYear} ליאה גניש. כל הזכויות שמורות.</p>
+            <p>&copy; {currentYear} לאה גניש. כל הזכויות שמורות.</p>
             <div className="footer-links">
               <Link to="/privacy">מדיניות פרטיות</Link>
               <Link to="/terms">תנאי שימוש</Link>

@@ -13,7 +13,7 @@ function App() {
           <nav className="nav">
             <div className="nav-content">
               <div className="logo">
-                <h1>ליאה גניש</h1>
+                <h1>לאה גניש</h1>
                 <p>הבחירה להרגיש טוב</p>
               </div>
               <ul className="nav-links">

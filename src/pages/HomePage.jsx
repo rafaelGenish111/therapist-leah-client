@@ -5,9 +5,7 @@ const HomePage = () => {
       <section className="hero">
         <div className="hero-content">
           <h1>
-            ברוכים הבאים לקליניקת
-            <br />
-            <span className="highlight">לאה גניש</span>
+            <span className="highlight">לבחור להרגיש טוב</span>
           </h1>
           <p className="hero-description">
             הבחירה להרגיש טוב - טיפולי עיסוי מקצועיים ורפואה משלימה במרכז תל אביב

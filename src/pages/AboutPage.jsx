@@ -53,12 +53,12 @@ const AboutPage = () => {
         <section className="about-hero">
           <div className="hero-content">
             <div className="hero-text">
-              <h1>אודות ליאה גניש</h1>
+              <h1>אודות לאה גניש</h1>
               <p className="hero-subtitle">
                 מטפלת מוסמכת עם ניסיון של למעלה מ-10 שנים בתחום הטיפולי עיסוי והרפואה המשלימה
               </p>
               <p className="hero-description">
-                ברוכים הבאים לקליניקה שלי! אני ליאה גניש, מטפלת מוסמכת המתמחה בטיפולי עיסוי ורפואה משלימה.
+                ברוכים הבאים לקליניקה שלי! אני לאה גניש, מטפלת מוסמכת המתמחה בטיפולי עיסוי ורפואה משלימה.
                 בקליניקה שלי במרכز תל אביב, אני מספקת טיפולים מותאמים אישית המשלבים טכניקות מסורתיות ומודרניות
                 כדי לעזור לכם להשיג רווחה מיטבית.
               </p>
@@ -66,7 +66,7 @@ const AboutPage = () => {
             <div className="hero-image">
               <div className="profile-image">
                 <div className="image-placeholder">
-                  <span>תמונה של ליאה גניש</span>
+                  <span>תמונה של לאה גניש</span>
                 </div>
               </div>
             </div>

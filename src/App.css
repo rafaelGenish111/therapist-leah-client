@@ -140,20 +140,28 @@ p {
 }
 
 .hero .highlight {
-  color: var(--primary-color);
-  position: relative;
+  color: var(--text-primary) !important;
+  font-weight: 700;
+  display: inline-block;
+  overflow: visible;
 }
 
 .hero .highlight::after {
   content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  right: 0;
+  display: block;
+  width: 100%;
   height: 3px;
   background: var(--primary-color);
   border-radius: 2px;
-  animation: expandWidth 1s ease-out 0.5s both;
+  margin-top: 5px;
+  transform: scaleX(0);
+  transform-origin: right;
+  animation: expandLine 1s ease-out 0.5s forwards;
+}
+
+@keyframes expandLine {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 .hero-description {
@@ -219,9 +227,15 @@ p {
 
 /* Sections */
 .section {
-  padding: 4rem 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 4rem 0;
+  max-width: none !important;
+  width: 100vw !important; /* רוחב מלא של המסך */
+  margin: 0 !important;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw !important;
+  margin-right: -50vw !important;
 }
 
 .section-header {
@@ -316,3 +330,4 @@ p {
 .mb-2 { margin-bottom: 2rem; }
 .mt-1 { margin-top: 1rem; }
 .mt-2 { margin-top: 2rem; }
+

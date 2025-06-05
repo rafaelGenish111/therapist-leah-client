@@ -95,7 +95,7 @@ const AdminSidebar = () => {
             {!isCollapsed && (
               <div className="logo-text">
                 <h3>אזור ניהול</h3>
-                <p>קליניקת ליאה גניש</p>
+                <p>קליניקת לאה גניש</p>
               </div>
             )}
           </div>

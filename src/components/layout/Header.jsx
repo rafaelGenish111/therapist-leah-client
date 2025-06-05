@@ -48,7 +48,7 @@ const Header = () => {
           <Link to="/" className="logo" onClick={closeMobileMenu}>
             <div className="logo-circle">ל</div>
             <div className="logo-text">
-              <h1>ליאה גניש</h1>
+              <h1>לאה גניש</h1>
               <p>הבחירה להרגיש טוב</p>
             </div>
           </Link>
