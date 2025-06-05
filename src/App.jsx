@@ -11,6 +11,7 @@ import Footer from './components/layout/Footer';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
+import ServicesPage from './pages/ServicesPage';
 
 // Basic styles
 import './App.css';
@@ -38,6 +39,7 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/services" element={<ServicesPage />} />
               </Routes>
             </main>
             
