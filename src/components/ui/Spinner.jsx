@@ -1,4 +1,3 @@
-import './Spinner.css';
 
 const Spinner = ({ 
   size = 'medium', 

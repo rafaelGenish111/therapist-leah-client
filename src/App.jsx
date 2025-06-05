@@ -1,39 +1,73 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Toaster } from 'react-hot-toast';
+import { AuthProvider } from './contexts/AuthContext';
+
+// Layout Components
+import Header from './components/layout/Header';
+import Footer from './components/layout/Footer';
+
+// Pages
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
-import { AuthProvider } from './contexts/AuthContext';
+
+// Basic styles
 import './App.css';
+
+// Create a React Query client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    },
+  },
+});
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="app">
-          <nav className="nav">
-            <div className="nav-content">
-              <div className="logo">
-                <h1>לאה גניש</h1>
-                <p>הבחירה להרגיש טוב</p>
-              </div>
-              <ul className="nav-links">
-                <li><Link to="/">בית</Link></li>
-                <li><Link to="/about">אודות</Link></li>
-                <li><Link to="/services">טיפולים</Link></li>
-                <li><Link to="/contact">יצירת קשר</Link></li>
-                <li><Link to="/login">כניסה למטפלת</Link></li>
-              </ul>
-            </div>
-          </nav>
-          
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/login" element={<LoginPage />} />
-          </Routes>
-        </div>
-      </Router>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <Router>
+          <div className="app">
+            <Header />
+            
+            <main className="main-content">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/login" element={<LoginPage />} />
+              </Routes>
+            </main>
+            
+            <Footer />
+            
+            {/* Toast Notifications */}
+            <Toaster
+              position="top-center"
+              reverseOrder={false}
+              gutter={8}
+              toastOptions={{
+                duration: 4000,
+                style: {
+                  background: '#363636',
+                  color: '#fff',
+                  direction: 'rtl',
+                  fontFamily: 'inherit',
+                },
+                success: {
+                  duration: 3000,
+                },
+                error: {
+                  duration: 4000,
+                },
+              }}
+            />
+          </div>
+        </Router>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
 

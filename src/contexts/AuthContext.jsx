@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
   const login = (credentials) => {
     // Simple demo login
     if (credentials.username === 'demo' && credentials.password === '123456') {
-      setUser({ username: 'ליאה', role: 'admin' });
+      setUser({ username: 'לאה', role: 'admin' });
       return Promise.resolve();
     }
     return Promise.reject(new Error('שם משתמש או סיסמה שגויים'));
