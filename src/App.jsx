@@ -1,25 +1,29 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
 import { AuthProvider } from './contexts/AuthContext';
-import { Link } from 'react-router-dom';
+import './App.css';
 
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <div style={{ fontFamily: 'Arial', direction: 'rtl' }}>
-          <nav style={{ 
-            padding: '20px', 
-            background: '#f5f5f5', 
-            textAlign: 'center',
-            borderBottom: '1px solid #ddd'
-          }}>
-            <h1 style={{ color: '#D4B5B0', margin: '0 0 10px 0' }}>
-              קליניקת ליאה גניש
-            </h1>
-            <p style={{ margin: 0, color: '#666' }}>הבחירה להרגיש טוב</p>
+        <div className="app">
+          <nav className="nav">
+            <div className="nav-content">
+              <div className="logo">
+                <h1>ליאה גניש</h1>
+                <p>הבחירה להרגיש טוב</p>
+              </div>
+              <ul className="nav-links">
+                <li><Link to="/">בית</Link></li>
+                <li><Link to="/about">אודות</Link></li>
+                <li><Link to="/services">טיפולים</Link></li>
+                <li><Link to="/contact">יצירת קשר</Link></li>
+                <li><Link to="/login">כניסה למטפלת</Link></li>
+              </ul>
+            </div>
           </nav>
           
           <Routes>
