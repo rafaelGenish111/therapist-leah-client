@@ -12,6 +12,8 @@ import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
 import ServicesPage from './pages/ServicesPage';
+import ArticlesPages from './pages/ArticlesPage';
+import ContactPage from './pages/ContactPage';
 
 // Basic styles
 import './App.css';
@@ -40,6 +42,8 @@ function App() {
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/services" element={<ServicesPage />} />
+                <Route path="/articles" element={<ArticlesPages />} />
+                <Route path="/contact" element={<ContactPage />} />
               </Routes>
             </main>
             
