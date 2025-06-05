@@ -130,3 +130,56 @@ a:hover {
 .mb-2 { margin-bottom: 2rem; }
 .mt-1 { margin-top: 1rem; }
 .mt-2 { margin-top: 2rem; }
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  text-decoration: none;
+  color: inherit;
+  transition: opacity var(--transition-fast);
+}
+
+.logo-image {
+  width:70px;
+  height:70px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--white);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.logo-circle {
+  width: 35px;
+  height: 35px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 16px; /* הקטנה מ-1.8rem */
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.logo p {
+  margin: 0;
+  font-size: 12px; /* הקטנה מ-0.9rem */
+  color: var(--text-secondary);
+}

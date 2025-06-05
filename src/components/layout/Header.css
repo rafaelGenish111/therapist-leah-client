@@ -559,9 +559,89 @@
     min-height: 65px;
   }
   
-  .logo {
-    gap: 0.8rem;
+/* src/components/layout/Header.css */
+
+/* דריסה ספציפית עבור Header */
+.header .logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  text-decoration: none;
+  color: inherit;
+}
+
+.header .logo h1 {
+  margin: 0 !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.header .logo p {
+  margin: 0 !important;
+  font-size: 12px !important;
+  color: var(--text-secondary);
+  opacity: 1 !important;
+  line-height: 1.2;
+}
+
+.header .logo-image {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--white);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+.header .logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.header .logo-circle {
+  width: 35px;
+  height: 35px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Responsive עבור Header */
+@media (max-width: 768px) {
+  .header .logo h1 {
+    font-size: 14px !important;
   }
+  
+  .header .logo p {
+    font-size: 10px !important;
+  }
+  
+  .header .logo-image,
+  .header .logo-circle {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* טקסט הלוגו - הקטנה */
+.logo-text h1 {
+  font-size: var(--font-size-lg); /* הקטנה מvar(--font-size-xl) */
+  color: var(--text-primary);
+  margin: 0 0 0.1rem 0; /* הקטנת margin */
+  line-height: 1.1;
+}
   
   .logo-circle {
     width: 40px;

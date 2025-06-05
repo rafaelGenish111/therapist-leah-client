@@ -58,15 +58,20 @@ const Header = () => {
         <div className="header-content">
           {/* Logo */}
           <Link to="/" className="logo" onClick={closeMobileMenu}>
-            <div className="logo-circle">
-              <span>ל</span>
-            </div>
-            <div className="logo-text">
-              <h1>ליאה גניש</h1>
-              <p>הבחירה להרגיש טוב</p>
-            </div>
-          </Link>
+            <div className="logo-image">
+            <img
+              src="/images/apple-touch-icon.png"
 
+              alt="לוגו ליאה גניש"
+              className="logo-img"
+              onError={(e) => {
+                // Fallback אם התמונה לא נטענת
+                e.target.style.display = 'none';
+                e.target.nextElementSibling.style.display = 'flex';
+              }}
+              />
+              </div>
+          </Link>
           {/* Desktop Navigation */}
           <nav className="desktop-nav">
             <div className="nav-items">
@@ -80,7 +85,7 @@ const Header = () => {
                 </Link>
               ))}
             </div>
-            
+
             {/* CTA Section */}
             <div className="header-cta">
               {!isAuthenticated && (
@@ -89,7 +94,7 @@ const Header = () => {
                   050-123-4567
                 </a>
               )}
-              
+
               {isAuthenticated ? (
                 <div className="user-menu">
                   <div className="user-info">
@@ -141,7 +146,7 @@ const Header = () => {
                 </Link>
               ))}
             </div>
-            
+
             {/* Mobile CTA */}
             <div className="mobile-cta">
               {!isAuthenticated && (
@@ -150,7 +155,7 @@ const Header = () => {
                   050-123-4567
                 </a>
               )}
-              
+
               {isAuthenticated ? (
                 <div className="mobile-user-section">
                   <div className="mobile-user-info">
