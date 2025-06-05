@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
@@ -12,23 +12,63 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const login = (credentials) => {
-    // Simple demo login
-    if (credentials.username === 'demo' && credentials.password === '123456') {
-      setUser({ username: 'לאה', role: 'admin' });
-      return Promise.resolve();
+  // Check for existing auth on mount
+  useEffect(() => {
+    const checkAuth = () => {
+      try {
+        const savedUser = localStorage.getItem('authUser');
+        const token = localStorage.getItem('authToken');
+        
+        if (savedUser && token) {
+          setUser(JSON.parse(savedUser));
+        }
+      } catch (error) {
+        console.error('Error loading auth data:', error);
+        localStorage.removeItem('authUser');
+        localStorage.removeItem('authToken');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  const login = async (credentials) => {
+    try {
+      // Demo login - replace with real API call
+      if (credentials.username === 'demo' && credentials.password === '123456') {
+        const userData = { 
+          username: 'ליאה', 
+          role: 'admin',
+          id: '1'
+        };
+        
+        setUser(userData);
+        localStorage.setItem('authUser', JSON.stringify(userData));
+        localStorage.setItem('authToken', 'demo-token-123');
+        
+        return Promise.resolve();
+      }
+      
+      throw new Error('שם משתמש או סיסמה שגויים');
+    } catch (error) {
+      throw error;
     }
-    return Promise.reject(new Error('שם משתמש או סיסמה שגויים'));
   };
 
   const logout = () => {
     setUser(null);
+    localStorage.removeItem('authUser');
+    localStorage.removeItem('authToken');
   };
 
   const value = {
     user,
     isAuthenticated: !!user,
+    loading,
     login,
     logout
   };

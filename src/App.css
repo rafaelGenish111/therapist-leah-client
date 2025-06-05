@@ -34,6 +34,32 @@ body {
   line-height: 1.6;
 }
 
+/* Layout */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 0.75rem;
+  }
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
@@ -50,221 +76,32 @@ p {
   color: var(--text-secondary);
 }
 
-/* Navigation */
-.nav {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-  color: white;
-  padding: 1rem 0;
-  box-shadow: 0 4px 20px var(--shadow);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.nav-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo h1 {
-  margin: 0;
-  font-size: 1.8rem;
-  font-weight: 700;
-}
-
-.logo p {
-  margin: 0;
-  font-size: 0.9rem;
-  opacity: 0.9;
-}
-
-.nav-links {
-  display: flex;
-  gap: 2rem;
-  list-style: none;
-}
-
-.nav-links a {
-  color: white;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius);
-  transition: all var(--transition);
-  font-weight: 500;
-}
-
-.nav-links a:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-}
-
-/* Hero Section */
-.hero {
-  background: linear-gradient(135deg, var(--background-alt) 0%, #F0E0DD 100%);
-  padding: 4rem 2rem;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4B5B0' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  z-index: 1;
-}
-
-.hero-content {
-  position: relative;
-  z-index: 2;
-  max-width: 800px;
-  margin: 0 auto;
-  animation: fadeInUp 0.8s ease-out;
-}
-
-.hero h1 {
-  font-size: 3.5rem;
-  margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-color) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.hero .highlight {
-  color: var(--text-primary) !important;
-  font-weight: 700;
-  display: inline-block;
-  overflow: visible;
-}
-
-.hero .highlight::after {
-  content: '';
-  display: block;
-  width: 100%;
-  height: 3px;
-  background: var(--primary-color);
-  border-radius: 2px;
-  margin-top: 5px;
-  transform: scaleX(0);
-  transform-origin: right;
-  animation: expandLine 1s ease-out 0.5s forwards;
-}
-
-@keyframes expandLine {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-
-.hero-description {
-  font-size: 1.3rem;
-  margin-bottom: 2.5rem;
-  color: var(--text-secondary);
-  line-height: 1.7;
-}
-
-/* Buttons */
-.btn {
-  display: inline-block;
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 25px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all var(--transition);
-  position: relative;
-  overflow: hidden;
-  margin: 0.5rem;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(212, 181, 176, 0.4);
-}
-
-.btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(212, 181, 176, 0.6);
-}
-
-.btn-secondary {
-  background: transparent;
+a {
   color: var(--primary-color);
-  border: 2px solid var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition);
 }
 
-.btn-secondary:hover {
-  background: var(--primary-color);
-  color: white;
-  transform: translateY(-3px);
+a:hover {
+  color: var(--primary-dark);
 }
 
-/* Cards */
-.card {
-  background: white;
-  padding: 2rem;
-  border-radius: var(--radius-lg);
-  box-shadow: 0 4px 20px var(--shadow);
-  transition: all var(--transition);
-  border: 1px solid rgba(212, 181, 176, 0.1);
+/* App Layout */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+.main-content {
+  flex: 1;
 }
 
-/* Sections */
-.section {
-  padding: 4rem 0;
-  max-width: none !important;
-  width: 100vw !important; /* רוחב מלא של המסך */
-  margin: 0 !important;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw !important;
-  margin-right: -50vw !important;
+/* Loading States */
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
 }
-
-.section-header {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.section-header h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: var(--text-primary);
-}
-
-.section-header p {
-  font-size: 1.2rem;
-  color: var(--text-secondary);
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-/* Grid Layouts */
-.grid {
-  display: grid;
-  gap: 2rem;
-}
-
-.grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-.grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-.grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
 
 /* Animations */
 @keyframes fadeInUp {
@@ -287,47 +124,9 @@ p {
   animation: fadeInUp 0.6s ease-out;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .nav-content {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 0 1rem;
-  }
-  
-  .nav-links {
-    gap: 1rem;
-  }
-  
-  .hero {
-    padding: 2rem 1rem;
-  }
-  
-  .hero h1 {
-    font-size: 2.5rem;
-  }
-  
-  .section {
-    padding: 2rem 1rem;
-  }
-  
-  .grid-2,
-  .grid-3,
-  .grid-4 {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Loading States */
-.loading {
-  opacity: 0.7;
-  pointer-events: none;
-}
-
 /* Utility Classes */
 .text-center { text-align: center; }
 .mb-1 { margin-bottom: 1rem; }
 .mb-2 { margin-bottom: 2rem; }
 .mt-1 { margin-top: 1rem; }
 .mt-2 { margin-top: 2rem; }
-
