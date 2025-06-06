@@ -17,6 +17,7 @@ import ContactPage from './pages/ContactPage';
 
 // Basic styles
 import './App.css';
+import HealthDeclarationPage from './pages/HealthDeclarationPage';
 
 // Create a React Query client
 const queryClient = new QueryClient({
@@ -44,6 +45,7 @@ function App() {
                 <Route path="/services" element={<ServicesPage />} />
                 <Route path="/articles" element={<ArticlesPages />} />
                 <Route path="/contact" element={<ContactPage />} />
+                 <Route path="/health-declaration" element={<HealthDeclarationPage />} />
               </Routes>
             </main>
             

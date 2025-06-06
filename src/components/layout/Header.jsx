@@ -40,14 +40,15 @@ const Header = () => {
     { path: '/about', label: 'אודות' },
     { path: '/services', label: 'טיפולים' },
     { path: '/articles', label: 'מאמרים' },
-    { path: '/contact', label: 'יצירת קשר' },
+    { path: '/health-declaration', label: 'הצהרת בריאות' },
+    { path: '/healthDe', label: 'יצירת קשר' },
   ];
 
   const adminNavItems = [
     { path: '/admin', label: 'לוח בקרה' },
     { path: '/admin/articles', label: 'ניהול מאמרים' },
     { path: '/admin/gallery', label: 'גלריה' },
-    { path: '/admin/declarations', label: 'הצהרות בריאות' },
+    { path: '/health-declaration', label: 'הצהרת בריאות' },
   ];
 
   const navItems = isAuthenticated ? adminNavItems : publicNavItems;
@@ -89,7 +90,7 @@ const Header = () => {
             {/* CTA Section */}
             <div className="header-cta">
               {!isAuthenticated && (
-                <a href="tel:050-123-4567" className="phone-btn">
+                <a href="tel:054-941-4947" className="phone-btn">
                   <Phone size={16} />
                   050-123-4567
                 </a>
