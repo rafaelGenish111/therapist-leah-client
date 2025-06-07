@@ -14,6 +14,7 @@ import LoginPage from './pages/LoginPage';
 import ServicesPage from './pages/ServicesPage';
 import ArticlesPages from './pages/ArticlesPage';
 import ContactPage from './pages/ContactPage';
+import AdminPage from './pages/AdminPage';
 
 // Basic styles
 import './App.css';
@@ -35,27 +36,9 @@ function App() {
       <AuthProvider>
         <Router>
           <div className="app">
-            <Header />
-            
-            <main className="main-content">
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/services" element={<ServicesPage />} />
-                <Route path="/articles" element={<ArticlesPages />} />
-                <Route path="/contact" element={<ContactPage />} />
-                 <Route path="/health-declaration" element={<HealthDeclarationPage />} />
-              </Routes>
-            </main>
-            
-            <Footer />
-            
             {/* Toast Notifications */}
             <Toaster
               position="top-center"
-              reverseOrder={false}
-              gutter={8}
               toastOptions={{
                 duration: 4000,
                 style: {
@@ -65,18 +48,83 @@ function App() {
                   fontFamily: 'inherit',
                 },
                 success: {
-                  duration: 3000,
+                  style: {
+                    background: '#10b981',
+                  },
                 },
                 error: {
-                  duration: 4000,
+                  style: {
+                    background: '#ef4444',
+                  },
                 },
               }}
             />
+
+            <Routes>
+              {/* Admin Routes - Protected */}
+              <Route 
+                path="/admin/*" 
+                element={
+                  <PrivateRoute>
+                    <AdminPage />
+                  </PrivateRoute>
+                } 
+              />
+              
+              {/* Public Routes with Layout */}
+              <Route path="/*" element={<PublicLayout />} />
+            </Routes>
           </div>
         </Router>
       </AuthProvider>
     </QueryClientProvider>
   );
 }
+
+// Public Layout Component
+const PublicLayout = () => {
+  return (
+    <>
+      <Header />
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/articles" element={<ArticlesPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          
+          {/* 404 Route */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </main>
+      <Footer />
+    </>
+  );
+};
+
+// Simple 404 Page
+const NotFoundPage = () => {
+  return (
+    <div className="not-found-page">
+      <div className="container">
+        <div className="not-found-content">
+          <h1>404</h1>
+          <h2>העמוד לא נמצא</h2>
+          <p>מצטערים, העמוד שחיפשת לא קיים.</p>
+          <div className="not-found-actions">
+            <a href="/" className="btn btn--primary">
+              חזור לעמוד הבית
+            </a>
+            <a href="/contact" className="btn btn--outline">
+              יצירת קשר
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default App;

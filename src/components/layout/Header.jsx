@@ -41,7 +41,7 @@ const Header = () => {
     { path: '/services', label: 'טיפולים' },
     { path: '/articles', label: 'מאמרים' },
     { path: '/health-declaration', label: 'הצהרת בריאות' },
-    { path: '/healthDe', label: 'יצירת קשר' },
+    { path: '/contact', label: 'יצירת קשר' },
   ];
 
   const adminNavItems = [

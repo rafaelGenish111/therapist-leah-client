@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+// src/components/admin/AdminSidebar.jsx
+import React from 'react';
 import { 
   Home, 
   FileText, 
@@ -10,61 +10,65 @@ import {
   BarChart3,
   Menu,
   X,
-  LogOut
+  LogOut,
+  Activity
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import './AdminSidebar.css';
 
-const AdminSidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+const AdminSidebar = ({
+  activeSection,
+  onSectionChange,
+  isCollapsed,
+  onToggleCollapse,
+  isMobileOpen,
+  onToggleMobile
+}) => {
   const { user, logout } = useAuth();
-  const location = useLocation();
 
   const menuItems = [
-    {
-      path: '/admin',
-      icon: <Home size={20} />,
+    { 
+      id: 'dashboard', 
+      icon: <Home size={20} />, 
       label: 'לוח בקרה',
-      exact: true
+      description: 'סקירה כללית של המערכת'
     },
-    {
-      path: '/admin/articles',
-      icon: <FileText size={20} />,
-      label: 'ניהול מאמרים'
+    { 
+      id: 'articles', 
+      icon: <FileText size={20} />, 
+      label: 'ניהול מאמרים',
+      description: 'כתיבה ועריכה של מאמרים'
     },
-    {
-      path: '/admin/gallery',
-      icon: <Image size={20} />,
-      label: 'גלריית תמונות'
+    { 
+      id: 'gallery', 
+      icon: <Image size={20} />, 
+      label: 'גלריית תמונות',
+      description: 'ניהול תמונות הקליניקה'
     },
-    {
-      path: '/admin/declarations',
-      icon: <Heart size={20} />,
-      label: 'הצהרות בריאות'
+    { 
+      id: 'declarations', 
+      icon: <Heart size={20} />, 
+      label: 'הצהרות בריאות',
+      description: 'צפייה בהצהרות מטופלים'
     },
-    {
-      path: '/admin/stats',
-      icon: <BarChart3 size={20} />,
-      label: 'סטטיסטיקות'
+    { 
+      id: 'activity', 
+      icon: <Activity size={20} />, 
+      label: 'פעילות באתר',
+      description: 'סטטיסטיקות ואנליטיקס'
     },
-    {
-      path: '/admin/settings',
-      icon: <Settings size={20} />,
-      label: 'הגדרות'
+    { 
+      id: 'settings', 
+      icon: <Settings size={20} />, 
+      label: 'הגדרות',
+      description: 'הגדרות מערכת וקליניקה'
     }
   ];
 
   const handleLogout = () => {
-    logout();
-    setIsMobileOpen(false);
-  };
-
-  const toggleMobileMenu = () => {
-    setIsMobileOpen(!isMobileOpen);
-  };
-
-  const closeMobileMenu = () => {
-    setIsMobileOpen(false);
+    if (window.confirm('האם אתה בטוח שברצונך להתנתק?')) {
+      logout();
+    }
   };
 
   return (
@@ -72,19 +76,11 @@ const AdminSidebar = () => {
       {/* Mobile Toggle Button */}
       <button 
         className="mobile-sidebar-toggle"
-        onClick={toggleMobileMenu}
+        onClick={onToggleMobile}
         aria-label="פתח תפריט"
       >
         <Menu size={24} />
       </button>
-
-      {/* Mobile Overlay */}
-      {isMobileOpen && (
-        <div 
-          className="mobile-sidebar-overlay"
-          onClick={closeMobileMenu}
-        />
-      )}
 
       {/* Sidebar */}
       <aside className={`admin-sidebar ${isCollapsed ? 'collapsed' : ''} ${isMobileOpen ? 'mobile-open' : ''}`}>
@@ -95,7 +91,7 @@ const AdminSidebar = () => {
             {!isCollapsed && (
               <div className="logo-text">
                 <h3>אזור ניהול</h3>
-                <p>קליניקת לאה גניש</p>
+                <p>קליניקת ליאה גניש</p>
               </div>
             )}
           </div>
@@ -103,8 +99,9 @@ const AdminSidebar = () => {
           {/* Desktop Collapse Toggle */}
           <button 
             className="sidebar-toggle desktop-only"
-            onClick={() => setIsCollapsed(!isCollapsed)}
+            onClick={onToggleCollapse}
             aria-label={isCollapsed ? 'הרחב תפריט' : 'כווץ תפריט'}
+            title={isCollapsed ? 'הרחב תפריט' : 'כווץ תפריט'}
           >
             <Menu size={20} />
           </button>
@@ -112,7 +109,7 @@ const AdminSidebar = () => {
           {/* Mobile Close Button */}
           <button 
             className="sidebar-close mobile-only"
-            onClick={closeMobileMenu}
+            onClick={onToggleMobile}
             aria-label="סגור תפריט"
           >
             <X size={24} />
@@ -126,8 +123,10 @@ const AdminSidebar = () => {
           </div>
           {!isCollapsed && (
             <div className="user-info">
-              <span className="user-name">{user?.username}</span>
-              <span className="user-role">{user?.role === 'admin' ? 'מנהלת' : 'מטפלת'}</span>
+              <span className="user-name">{user?.username || 'משתמש'}</span>
+              <span className="user-role">
+                {user?.role === 'admin' ? 'מנהלת' : 'מטפלת'}
+              </span>
             </div>
           )}
         </div>
@@ -136,20 +135,17 @@ const AdminSidebar = () => {
         <nav className="sidebar-nav">
           <ul className="nav-list">
             {menuItems.map((item) => (
-              <li key={item.path} className="nav-item">
-                <NavLink
-                  to={item.path}
-                  end={item.exact}
-                  className={({ isActive }) => 
-                    `nav-link ${isActive ? 'active' : ''}`
-                  }
-                  onClick={closeMobileMenu}
+              <li key={item.id} className="nav-item">
+                <button
+                  className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
+                  onClick={() => onSectionChange(item.id)}
+                  title={isCollapsed ? item.label : item.description}
                 >
                   <span className="nav-icon">{item.icon}</span>
                   {!isCollapsed && (
                     <span className="nav-label">{item.label}</span>
                   )}
-                </NavLink>
+                </button>
               </li>
             ))}
           </ul>
@@ -160,7 +156,7 @@ const AdminSidebar = () => {
           <button 
             className="logout-button"
             onClick={handleLogout}
-            title="התנתק"
+            title="התנתק מהמערכת"
           >
             <LogOut size={20} />
             {!isCollapsed && <span>התנתק</span>}
