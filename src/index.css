@@ -1,68 +1,153 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/* Import Global Styles */
+@import './styles/global.css';
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+/* Root App Styles */
+#root {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Loading Screen */
+.app-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.app-loading .loading-content {
+  text-align: center;
+}
+
+.app-loading .spinner {
+  margin-bottom: var(--spacing-lg);
+}
+
+.app-loading p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+/* Error Boundary Styles */
+.error-boundary {
+  padding: var(--spacing-3xl);
+  text-align: center;
+  background: var(--background-alt);
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-boundary h1 {
+  color: var(--error);
+  margin-bottom: var(--spacing-lg);
+}
+
+.error-boundary p {
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xl);
+  max-width: 500px;
+}
+
+/* Toast Notification Overrides */
+.Toastify__toast-container {
+  direction: rtl;
+}
+
+.Toastify__toast {
   font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
 }
 
-@media (prefers-color-scheme: light) {
+.Toastify__toast--success {
+  background: var(--success);
+}
+
+.Toastify__toast--error {
+  background: var(--error);
+}
+
+.Toastify__toast--warning {
+  background: var(--warning);
+}
+
+/* Accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--primary-color);
+  color: var(--white);
+  padding: 8px;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  z-index: 10000;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* Focus Visible Polyfill */
+.js-focus-visible :focus:not(.focus-visible) {
+  outline: none;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    --border: #000000;
+    --shadow: rgba(0, 0, 0, 0.5);
   }
-  a:hover {
-    color: #747bff;
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
   }
-  button {
-    background-color: #f9f9f9;
+  
+  .app {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .main-content {
+    padding: 0 !important;
   }
 }

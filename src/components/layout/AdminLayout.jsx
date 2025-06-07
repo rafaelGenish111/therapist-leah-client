@@ -1,71 +1,91 @@
-import { useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Toaster } from 'react-hot-toast';
 import AdminSidebar from '../admin/AdminSidebar';
-import AdminDashboard from '../admin/AdminDashboard';
-import ArticlesManager from '../admin/ArticlesManager';
-import GalleryManager from '../admin/GalleryManager';
-import HealthDeclarations from '../admin/HealthDeclarations';
-import WebsiteActivity from '../admin/WebsiteActivity';
-import Settings from './settings';
-import './AdminLayout.css';
+import { useAuth } from '../../contexts/AuthContext';
 
 const AdminLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const { user } = useAuth();
 
-  const handleMobileMenuToggle = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
+  // Create a query client for this admin layout
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: 2,
+        staleTime: 5 * 60 * 1000, // 5 minutes
+        cacheTime: 10 * 60 * 1000, // 10 minutes
+      },
+    },
+  });
 
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false);
-  };
+  // Close mobile sidebar when window resizes
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setMobileSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
-    <div className="admin-page">
-      <div className="admin-container">
+    <QueryClientProvider client={queryClient}>
+      <div className="admin-layout">
         <AdminSidebar 
-          isCollapsed={sidebarCollapsed}
-          setIsCollapsed={setSidebarCollapsed}
-          isMobileOpen={mobileMenuOpen}
-          onMobileToggle={handleMobileMenuToggle}
-          onMobileClose={closeMobileMenu}
+          collapsed={sidebarCollapsed}
+          onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+          mobileOpen={mobileSidebarOpen}
+          onMobileToggle={() => setMobileSidebarOpen(!mobileSidebarOpen)}
         />
         
-        <main className={`admin-main ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
-          <Routes>
-            <Route path="/" element={<AdminDashboard />} />
-            <Route path="/articles" element={<ArticlesManager />} />
-            <Route path="/gallery" element={<GalleryManager />} />
-            <Route path="/declarations" element={<HealthDeclarations />} />
-            <Route path="/activity" element={<WebsiteActivity />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="*" element={<Navigate to="/admin" replace />} />
-          </Routes>
-        </main>
-
-        {/* Mobile Menu Toggle Button */}
-        <button 
-          className="mobile-sidebar-toggle"
-          onClick={handleMobileMenuToggle}
-          aria-label="פתח תפריט"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
-          </svg>
-        </button>
-
         {/* Mobile Overlay */}
-        {mobileMenuOpen && (
+        {mobileSidebarOpen && (
           <div 
             className="mobile-sidebar-overlay"
-            onClick={closeMobileMenu}
+            onClick={() => setMobileSidebarOpen(false)}
           />
         )}
+
+        {/* Main Content */}
+        <main className={`admin-main ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+          <div className="admin-content">
+            <Outlet />
+          </div>
+        </main>
+
+        {/* Toast Notifications */}
+        <Toaster
+          position="top-left"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: 'var(--white)',
+              color: 'var(--text-primary)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius-lg)',
+              fontSize: 'var(--font-size-sm)',
+            },
+            success: {
+              iconTheme: {
+                primary: 'var(--success)',
+                secondary: 'var(--white)',
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: 'var(--error)',
+                secondary: 'var(--white)',
+              },
+            },
+          }}
+        />
       </div>
-    </div>
+    </QueryClientProvider>
   );
 };
 
