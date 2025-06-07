@@ -2,30 +2,29 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
-
-// Layout Components
+import PrivateRoute from './components/auth/PrivateRoute';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
-
-// Pages
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
-import LoginPage from './pages/LoginPage';
 import ServicesPage from './pages/ServicesPage';
-import ArticlesPages from './pages/ArticlesPage';
+import ArticlesPage from './pages/ArticlesPage';
 import ContactPage from './pages/ContactPage';
-import AdminPage from './pages/AdminPage';
+import LoginPage from './pages/LoginPage';
+import AdminLayout from './components/layout/AdminLayout';
 
-// Basic styles
-import './App.css';
-import HealthDeclarationPage from './pages/HealthDeclarationPage';
 
-// Create a React Query client
+// Create QueryClient for React Query
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 1,
       staleTime: 5 * 60 * 1000, // 5 minutes
+      cacheTime: 10 * 60 * 1000, // 10 minutes
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+    mutations: {
+      retry: 1,
     },
   },
 });
@@ -36,95 +35,103 @@ function App() {
       <AuthProvider>
         <Router>
           <div className="app">
-            {/* Toast Notifications */}
-            <Toaster
-              position="top-center"
-              toastOptions={{
-                duration: 4000,
-                style: {
-                  background: '#363636',
-                  color: '#fff',
-                  direction: 'rtl',
-                  fontFamily: 'inherit',
-                },
-                success: {
-                  style: {
-                    background: '#10b981',
-                  },
-                },
-                error: {
-                  style: {
-                    background: '#ef4444',
-                  },
-                },
-              }}
-            />
-
             <Routes>
-              {/* Admin Routes - Protected */}
+              {/* Admin Routes */}
               <Route 
                 path="/admin/*" 
                 element={
                   <PrivateRoute>
-                    <AdminPage />
+                    <AdminLayout />
                   </PrivateRoute>
                 } 
               />
               
-              {/* Public Routes with Layout */}
-              <Route path="/*" element={<PublicLayout />} />
+              {/* Public Routes with Header/Footer */}
+              <Route path="/*" element={
+                <>
+                  <Header />
+                  <main className="main-content">
+                    <Routes>
+                      <Route path="/" element={<HomePage />} />
+                      <Route path="/about" element={<AboutPage />} />
+                      <Route path="/services" element={<ServicesPage />} />
+                      <Route path="/articles" element={<ArticlesPage />} />
+                      <Route path="/contact" element={<ContactPage />} />
+                      <Route path="/login" element={<LoginPage />} />
+                    </Routes>
+                  </main>
+                  <Footer />
+                </>
+              } />
             </Routes>
+            
+            {/* Global Toast Notifications */}
+            <Toaster 
+              position="top-center"
+              reverseOrder={false}
+              gutter={8}
+              containerClassName=""
+              containerStyle={{}}
+              toastOptions={{
+                // Default options
+                className: '',
+                duration: 4000,
+                style: {
+                  background: 'var(--white)',
+                  color: 'var(--text-primary)',
+                  fontFamily: 'inherit',
+                  fontSize: 'var(--font-size-sm)',
+                  padding: 'var(--spacing-md)',
+                  borderRadius: 'var(--radius-lg)',
+                  boxShadow: 'var(--shadow-lg)',
+                  border: '1px solid var(--border)',
+                  direction: 'rtl',
+                },
+                
+                // Success
+                success: {
+                  duration: 3000,
+                  style: {
+                    background: '#F0FDF4',
+                    color: '#166534',
+                    border: '1px solid #BBF7D0',
+                  },
+                  iconTheme: {
+                    primary: '#22C55E',
+                    secondary: '#FFFFFF',
+                  },
+                },
+                
+                // Error
+                error: {
+                  duration: 5000,
+                  style: {
+                    background: '#FEF2F2',
+                    color: '#991B1B',
+                    border: '1px solid #FECACA',
+                  },
+                  iconTheme: {
+                    primary: '#EF4444',
+                    secondary: '#FFFFFF',
+                  },
+                },
+                
+                // Loading
+                loading: {
+                  duration: Infinity,
+                  style: {
+                    background: '#FFFBEB',
+                    color: '#92400E',
+                    border: '1px solid #FED7AA',
+                  },
+                },
+              }}
+            />
           </div>
         </Router>
       </AuthProvider>
     </QueryClientProvider>
   );
 }
-
-// Public Layout Component
-const PublicLayout = () => {
-  return (
-    <>
-      <Header />
-      <main className="main-content">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/articles" element={<ArticlesPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          
-          {/* 404 Route */}
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </main>
-      <Footer />
-    </>
-  );
-};
-
-// Simple 404 Page
-const NotFoundPage = () => {
-  return (
-    <div className="not-found-page">
-      <div className="container">
-        <div className="not-found-content">
-          <h1>404</h1>
-          <h2>העמוד לא נמצא</h2>
-          <p>מצטערים, העמוד שחיפשת לא קיים.</p>
-          <div className="not-found-actions">
-            <a href="/" className="btn btn--primary">
-              חזור לעמוד הבית
-            </a>
-            <a href="/contact" className="btn btn--outline">
-              יצירת קשר
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 export default App;

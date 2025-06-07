@@ -14,7 +14,7 @@ import {
   Save,
   X
 } from 'lucide-react';
-import { mockArticles } from '../../services/mockData';
+import { mockArticles } from '../../data/mockData';
 import './ArticlesManager.css';
 
 const ArticlesManager = () => {

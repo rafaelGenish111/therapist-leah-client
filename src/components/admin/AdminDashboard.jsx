@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import StatsCard from './components/StatsCard';
-import { mockStats } from '../../services/mockData';
+import { mockStats } from '../../data/mockData';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import AdminLayout from '../components/admin/AdminLayout';
+import AdminLayout from '../components/layout/AdminLayout';
 import Spinner from '../components/ui/Spinner';
 import './AdminPage.css';
 
