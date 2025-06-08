@@ -37,6 +37,7 @@ const Footer = () => {
     { to: '/services', label: 'טיפולים' },
     { to: '/articles', label: 'מאמרים' },
     {to: '/gallery', label: 'גלריה'},
+    {to: '/health-declaration', label: 'הצהרת בריאות'},
     { to: '/contact', label: 'יצירת קשר' }
   ];
 

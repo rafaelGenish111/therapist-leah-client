@@ -26,6 +26,11 @@ import './pages/ContantPage.css';
 import './pages/LoginPage.css';
 import './pages/AdminPage.css';
 import GalleryPage from './pages/GalleryPage';
+import ArticlesManager from './components/admin/ArticlesManager';
+import GalleryManager from './components/admin/GalleryManager';
+import AdminDashboard from './components/admin/AdminDashboard';
+import HealthDeclarations from './components/admin/HealthDeclarations';
+import HealthDeclarationPage from './pages/HealthDeclarationPage';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -53,15 +58,18 @@ function App() {
                 <Route path="/articles" element={<ArticlesPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                  <Route path="/gallery" element={<GalleryPage />} />
+                 <Route path="/health-declaration" element={<HealthDeclarationPage />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route 
-                  path="/admin/*" 
-                  element={
-                    <PrivateRoute>
-                      <AdminPage />
-                    </PrivateRoute>
-                  } 
-                />
+                <Route path="/admin" element={
+                  <PrivateRoute>
+                    <AdminPage />
+                  </PrivateRoute>
+                }>
+                  <Route index element={<AdminDashboard />} />
+                  <Route path="articles" element={<ArticlesManager />} />
+                  <Route path="gallery" element={<GalleryManager />} />
+                  <Route path="declarations" element={<HealthDeclarations />} />
+                </Route>
               </Routes>
             </main>
             
