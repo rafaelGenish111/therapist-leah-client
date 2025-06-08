@@ -25,6 +25,7 @@ import './pages/AboutPage.css';
 import './pages/ContantPage.css';
 import './pages/LoginPage.css';
 import './pages/AdminPage.css';
+import GalleryPage from './pages/GalleryPage';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -51,6 +52,7 @@ function App() {
                 <Route path="/services" element={<ServicesPage />} />
                 <Route path="/articles" element={<ArticlesPage />} />
                 <Route path="/contact" element={<ContactPage />} />
+                 <Route path="/gallery" element={<GalleryPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route 
                   path="/admin/*" 

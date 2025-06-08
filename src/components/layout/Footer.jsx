@@ -36,6 +36,7 @@ const Footer = () => {
     { to: '/about', label: 'אודות' },
     { to: '/services', label: 'טיפולים' },
     { to: '/articles', label: 'מאמרים' },
+    {to: '/gallery', label: 'גלריה'},
     { to: '/contact', label: 'יצירת קשר' }
   ];
 

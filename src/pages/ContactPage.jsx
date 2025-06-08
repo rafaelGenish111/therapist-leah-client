@@ -1,334 +1,549 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Clock, 
-  Send, 
-  CheckCircle,
-  MessageCircle,
-  Instagram,
-  Facebook,
-  Youtube,
-  Heart
-} from 'lucide-react';
-import Card from '../components/ui/Card';
-import Button from '../components/ui/Button';
-import toast from 'react-hot-toast';
-import './ContantPage.css'
 
 const ContactPage = () => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: '',
+    consent: false
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset
-  } = useForm();
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
 
-  const onSubmit = async (data) => {
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.firstName.trim()) newErrors.firstName = 'שם פרטי נדרש';
+    if (!formData.lastName.trim()) newErrors.lastName = 'שם משפחה נדרש';
+    if (!formData.email.trim()) {
+      newErrors.email = 'אימייל נדרש';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'כתובת אימייל לא תקינה';
+    }
+    if (!formData.message.trim()) newErrors.message = 'הודעה נדרשת';
+    if (!formData.consent) newErrors.consent = 'יש לאשר את תנאי השימוש';
+    
+    return newErrors;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = validateForm();
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
+      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      console.log('Form data:', data);
+      console.log('Form data:', formData);
       setIsSubmitted(true);
-      toast.success('ההודעה נשלחה בהצלחה! נחזור אליכם בהקדם.');
-      reset();
       
+      // Reset form
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: '',
+        consent: false
+      });
+      
+      // Reset success state after 5 seconds
       setTimeout(() => setIsSubmitted(false), 5000);
     } catch (error) {
-      toast.error('שגיאה בשליחת ההודעה. אנא נסו שוב.');
+      console.error('Error submitting form:', error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const contactMethods = [
+  const contactInfo = [
     {
-      icon: <Phone size={24} />,
-      title: 'התקשרו אלינו',
-      info: '054-941-4947',
-      action: 'tel:0549414947',
-      description: 'זמינה לשיחה ישירה'
+      icon: '📞',
+      title: 'טלפון',
+      details: ['050-123-4567', '03-123-4567'],
+      link: 'tel:0501234567'
     },
     {
-      icon: <MessageCircle size={24} />,
-      title: 'ווטסאפ',
-      info: 'שלחו הודעה',
-      action: 'https://wa.me/972549414947?text=היי, אני מעוניין/ת לקבוע טיפול',
-      description: 'צ\'אט מהיר ונוח'
-    },
-    {
-      icon: <Mail size={24} />,
+      icon: '✉️',
       title: 'אימייל',
-      info: 'info@leahgenish.co.il',
-      action: 'mailto:info@leahgenish.co.il',
-      description: 'לפניות מפורטות'
+      details: ['info@leahgenish.co.il'],
+      link: 'mailto:info@leahgenish.co.il'
+    },
+    {
+      icon: '📍',
+      title: 'כתובת',
+      details: ['רחוב הרצל 123', 'תל אביב-יפו', 'קומה 3, דירה 12']
+    },
+    {
+      icon: '🕐',
+      title: 'שעות פעילות',
+      details: [
+        'ראשון - רביעי: 9:00-20:00',
+        'חמישי: 9:00-16:00',
+        'שישי - שבת: סגור'
+      ]
     }
   ];
 
-  const socialLinks = [
-    {
-      icon: <Instagram size={20} />,
-      name: 'Instagram',
-      url: 'https://instagram.com/leah_genish_clinic',
-      color: '#E4405F'
-    },
-    {
-      icon: <Facebook size={20} />,
-      name: 'Facebook', 
-      url: 'https://facebook.com/leahgenishclinic',
-      color: '#1877F2'
-    },
-    
+  const workingHours = [
+    { day: 'ראשון', hours: '9:00 - 20:00', available: true },
+    { day: 'שני', hours: '9:00 - 20:00', available: true },
+    { day: 'שלישי', hours: '9:00 - 20:00', available: true },
+    { day: 'רביעי', hours: '9:00 - 20:00', available: true },
+    { day: 'חמישי', hours: '9:00 - 16:00', available: true },
+    { day: 'שישי', hours: 'סגור', available: false },
+    { day: 'שבת', hours: 'סגור', available: false }
   ];
 
+  const cardStyle = {
+    background: 'white',
+    borderRadius: '12px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    overflow: 'hidden'
+  };
+
+  const inputStyle = {
+    width: '100%',
+    padding: '12px 16px',
+    border: '2px solid #F5E6E3',
+    borderRadius: '8px',
+    fontSize: '16px',
+    transition: 'border-color 0.3s ease',
+    fontFamily: 'inherit'
+  };
+
+  const errorInputStyle = {
+    ...inputStyle,
+    borderColor: '#EF4444'
+  };
+
+  const buttonStyle = {
+    background: '#D4B5B0',
+    color: 'white',
+    border: 'none',
+    padding: '16px 24px',
+    borderRadius: '8px',
+    fontSize: '16px',
+    fontWeight: '500',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+    width: '100%'
+  };
+
   return (
-    <div className="contact-page">
-      <div className="container">
-        {/* Hero Section */}
-        <section className="contact-hero">
-          <h1>יצירת קשר</h1>
-          <p>נשמח לענות על כל שאלה ולעזור לכם לקבוע טיפול</p>
-        </section>
+    <div style={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto' }}>
+      {/* Page Header */}
+      <div style={{ 
+        textAlign: 'center', 
+        padding: '40px 20px', 
+        background: '#F5E6E3', 
+        borderRadius: '12px',
+        marginBottom: '40px'
+      }}>
+        <h1 style={{ fontSize: '2.5rem', marginBottom: '16px', color: '#4A3429' }}>
+          יצירת קשר
+        </h1>
+        <p style={{ fontSize: '1.2rem', color: '#8B6F66' }}>
+          נשמח לענות על כל שאלה ולעזור לכם לקבוע טיפול
+        </p>
+      </div>
 
-        {/* Quick Contact */}
-        <section className="quick-contact-section">
-          <div className="section-header">
-            <h2>דרכי יצירת קשר</h2>
-            <p>בחרו את הדרך הנוחה לכם ביותר</p>
-          </div>
-          
-          <div className="contact-methods-grid">
-            {contactMethods.map((method, index) => (
-              <Card key={index} className="contact-method-card" hover>
-                <div className="method-icon">{method.icon}</div>
-                <h3>{method.title}</h3>
-                <p className="method-info">{method.info}</p>
-                <p className="method-description">{method.description}</p>
-                <Button 
-                  variant="primary" 
-                  size="small"
-                  as="a" 
-                  href={method.action}
-                  target={method.action.startsWith('http') ? '_blank' : undefined}
-                >
-                  {method.title === 'ווטסאפ' ? 'שלח הודעה' : 'צור קשר'}
-                </Button>
-              </Card>
-            ))}
-          </div>
-        </section>
+      {/* CSS for responsive design */}
+      <style jsx>{`
+        .main-content {
+          display: grid;
+          grid-template-columns: 2fr 1fr;
+          gap: 40px;
+        }
+        .form-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+          margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+          .main-content {
+            grid-template-columns: 1fr;
+            gap: 24px;
+          }
+          .form-row {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
 
-        {/* Main Content */}
-        <div className="contact-content-grid">
-          {/* Contact Form */}
-          <section className="contact-form-section">
-            <Card className="contact-form-card">
-              <h2>שלחו לנו הודעה</h2>
-              
-              {isSubmitted ? (
-                <div className="success-message">
-                  <CheckCircle size={48} />
-                  <h3>ההודעה נשלחה בהצלחה!</h3>
-                  <p>תודה על פנייתכם. נחזור אליכם בהקדם.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit(onSubmit)} className="contact-form">
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>שם פרטי *</label>
-                      <input
-                        type="text"
-                        {...register('firstName', {
-                          required: 'שם פרטי נדרש',
-                          minLength: { value: 2, message: 'שם קצר מדי' }
-                        })}
-                        placeholder="הכנס שם פרטי"
-                      />
-                      {errors.firstName && (
-                        <span className="error">{errors.firstName.message}</span>
-                      )}
-                    </div>
-                    
-                    <div className="form-group">
-                      <label>שם משפחה *</label>
-                      <input
-                        type="text"
-                        {...register('lastName', {
-                          required: 'שם משפחה נדרש',
-                          minLength: { value: 2, message: 'שם קצר מדי' }
-                        })}
-                        placeholder="הכנס שם משפחה"
-                      />
-                      {errors.lastName && (
-                        <span className="error">{errors.lastName.message}</span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>אימייל *</label>
-                      <input
-                        type="email"
-                        {...register('email', {
-                          required: 'אימייל נדרש',
-                          pattern: {
-                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                            message: 'אימייל לא תקין'
-                          }
-                        })}
-                        placeholder="example@email.com"
-                      />
-                      {errors.email && (
-                        <span className="error">{errors.email.message}</span>
-                      )}
-                    </div>
-                    
-                    <div className="form-group">
-                      <label>טלפון</label>
-                      <input
-                        type="tel"
-                        {...register('phone')}
-                        placeholder="050-123-4567"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label>נושא</label>
-                    <select {...register('subject')}>
-                      <option value="">בחר נושא</option>
-                      <option value="appointment">קביעת תור</option>
-                      <option value="pricing">מחירים</option>
-                      <option value="question">שאלה כללית</option>
-                      <option value="other">אחר</option>
-                    </select>
-                  </div>
-
-                  <div className="form-group">
-                    <label>הודעה *</label>
-                    <textarea
-                      rows="4"
-                      {...register('message', {
-                        required: 'הודעה נדרשת',
-                        minLength: { value: 10, message: 'הודעה קצרה מדי' }
-                      })}
-                      placeholder="ספרו לנו כיצד נוכל לעזור לכם..."
+      {/* Main Content */}
+      <div className="main-content">
+        {/* Contact Form */}
+        <div style={cardStyle}>
+          <div style={{ padding: '32px' }}>
+            <h2 style={{ textAlign: 'center', marginBottom: '32px', color: '#4A3429' }}>
+              שלחו לנו הודעה
+            </h2>
+            
+            {isSubmitted ? (
+              <div style={{ textAlign: 'center', padding: '40px' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '16px' }}>✅</div>
+                <h3 style={{ color: '#22C55E', marginBottom: '12px' }}>
+                  ההודעה נשלחה בהצלחה!
+                </h3>
+                <p style={{ color: '#8B6F66' }}>
+                  תודה על פנייתכם. נחזור אליכם בהקדם.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit}>
+                {/* Name Row */}
+                <div className="form-row">
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#8B6F66' }}>
+                      שם פרטי *
+                    </label>
+                    <input
+                      type="text"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleChange}
+                      placeholder="הכנס שם פרטי"
+                      style={errors.firstName ? errorInputStyle : inputStyle}
                     />
-                    {errors.message && (
-                      <span className="error">{errors.message.message}</span>
+                    {errors.firstName && (
+                      <span style={{ color: '#EF4444', fontSize: '14px', marginTop: '4px', display: 'block' }}>
+                        {errors.firstName}
+                      </span>
                     )}
                   </div>
-
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    size="large"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? 'שולח...' : (
-                      <>
-                        <Send size={16} />
-                        שלח הודעה
-                      </>
+                  
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#8B6F66' }}>
+                      שם משפחה *
+                    </label>
+                    <input
+                      type="text"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleChange}
+                      placeholder="הכנס שם משפחה"
+                      style={errors.lastName ? errorInputStyle : inputStyle}
+                    />
+                    {errors.lastName && (
+                      <span style={{ color: '#EF4444', fontSize: '14px', marginTop: '4px', display: 'block' }}>
+                        {errors.lastName}
+                      </span>
                     )}
-                  </Button>
-                </form>
-              )}
-            </Card>
-          </section>
-
-          {/* Contact Info */}
-          <aside className="contact-info-section">
-            <Card className="info-card">
-              <h3>פרטי הקליניקה</h3>
-              
-              <div className="info-item">
-                <MapPin size={20} />
-                <div>
-                  <strong>כתובת</strong>
-                  <p>פתח תקווה</p>
+                  </div>
                 </div>
-              </div>
 
-              <div className="info-item">
-                <Clock size={20} />
-                <div>
-                  <strong>שעות פעילות</strong>
-                  <p>ראשון - רביעי: 9:00-20:00<br />חמישי: 9:00-16:00<br />שישי - שבת: סגור</p>
+                {/* Contact Row */}
+                <div className="form-row">
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#8B6F66' }}>
+                      אימייל *
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="example@email.com"
+                      style={errors.email ? errorInputStyle : inputStyle}
+                    />
+                    {errors.email && (
+                      <span style={{ color: '#EF4444', fontSize: '14px', marginTop: '4px', display: 'block' }}>
+                        {errors.email}
+                      </span>
+                    )}
+                  </div>
+                  
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#8B6F66' }}>
+                      טלפון
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="050-123-4567"
+                      style={inputStyle}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div className="info-item">
-                <Heart size={20} />
-                <div>
-                  <strong>מקרי חירום</strong>
-                  <p>במקרה של כאב דחוף, פנו למיון הקרוב או התקשרו למוקד 101</p>
-                </div>
-              </div>
-            </Card>
-
-            <Card className="social-card">
-              <h3>עקבו אחרינו</h3>
-              <p>טיפים ועדכונים בזמן אמת</p>
-              
-              <div className="social-links">
-                {socialLinks.map((social, index) => (
-                  <a
-                    key={index}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="social-link"
-                    style={{ '--social-color': social.color }}
+                {/* Subject */}
+                <div style={{ marginBottom: '20px' }}>
+                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#8B6F66' }}>
+                    נושא
+                  </label>
+                  <select
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    style={inputStyle}
                   >
-                    {social.icon}
-                    <span>{social.name}</span>
-                  </a>
-                ))}
-              </div>
-            </Card>
-          </aside>
+                    <option value="">בחר נושא</option>
+                    <option value="appointment">קביעת תור</option>
+                    <option value="question">שאלה כללית</option>
+                    <option value="pricing">מחירים</option>
+                    <option value="packages">חבילות טיפולים</option>
+                    <option value="other">אחר</option>
+                  </select>
+                </div>
+
+                {/* Message */}
+                <div style={{ marginBottom: '20px' }}>
+                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#8B6F66' }}>
+                    הודעה *
+                  </label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows="5"
+                    placeholder="ספרו לנו כיצד נוכל לעזור לכם..."
+                    style={errors.message ? errorInputStyle : inputStyle}
+                  />
+                  {errors.message && (
+                    <span style={{ color: '#EF4444', fontSize: '14px', marginTop: '4px', display: 'block' }}>
+                      {errors.message}
+                    </span>
+                  )}
+                </div>
+
+                {/* Consent */}
+                <div style={{ marginBottom: '24px' }}>
+                  <label style={{ 
+                    display: 'flex', 
+                    alignItems: 'flex-start', 
+                    gap: '8px', 
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    lineHeight: '1.4'
+                  }}>
+                    <input
+                      type="checkbox"
+                      name="consent"
+                      checked={formData.consent}
+                      onChange={handleChange}
+                      style={{ marginTop: '2px' }}
+                    />
+                    אני מסכים/ה לתנאי השימוש ולמדיניות הפרטיות
+                  </label>
+                  {errors.consent && (
+                    <span style={{ color: '#EF4444', fontSize: '14px', marginTop: '4px', display: 'block' }}>
+                      {errors.consent}
+                    </span>
+                  )}
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  style={{
+                    ...buttonStyle,
+                    opacity: isSubmitting ? 0.7 : 1,
+                    cursor: isSubmitting ? 'not-allowed' : 'pointer'
+                  }}
+                >
+                  {isSubmitting ? '📤 שולח הודעה...' : '📩 שלח הודעה'}
+                </button>
+              </form>
+            )}
+          </div>
         </div>
 
-        {/* CTA Section */}
-        <section className="contact-cta">
-          <Card className="cta-card">
-            <h2>מוכנים לקבוע טיפול?</h2>
-            <p>הצטרפו לאלפי הלקוחות המרוצים שלנו</p>
-            
-            <div className="cta-buttons">
-              <Button 
-                variant="primary" 
-                size="large"
-                as="a"
-                href="https://wa.me/972501234567?text=היי, אני מעוניין/ת לקבוע טיפול"
-                target="_blank"
-              >
-                <MessageCircle size={20} />
-                ווטסאפ
-              </Button>
-              
-              <Button 
-                variant="outline" 
-                size="large"
-                as="a"
-                href="tel:0501234567"
-              >
-                <Phone size={20} />
-                התקשר
-              </Button>
+        {/* Contact Info Sidebar */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          {/* Contact Details */}
+          <div style={cardStyle}>
+            <div style={{ padding: '24px' }}>
+              <h2 style={{ marginBottom: '24px', color: '#4A3429' }}>פרטי התקשרות</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                {contactInfo.map((info, index) => (
+                  <div key={index} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                    <div style={{ fontSize: '1.5rem', marginTop: '4px' }}>{info.icon}</div>
+                    <div>
+                      <h3 style={{ fontSize: '1.1rem', marginBottom: '8px', color: '#4A3429' }}>
+                        {info.title}
+                      </h3>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        {info.details.map((detail, idx) => (
+                          <div key={idx} style={{ fontSize: '14px', color: '#8B6F66' }}>
+                            {info.link && idx === 0 ? (
+                              <a 
+                                href={info.link} 
+                                style={{ color: '#D4B5B0', textDecoration: 'none', fontWeight: '500' }}
+                              >
+                                {detail}
+                              </a>
+                            ) : (
+                              detail
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          </Card>
-        </section>
+          </div>
+
+          {/* Working Hours */}
+          <div style={cardStyle}>
+            <div style={{ padding: '24px' }}>
+              <h2 style={{ marginBottom: '20px', color: '#4A3429' }}>שעות פעילות</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {workingHours.map((day, index) => (
+                  <div 
+                    key={index} 
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: '8px',
+                      borderRadius: '6px',
+                      background: '#F5E6E3',
+                      opacity: day.available ? 1 : 0.6
+                    }}
+                  >
+                    <span style={{ fontWeight: '500', color: '#4A3429' }}>{day.day}</span>
+                    <span style={{ color: '#8B6F66', fontSize: '14px' }}>{day.hours}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ 
+                marginTop: '16px', 
+                padding: '12px', 
+                background: '#F5E6E3', 
+                borderRadius: '8px',
+                fontSize: '14px',
+                color: '#8B6F66'
+              }}>
+                <p style={{ margin: 0 }}>
+                  <strong>הערה:</strong> בחגים ומועדים ייתכנו שינויים בשעות הפעילות.
+                  מומלץ לתאם מראש.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Emergency Contact */}
+          <div style={{ ...cardStyle, background: '#FEF2F2', border: '1px solid #FECACA' }}>
+            <div style={{ padding: '24px' }}>
+              <h2 style={{ color: '#EF4444', marginBottom: '12px' }}>מקרי חירום</h2>
+              <p style={{ fontSize: '14px', lineHeight: '1.6', marginBottom: '8px', color: '#4A3429' }}>
+                במקרה של כאב חריף או פציעה דחופה, פנו למיון הקרוב או התקשרו למוקד 101.
+              </p>
+              <p style={{ fontSize: '14px', lineHeight: '1.6', margin: 0, color: '#4A3429' }}>
+                לשאלות דחופות הקשורות לטיפול קיים, ניתן להתקשר גם מחוץ לשעות הפעילות
+                ולהשאיר הודעה קולית.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Map Section */}
+      <div style={{ marginTop: '40px' }}>
+        <div style={cardStyle}>
+          <div style={{ padding: '24px' }}>
+            <h2 style={{ marginBottom: '20px', color: '#4A3429' }}>מיקום הקליניקה</h2>
+            <div style={{
+              height: '300px',
+              background: '#F5E6E3',
+              border: '2px dashed #D4B5B0',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '16px',
+              color: '#8B6F66',
+              borderRadius: '8px',
+              marginBottom: '20px'
+            }}>
+              <div style={{ fontSize: '3rem' }}>🗺️</div>
+              <p>מפה תוטמע כאן</p>
+              <button 
+                style={{
+                  background: 'transparent',
+                  color: '#D4B5B0',
+                  border: '2px solid #D4B5B0',
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  cursor: 'pointer'
+                }}
+                onClick={() => window.open('https://maps.google.com', '_blank')}
+              >
+                פתח במפות גוגל
+              </button>
+            </div>
+            
+            <div>
+              <h3 style={{ marginBottom: '16px', color: '#4A3429' }}>הגעה לקליניקה</h3>
+              <div style={{ display: 'grid', gap: '12px' }}>
+                <div style={{ 
+                  padding: '12px', 
+                  background: '#F5E6E3', 
+                  borderRadius: '8px' 
+                }}>
+                  <strong style={{ color: '#4A3429' }}>תחבורה ציבורית:</strong>
+                  <p style={{ fontSize: '14px', color: '#8B6F66', margin: '4px 0 0 0' }}>
+                    אוטובוסים: 4, 18, 61, 142 - עצירה: הרצל/אלנבי
+                  </p>
+                </div>
+                <div style={{ 
+                  padding: '12px', 
+                  background: '#F5E6E3', 
+                  borderRadius: '8px' 
+                }}>
+                  <strong style={{ color: '#4A3429' }}>חניה:</strong>
+                  <p style={{ fontSize: '14px', color: '#8B6F66', margin: '4px 0 0 0' }}>
+                    חניון תשלום ברחוב הרצל, חניה ברחובות הסמוכים
+                  </p>
+                </div>
+                <div style={{ 
+                  padding: '12px', 
+                  background: '#F5E6E3', 
+                  borderRadius: '8px' 
+                }}>
+                  <strong style={{ color: '#4A3429' }}>נגישות:</strong>
+                  <p style={{ fontSize: '14px', color: '#8B6F66', margin: '4px 0 0 0' }}>
+                    הבניין נגיש לכיסאות גלגלים, יש מעלית
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

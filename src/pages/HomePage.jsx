@@ -54,6 +54,33 @@ const HomePage = () => {
         </div>
       </section>
 
+      <section className="section" style={{ background: 'var(--background-alt)' }}>
+        <div className="section-header">
+          <h2>גלריית התמונות שלנו</h2>
+          <p>הציצו בקליניקה, בטיפולים ובאווירה המיוחדת שלנו</p>
+        </div>
+        
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+          gap: '1rem',
+          marginBottom: '2rem'
+        }}>
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="card" style={{ 
+              aspectRatio: '1',
+              background: 'linear-gradient(45deg, var(--primary-color), var(--primary-dark))',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              fontSize: '2rem'
+            }}>
+              📸
+            </div>
+          ))}
+        </div>     
+</section>
       {/* Services Section */}
       <section className="services-section">
         <div className="container">

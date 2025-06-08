@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { Menu, X, User, LogOut } from 'lucide-react';
-import './Header.css';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -24,12 +23,11 @@ const Header = () => {
     return location.pathname === path;
   };
 
-  const isAdminArea = location.pathname.startsWith('/admin');
-
   const publicNavItems = [
     { path: '/', label: 'בית' },
     { path: '/about', label: 'אודות' },
     { path: '/services', label: 'טיפולים' },
+    { path: '/gallery', label: 'גלריה' },
     { path: '/articles', label: 'מאמרים' },
     { path: '/contact', label: 'יצירת קשר' },
   ];
@@ -37,11 +35,11 @@ const Header = () => {
   const adminNavItems = [
     { path: '/admin', label: 'לוח בקרה' },
     { path: '/admin/articles', label: 'ניהול מאמרים' },
-    { path: '/admin/gallery', label: 'גלריה' },
+    { path: '/admin/gallery', label: 'ניהול גלריה' },
     { path: '/admin/declarations', label: 'הצהרות בריאות' },
   ];
 
-  const navItems = isAuthenticated && isAdminArea ? adminNavItems : publicNavItems;
+  const navItems = isAuthenticated ? adminNavItems : publicNavItems;
 
   return (
     <header className="header">
