@@ -7,19 +7,13 @@ import {
   Settings, 
   User,
   BarChart3,
-  Menu,
   X,
   LogOut
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import './AdminSidebar.css';
 
-const AdminSidebar = ({ 
-  isCollapsed, 
-  setIsCollapsed, 
-  isMobileOpen, 
-  closeMobileMenu 
-}) => {
+const AdminSidebar = ({ collapsed, mobileOpen, onClose }) => {
   const { user, logout } = useAuth();
 
   const menuItems = [
@@ -45,9 +39,9 @@ const AdminSidebar = ({
       label: 'הצהרות בריאות'
     },
     {
-      path: '/admin/analytics',
+      path: '/admin/stats',
       icon: <BarChart3 size={20} />,
-      label: 'אנליטיקה'
+      label: 'סטטיסטיקות'
     },
     {
       path: '/admin/settings',
@@ -57,19 +51,17 @@ const AdminSidebar = ({
   ];
 
   const handleLogout = () => {
-    if (window.confirm('האם אתה בטוח שברצונך להתנתק?')) {
-      logout();
-      closeMobileMenu();
-    }
+    logout();
+    onClose();
   };
 
   return (
-    <aside className={`admin-sidebar ${isCollapsed ? 'collapsed' : ''} ${isMobileOpen ? 'mobile-open' : ''}`}>
+    <aside className={`admin-sidebar ${collapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
       {/* Sidebar Header */}
       <div className="sidebar-header">
         <div className="sidebar-logo">
           <div className="logo-circle">ל</div>
-          {!isCollapsed && (
+          {!collapsed && (
             <div className="logo-text">
               <h3>אזור ניהול</h3>
               <p>קליניקת ליאה גניש</p>
@@ -77,19 +69,10 @@ const AdminSidebar = ({
           )}
         </div>
         
-        {/* Desktop Collapse Toggle */}
-        <button 
-          className="sidebar-toggle desktop-only"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          aria-label={isCollapsed ? 'הרחב תפריט' : 'כווץ תפריט'}
-        >
-          <Menu size={20} />
-        </button>
-
         {/* Mobile Close Button */}
         <button 
           className="sidebar-close mobile-only"
-          onClick={closeMobileMenu}
+          onClick={onClose}
           aria-label="סגור תפריט"
         >
           <X size={24} />
@@ -101,7 +84,7 @@ const AdminSidebar = ({
         <div className="user-avatar">
           <User size={20} />
         </div>
-        {!isCollapsed && (
+        {!collapsed && (
           <div className="user-info">
             <span className="user-name">{user?.username}</span>
             <span className="user-role">{user?.role === 'admin' ? 'מנהלת' : 'מטפלת'}</span>
@@ -120,10 +103,10 @@ const AdminSidebar = ({
                 className={({ isActive }) => 
                   `nav-link ${isActive ? 'active' : ''}`
                 }
-                onClick={closeMobileMenu}
+                onClick={onClose}
               >
                 <span className="nav-icon">{item.icon}</span>
-                {!isCollapsed && (
+                {!collapsed && (
                   <span className="nav-label">{item.label}</span>
                 )}
               </NavLink>
@@ -140,10 +123,10 @@ const AdminSidebar = ({
           title="התנתק"
         >
           <LogOut size={20} />
-          {!isCollapsed && <span>התנתק</span>}
+          {!collapsed && <span>התנתק</span>}
         </button>
         
-        {!isCollapsed && (
+        {!collapsed && (
           <div className="sidebar-version">
             <small>גירסה 1.0.0</small>
           </div>

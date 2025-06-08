@@ -1,298 +1,473 @@
-// src/components/admin/AdminDashboard.jsx
-import React, { useState, useEffect } from 'react';
-import { 
-  FileText, 
-  Image, 
-  Heart, 
-  Eye, 
-  Plus, 
-  Download, 
-  BarChart3,
-  TrendingUp,
-  Users,
-  Clock,
-  Calendar
-} from 'lucide-react';
+import { useQuery } from 'react-query';
+import { FileText, Image, Heart, Eye, Plus, Download, BarChart, Users } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import StatsCard from './components/StatsCard';
-import { mockStats } from '../../data/mockData';
+import { articlesApi, galleryApi, healthDeclarationsApi } from '../../services/api';
+import Card from '../ui/Card';
+import Button from '../ui/Button';
+import Spinner from '../ui/Spinner';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
   const { user } = useAuth();
-  const [stats, setStats] = useState(mockStats);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // סימולציה של טעינת נתונים
-    const loadStats = async () => {
-      try {
-        setLoading(true);
-        // כאן יהיה קריאה אמיתית ל-API
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setStats(mockStats);
-      } catch (error) {
-        console.error('Error loading stats:', error);
-      } finally {
-        setLoading(false);
+  // Get current time and date for welcome message
+  const getCurrentGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'בוקר טוב';
+    if (hour < 18) return 'שלום';
+    return 'ערב טוב';
+  };
+
+  // Fetch stats from different APIs
+  const { data: articlesStats, isLoading: articlesLoading } = useQuery(
+    'articlesStats',
+    articlesApi.getStats,
+    { 
+      staleTime: 5 * 60 * 1000,
+      onError: () => {
+        // Handle error silently or provide mock data
       }
-    };
+    }
+  );
 
-    loadStats();
-  }, []);
+  const { data: galleryStats, isLoading: galleryLoading } = useQuery(
+    'galleryStats',
+    galleryApi.getStats,
+    { 
+      staleTime: 5 * 60 * 1000,
+      onError: () => {
+        // Handle error silently or provide mock data
+      }
+    }
+  );
+
+  const { data: declarationsStats, isLoading: declarationsLoading } = useQuery(
+    'declarationsStats',
+    healthDeclarationsApi.getStats,
+    { 
+      staleTime: 5 * 60 * 1000,
+      onError: () => {
+        // Handle error silently or provide mock data
+      }
+    }
+  );
+
+  const isLoading = articlesLoading || galleryLoading || declarationsLoading;
+
+  // Mock data for when API is not available
+  const mockStats = {
+    articles: { published: 20, total: 25, totalViews: 1245, popularArticles: [] },
+    gallery: { visible: 135, total: 150, recentImages: [] },
+    declarations: { thisWeek: 12, total: 89 }
+  };
+
+  const statsData = {
+    articles: articlesStats || mockStats.articles,
+    gallery: galleryStats || mockStats.gallery,
+    declarations: declarationsStats || mockStats.declarations
+  };
+
+  const statsCards = [
+    {
+      title: 'מאמרים',
+      value: statsData.articles.published,
+      subtitle: `סה"כ ${statsData.articles.total} מאמרים`,
+      icon: <FileText size={24} />,
+      color: 'primary'
+    },
+    {
+      title: 'צפיות במאמרים',
+      value: statsData.articles.totalViews,
+      subtitle: 'צפיות כוללות',
+      icon: <Eye size={24} />,
+      color: 'success'
+    },
+    {
+      title: 'תמונות בגלריה',
+      value: statsData.gallery.visible,
+      subtitle: `סה"כ ${statsData.gallery.total} תמונות`,
+      icon: <Image size={24} />,
+      color: 'info'
+    },
+    {
+      title: 'הצהרות בריאות',
+      value: statsData.declarations.thisWeek,
+      subtitle: 'השבוע',
+      icon: <Heart size={24} />,
+      color: 'warning'
+    }
+  ];
 
   const quickActions = [
     {
       title: 'כתיבת מאמר חדש',
       description: 'הוסף מאמר חדש לאתר',
       icon: <Plus size={20} />,
-      action: () => alert('פתיחת עורך מאמרים...'),
-      variant: 'primary',
-      color: 'blue'
+      action: () => window.location.href = '/admin/articles',
+      variant: 'primary'
     },
     {
       title: 'העלאת תמונות',
       description: 'הוסף תמונות לגלריה',
       icon: <Image size={20} />,
-      action: () => alert('פתיחת מנהל גלריה...'),
-      variant: 'secondary',
-      color: 'green'
+      action: () => window.location.href = '/admin/gallery',
+      variant: 'secondary'
     },
     {
       title: 'יצוא נתונים',
       description: 'הורד דוח של הצהרות בריאות',
       icon: <Download size={20} />,
-      action: () => alert('מייצא נתונים...'),
-      variant: 'outline',
-      color: 'purple'
+      action: () => console.log('Export data'),
+      variant: 'outline'
     },
     {
       title: 'צפיה בדוחות',
       description: 'סטטיסטיקות מפורטות',
-      icon: <BarChart3 size={20} />,
-      action: () => alert('פתיחת דוחות...'),
-      variant: 'outline',
-      color: 'orange'
+      icon: <BarChart size={20} />,
+      action: () => window.location.href = '/admin/stats',
+      variant: 'outline'
     }
   ];
 
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'בוקר טוב';
-    if (hour < 17) return 'צהריים טובים';
-    if (hour < 21) return 'ערב טוב';
-    return 'לילה טוב';
-  };
-
-  if (loading) {
-    return (
-      <div className="admin-dashboard loading">
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p>טוען נתונים...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="admin-dashboard">
-      {/* Welcome Header */}
-      <div className="dashboard-header">
-        <div className="welcome-section">
-          <h1>{getGreeting()}, {user?.username}! 👋</h1>
-          <p>ברוכה הבאה לאזור הניהול של הקליניקה</p>
-          <div className="last-login">
-            <Clock size={16} />
-            <span>כניסה אחרונה: {new Date(user?.lastLogin).toLocaleDateString('he-IL')}</span>
-          </div>
-        </div>
-        <div className="header-actions">
-          <button className="btn btn--primary">
-            <Plus size={16} />
-            פעולה מהירה
-          </button>
-        </div>
+    <div style={{
+      maxWidth: '1200px',
+      margin: '0 auto',
+      padding: '2rem',
+      fontFamily: 'system-ui, -apple-system, sans-serif',
+      direction: 'rtl'
+    }}>
+      {/* Welcome Section */}
+      <div style={{
+        background: 'linear-gradient(135deg, #D4B5B0 0%, #B89C94 100%)',
+        color: 'white',
+        padding: '3rem 2rem',
+        borderRadius: '1rem',
+        marginBottom: '3rem',
+        textAlign: 'center'
+      }}>
+        <h1 style={{
+          fontSize: '2rem',
+          marginBottom: '0.5rem',
+          fontWeight: '600'
+        }}>
+          {getCurrentGreeting()}, {user?.username}! 👋
+        </h1>
+        <p style={{
+          fontSize: '1.125rem',
+          margin: 0,
+          opacity: 0.9
+        }}>
+          ברוכה הבאה לאזור הניהול של הקליניקה
+        </p>
       </div>
 
-      {/* Stats Grid */}
-      <div className="stats-grid">
-        <StatsCard
-          title="מאמרים"
-          value={stats.articles.published}
-          subtitle={`מתוך ${stats.articles.total} כוללם`}
-          icon={<FileText size={24} />}
-          color="primary"
-          trend={{ value: 12, isPositive: true }}
-          onClick={() => alert('מעבר לניהול מאמרים')}
-        />
-        
-        <StatsCard
-          title="צפיות במאמרים"
-          value={stats.articles.totalViews.toLocaleString()}
-          subtitle="צפיות כוללות"
-          icon={<Eye size={24} />}
-          color="success"
-          trend={{ value: 8, isPositive: true }}
-          onClick={() => alert('מעבר לסטטיסטיקות')}
-        />
-        
-        <StatsCard
-          title="תמונות בגלריה"
-          value={stats.gallery.visible}
-          subtitle={`מתוך ${stats.gallery.total} תמונות`}
-          icon={<Image size={24} />}
-          color="info"
-          trend={{ value: 3, isPositive: false }}
-          onClick={() => alert('מעבר לגלריה')}
-        />
-        
-        <StatsCard
-          title="הצהרות השבוע"
-          value={stats.declarations.thisWeek}
-          subtitle={`מתוך ${stats.declarations.total} כוללם`}
-          icon={<Heart size={24} />}
-          color="warning"
-          trend={{ value: 15, isPositive: true }}
-          onClick={() => alert('מעבר להצהרות')}
-        />
-      </div>
-
-      {/* Quick Actions */}
-      <div className="quick-actions-section">
-        <h2>פעולות מהירות</h2>
-        <div className="quick-actions-grid">
-          {quickActions.map((action, index) => (
-            <div key={index} className={`quick-action-item quick-action--${action.color}`}>
-              <div className="action-content">
-                <div className="action-icon">{action.icon}</div>
-                <div className="action-text">
-                  <h4>{action.title}</h4>
-                  <p>{action.description}</p>
+      {isLoading ? (
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '3rem',
+          textAlign: 'center'
+        }}>
+          <Spinner size="large" />
+          <p style={{ marginTop: '1rem', color: '#8B6F66' }}>טוען נתונים...</p>
+        </div>
+      ) : (
+        <>
+          {/* Stats Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '2rem',
+            marginBottom: '3rem'
+          }}>
+            {statsCards.map((stat, index) => (
+              <div key={index} style={{
+                background: 'white',
+                padding: '2rem',
+                borderRadius: '1rem',
+                border: '1px solid #E7D1CD',
+                borderLeft: `4px solid ${
+                  stat.color === 'primary' ? '#D4B5B0' :
+                  stat.color === 'success' ? '#22C55E' :
+                  stat.color === 'info' ? '#3B82F6' :
+                  '#F59E0B'
+                }`,
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-4px)';
+                e.target.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.15)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  marginBottom: '1.5rem'
+                }}>
+                  <div style={{
+                    color: stat.color === 'primary' ? '#D4B5B0' :
+                           stat.color === 'success' ? '#22C55E' :
+                           stat.color === 'info' ? '#3B82F6' :
+                           '#F59E0B'
+                  }}>
+                    {stat.icon}
+                  </div>
+                  <h3 style={{
+                    margin: 0,
+                    fontSize: '1rem',
+                    color: '#8B6F66',
+                    fontWeight: '500'
+                  }}>
+                    {stat.title}
+                  </h3>
+                </div>
+                <div>
+                  <div style={{
+                    fontSize: '2.5rem',
+                    fontWeight: '700',
+                    color: '#4A3429',
+                    marginBottom: '0.25rem',
+                    lineHeight: 1
+                  }}>
+                    {stat.value.toLocaleString()}
+                  </div>
+                  <div style={{
+                    color: '#B89C94',
+                    fontSize: '0.875rem'
+                  }}>
+                    {stat.subtitle}
+                  </div>
                 </div>
               </div>
-              <button 
-                className={`btn btn--${action.variant} btn--small`}
-                onClick={action.action}
-              >
-                בצע
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Recent Activity Dashboard */}
-      <div className="dashboard-grid">
-        {/* Popular Articles */}
-        <div className="dashboard-card recent-articles">
-          <div className="card-header">
-            <h3>מאמרים פופולריים</h3>
-            <button className="btn btn--outline btn--small">
-              צפה בכל המאמרים
-            </button>
+            ))}
           </div>
-          
-          {stats.articles.popularArticles && stats.articles.popularArticles.length > 0 ? (
-            <div className="articles-list">
-              {stats.articles.popularArticles.map((article) => (
-                <div key={article._id} className="article-item">
-                  <div className="article-info">
-                    <h4>{article.title}</h4>
-                    <div className="article-meta">
-                      <span className="views">
-                        <Eye size={14} />
-                        {article.views} צפיות
-                      </span>
-                      <span className="date">
-                        <Calendar size={14} />
+
+          {/* Quick Actions */}
+          <div style={{
+            background: 'white',
+            padding: '2rem',
+            borderRadius: '1rem',
+            border: '1px solid #E7D1CD',
+            marginBottom: '3rem'
+          }}>
+            <h2 style={{
+              marginBottom: '2rem',
+              color: '#4A3429',
+              fontSize: '1.5rem'
+            }}>
+              פעולות מהירות
+            </h2>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '1.5rem'
+            }}>
+              {quickActions.map((action, index) => (
+                <div key={index} style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '1.5rem',
+                  border: '1px solid #E7D1CD',
+                  borderRadius: '0.75rem',
+                  transition: 'all 0.15s ease',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.borderColor = '#D4B5B0';
+                  e.target.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.borderColor = '#E7D1CD';
+                  e.target.style.boxShadow = 'none';
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1rem'
+                  }}>
+                    <div style={{
+                      color: '#D4B5B0',
+                      background: '#F5E6E3',
+                      padding: '0.5rem',
+                      borderRadius: '0.5rem'
+                    }}>
+                      {action.icon}
+                    </div>
+                    <div>
+                      <h4 style={{
+                        margin: '0 0 0.25rem 0',
+                        fontSize: '1rem',
+                        color: '#4A3429'
+                      }}>
+                        {action.title}
+                      </h4>
+                      <p style={{
+                        margin: 0,
+                        fontSize: '0.875rem',
+                        color: '#8B6F66'
+                      }}>
+                        {action.description}
+                      </p>
+                    </div>
+                  </div>
+                  <Button 
+                    variant={action.variant} 
+                    onClick={action.action}
+                    size="small"
+                  >
+                    בצע
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Recent Activity */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+            gap: '2rem'
+          }}>
+            <div style={{
+              background: 'white',
+              padding: '2rem',
+              borderRadius: '1rem',
+              border: '1px solid #E7D1CD'
+            }}>
+              <h3 style={{
+                marginBottom: '1.5rem',
+                color: '#4A3429',
+                fontSize: '1.25rem'
+              }}>
+                מאמרים פופולריים
+              </h3>
+              {statsData.articles.popularArticles?.length > 0 ? (
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1rem'
+                }}>
+                  {statsData.articles.popularArticles.map((article, index) => (
+                    <div key={article._id} style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: '1rem',
+                      border: '1px solid #F0E4E1',
+                      borderRadius: '0.5rem'
+                    }}>
+                      <div style={{ flex: 1 }}>
+                        <h4 style={{
+                          margin: '0 0 0.25rem 0',
+                          fontSize: '0.875rem',
+                          color: '#4A3429'
+                        }}>
+                          {article.title}
+                        </h4>
+                        <span style={{
+                          fontSize: '0.75rem',
+                          color: '#8B6F66'
+                        }}>
+                          {article.views} צפיות
+                        </span>
+                      </div>
+                      <span style={{
+                        fontSize: '0.75rem',
+                        color: '#B89C94'
+                      }}>
                         {new Date(article.createdAt).toLocaleDateString('he-IL')}
                       </span>
                     </div>
-                  </div>
-                  <button className="btn btn--outline btn--small">
-                    עריכה
-                  </button>
+                  ))}
                 </div>
-              ))}
+              ) : (
+                <p style={{
+                  textAlign: 'center',
+                  color: '#8B6F66',
+                  fontStyle: 'italic',
+                  padding: '2rem'
+                }}>
+                  אין מאמרים עדיין
+                </p>
+              )}
             </div>
-          ) : (
-            <div className="empty-state">
-              <FileText size={48} />
-              <p>אין מאמרים עדיין</p>
-              <button className="btn btn--primary btn--small">
-                צור מאמר ראשון
-              </button>
-            </div>
-          )}
-        </div>
 
-        {/* Recent Images */}
-        <div className="dashboard-card recent-images">
-          <div className="card-header">
-            <h3>תמונות אחרונות</h3>
-            <button className="btn btn--outline btn--small">
-              צפה בגלריה
-            </button>
-          </div>
-          
-          {stats.gallery.recentImages && stats.gallery.recentImages.length > 0 ? (
-            <div className="images-list">
-              {stats.gallery.recentImages.map((image) => (
-                <div key={image._id} className="image-item">
-                  <div className="image-thumbnail">
-                    <Image size={24} />
-                  </div>
-                  <div className="image-info">
-                    <h4>{image.originalName}</h4>
-                    <div className="image-meta">
-                      <span className="category">{image.category}</span>
-                      <span className="date">
+            <div style={{
+              background: 'white',
+              padding: '2rem',
+              borderRadius: '1rem',
+              border: '1px solid #E7D1CD'
+            }}>
+              <h3 style={{
+                marginBottom: '1.5rem',
+                color: '#4A3429',
+                fontSize: '1.25rem'
+              }}>
+                תמונות אחרונות
+              </h3>
+              {statsData.gallery.recentImages?.length > 0 ? (
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1rem'
+                }}>
+                  {statsData.gallery.recentImages.map((image, index) => (
+                    <div key={image._id} style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: '1rem',
+                      border: '1px solid #F0E4E1',
+                      borderRadius: '0.5rem'
+                    }}>
+                      <div style={{ flex: 1 }}>
+                        <h4 style={{
+                          margin: '0 0 0.25rem 0',
+                          fontSize: '0.875rem',
+                          color: '#4A3429'
+                        }}>
+                          {image.originalName}
+                        </h4>
+                        <span style={{
+                          fontSize: '0.75rem',
+                          color: '#8B6F66'
+                        }}>
+                          {image.category}
+                        </span>
+                      </div>
+                      <span style={{
+                        fontSize: '0.75rem',
+                        color: '#B89C94'
+                      }}>
                         {new Date(image.uploadedAt).toLocaleDateString('he-IL')}
                       </span>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="empty-state">
-              <Image size={48} />
-              <p>אין תמונות עדיין</p>
-              <button className="btn btn--primary btn--small">
-                העלה תמונה ראשונה
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* System Status */}
-      <div className="system-status">
-        <div className="status-card">
-          <div className="status-header">
-            <h3>סטטוס המערכת</h3>
-            <div className="status-indicator status--healthy">
-              <div className="status-dot"></div>
-              <span>תקין</span>
+              ) : (
+                <p style={{
+                  textAlign: 'center',
+                  color: '#8B6F66',
+                  fontStyle: 'italic',
+                  padding: '2rem'
+                }}>
+                  אין תמונות עדיין
+                </p>
+              )}
             </div>
           </div>
-          <div className="status-details">
-            <div className="status-item">
-              <span>שרת:</span>
-              <span className="status-value">פעיל</span>
-            </div>
-            <div className="status-item">
-              <span>בסיס נתונים:</span>
-              <span className="status-value">מחובר</span>
-            </div>
-            <div className="status-item">
-              <span>נפח אחסון:</span>
-              <span className="status-value">{stats.gallery.totalSize} MB בשימוש</span>
-            </div>
-          </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };

@@ -3,27 +3,15 @@ import { useAuth } from '../../contexts/AuthContext';
 import Spinner from '../ui/Spinner';
 
 const PrivateRoute = ({ children }) => {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const location = useLocation();
 
-  if (loading) {
-    return (
-      <div className="private-route-loading">
-        <div className="container">
-          <div className="loading-container">
-            <Spinner size="large" />
-            <p>מאמת הרשאות...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+  // אם לא מחובר, הפנה לדף הלוגין
   if (!isAuthenticated) {
-    // Redirect to login page with return url
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  // אם מחובר, הצג את התוכן
   return children;
 };
 

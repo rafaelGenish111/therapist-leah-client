@@ -61,131 +61,117 @@
 
 /* כרטיס שירות עם גודל אחיד */
 .service-card {
-  padding: 2rem !important;
-  height: 100% !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: space-between !important;
-  min-height: 480px !important; /* גובה מינימלי גדול יותר */
-  transition: all var(--transition-normal) !important;
-  border: 2px solid transparent !important;
-  border-radius: var(--radius-lg) !important;
+  padding: var(--spacing-2xl);
+  height: 100%; /* גובה אחיד לכל הכרטיסים */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* חלוקה אחידה של התוכן */
+  min-height: 450px; /* גובה מינימלי קבוע */
+  transition: all var(--transition-normal);
+  border: 2px solid transparent;
 }
 
 .service-card:hover {
-  transform: translateY(-8px) !important;
-  border-color: var(--primary-color) !important;
-  box-shadow: var(--shadow-xl) !important;
+  transform: translateY(-8px);
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-xl);
 }
 
 .service-header {
-  margin-bottom: 1.5rem !important;
+  margin-bottom: var(--spacing-lg);
 }
 
 .service-title-price {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: flex-start !important;
-  margin-bottom: 1rem !important;
-  gap: 1rem !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-md);
+  gap: var(--spacing-md); /* ריווח בין הכותרת למחיר */
 }
 
 .service-title-price h3 {
-  flex: 1 !important;
-  margin: 0 !important;
-  font-size: 1.25rem !important;
-  color: var(--text-primary) !important;
-  line-height: 1.3 !important;
+  flex: 1;
+  margin: 0;
+  font-size: var(--font-size-xl);
+  color: var(--text-primary);
 }
 
 .price-duration {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-end !important;
-  gap: 0.5rem !important;
-  flex-shrink: 0 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-xs);
+  flex-shrink: 0; /* מונע כיווץ */
 }
 
 .price {
-  font-size: 1.25rem !important;
-  font-weight: bold !important;
-  color: var(--primary-color) !important;
-  white-space: nowrap !important;
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+  color: var(--primary-color);
+  white-space: nowrap;
 }
 
 .duration {
-  display: flex !important;
-  align-items: center !important;
-  gap: 0.5rem !important;
-  font-size: 0.875rem !important;
-  color: var(--text-secondary) !important;
-  white-space: nowrap !important;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  white-space: nowrap;
 }
 
 .service-description {
-  font-size: 1rem !important;
-  line-height: 1.6 !important;
-  margin-bottom: 1.5rem !important;
-  color: var(--text-secondary) !important;
-  flex-grow: 1 !important;
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-lg);
+  color: var(--text-secondary);
+  flex-grow: 1; /* תופס את השטח הפנוי */
 }
 
 .service-benefits {
-  margin-bottom: 1.5rem !important;
+  margin-bottom: var(--spacing-lg);
 }
 
 .service-benefits h4 {
-  font-size: 1rem !important;
-  margin-bottom: 1rem !important;
-  color: var(--text-primary) !important;
-  font-weight: 600 !important;
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-primary);
 }
 
 .service-benefits ul {
-  list-style: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .service-benefits li {
-  display: flex !important;
-  align-items: center !important;
-  gap: 0.75rem !important;
-  margin-bottom: 0.5rem !important;
-  font-size: 0.875rem !important;
-  color: var(--text-secondary) !important;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
 }
 
 .service-benefits li svg {
-  color: var(--success) !important;
-  flex-shrink: 0 !important;
+  color: var(--success);
+  flex-shrink: 0;
 }
 
 .suitable-for {
-  font-size: 0.875rem !important;
-  color: var(--text-secondary) !important;
-  background: var(--background-alt) !important;
-  padding: 1rem !important;
-  border-radius: var(--radius-md) !important;
-  margin-bottom: 2rem !important; /* ריווח גדול מעל הכפתורים */
-  border: 1px solid var(--border) !important;
-  line-height: 1.5 !important;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  background: var(--background-alt);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
 }
 
 .service-actions {
-  display: flex !important;
-  gap: 0.75rem !important;
-  justify-content: space-between !important;
-  margin-top: auto !important; /* דוחף את הכפתורים למטה */
-  padding-top: 1.5rem !important; /* ריווח נוסף מעל הכפתורים */
-  border-top: 1px solid var(--border) !important; /* קו הפרדה עדין */
-}
-
-.service-actions .btn {
-  flex: 1 !important; /* כפתורים באותו גודל */
-  padding: 0.75rem 1rem !important;
-  font-size: 0.875rem !important;
-  font-weight: 600 !important;
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: space-between;
+  margin-top: auto; /* דוחף את הכפתורים למטה */
 }
 
 /* חבילות טיפולים */
@@ -308,207 +294,59 @@
   font-weight: 600 !important;
 }
 
-/* שאלות נפוצות - עיצוב מקצועי */
+/* שאלות נפוצות - הוספת ריווח */
 .faq-section {
-  padding: 4rem 0 !important;
-  margin-top: 3rem !important;
-  background: var(--white) !important;
+  padding: 4rem 0 !important; /* ריווח גדול מעל ומתחת */
+  margin-top: 3rem !important; /* ריווח מעל הסקשן */
 }
 
 .faq-card {
-  max-width: 900px !important;
-  margin: 0 auto !important;
-  padding: 3rem !important;
-  background: var(--white) !important;
-  border-radius: var(--radius-xl) !important;
-  box-shadow: var(--shadow-lg) !important;
-}
-
-.faq-card h2 {
-  text-align: center !important;
-  font-size: 2.5rem !important;
-  margin-bottom: 3rem !important;
-  color: var(--text-primary) !important;
-  font-weight: 700 !important;
-  position: relative !important;
-}
-
-.faq-card h2::after {
-  content: '' !important;
-  position: absolute !important;
-  bottom: -10px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  width: 60px !important;
-  height: 4px !important;
-  background: var(--primary-color) !important;
-  border-radius: 2px !important;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .faq-content {
-  display: grid !important;
-  gap: 1rem !important;
+  display: grid;
+  gap: var(--spacing-lg);
 }
 
 .faq-item {
-  background: var(--background-alt) !important;
-  border-radius: var(--radius-lg) !important;
-  overflow: hidden !important;
-  transition: all 0.3s ease !important;
-  border: 2px solid transparent !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast);
 }
 
 .faq-item:hover {
-  border-color: var(--primary-color) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+  border-color: var(--primary-color);
 }
 
-.faq-question {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  padding: 1.5rem 2rem !important;
-  cursor: pointer !important;
-  background: var(--white) !important;
-  border: none !important;
-  width: 100% !important;
-  text-align: right !important;
-  transition: background-color 0.3s ease !important;
+.faq-item h4 {
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
 }
 
-.faq-question:hover {
-  background: var(--background-alt) !important;
+.faq-item p {
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.6;
 }
 
-.faq-question h4 {
-  color: var(--text-primary) !important;
-  margin: 0 !important;
-  font-size: 1.125rem !important;
-  font-weight: 600 !important;
-  flex: 1 !important;
-  text-align: right !important;
-}
-
-.faq-icon {
-  color: var(--primary-color) !important;
-  transition: transform 0.3s ease !important;
-  margin-left: 1rem !important;
-  flex-shrink: 0 !important;
-}
-
-.faq-item.active .faq-icon {
-  transform: rotate(180deg) !important;
-}
-
-.faq-answer {
-  max-height: 0 !important;
-  overflow: hidden !important;
-  transition: max-height 0.3s ease !important;
-  background: var(--white) !important;
-}
-
-.faq-item.active .faq-answer {
-  max-height: 200px !important;
-}
-
-.faq-answer-content {
-  padding: 0 2rem 2rem 2rem !important;
-  border-top: 1px solid var(--border) !important;
-  padding-top: 1.5rem !important;
-}
-
-.faq-answer p {
-  color: var(--text-secondary) !important;
-  margin: 0 !important;
-  line-height: 1.7 !important;
-  font-size: 1rem !important;
-}
-
-/* אנימציה עדינה לפתיחה */
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.faq-item.active .faq-answer-content {
-  animation: slideDown 0.3s ease !important;
-}
-
-/* עיצוב מיוחד לאייטם הפתוח */
-.faq-item.active {
-  border-color: var(--primary-color) !important;
-  box-shadow: 0 8px 30px rgba(212, 181, 176, 0.2) !important;
-}
-
-.faq-item.active .faq-question {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)) !important;
-  color: var(--white) !important;
-}
-
-.faq-item.active .faq-question h4 {
-  color: var(--white) !important;
-}
-
-.faq-item.active .faq-icon {
-  color: var(--white) !important;
-}
-
-/* רספונסיבי לשאלות נפוצות */
+/* רספונסיבי לחבילות */
 @media (max-width: 768px) {
-  .faq-card {
-    padding: 2rem !important;
-    margin: 0 1rem !important;
+  .packages-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+    max-width: 400px !important;
   }
   
-  .faq-card h2 {
-    font-size: 2rem !important;
-    margin-bottom: 2rem !important;
+  .package-card {
+    min-height: 320px !important;
+    margin-bottom: 1.5rem !important;
   }
   
-  .faq-question {
-    padding: 1.25rem 1.5rem !important;
-  }
-  
-  .faq-question h4 {
-    font-size: 1rem !important;
-  }
-  
-  .faq-answer-content {
-    padding: 0 1.5rem 1.5rem 1.5rem !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .faq-card {
-    padding: 1.5rem !important;
-  }
-  
-  .faq-card h2 {
-    font-size: 1.75rem !important;
-  }
-  
-  .faq-question {
-    padding: 1rem !important;
-  }
-  
-  .faq-answer-content {
-    padding: 0 1rem 1rem 1rem !important;
-  }
-  
-  .faq-question h4 {
-    font-size: 0.95rem !important;
-  }
-  
-  .faq-answer p {
-    font-size: 0.9rem !important;
+  .packages-section {
+    padding: 3rem 0 4rem 0 !important;
   }
 }
 
@@ -544,103 +382,74 @@
   flex-wrap: wrap;
 }
 
-/* עיצוב רספונסיבי משופר */
+/* עיצוב רספונסיבי */
 @media (max-width: 768px) {
   .services-grid {
-    grid-template-columns: 1fr !important;
-    gap: 1.5rem !important;
-    max-width: 500px !important;
-  }
-  
-  .service-card {
-    min-height: 420px !important;
-    padding: 1.5rem !important;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+    max-width: 500px; /* רוחב מוגבל במובייל */
   }
   
   .service-title-price {
-    flex-direction: column !important;
-    gap: 1rem !important;
-    align-items: flex-start !important;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: flex-start;
   }
   
   .price-duration {
-    align-items: flex-start !important;
+    align-items: flex-start;
   }
   
   .service-actions {
-    flex-direction: column !important;
-    gap: 0.75rem !important;
-    padding-top: 1.5rem !important;
-  }
-  
-  .service-actions .btn {
-    width: 100% !important;
+    flex-direction: column;
+    gap: var(--spacing-sm);
   }
   
   .filter-buttons {
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 0.75rem !important;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
   }
   
   .filter-buttons .btn {
-    min-width: 200px !important;
+    min-width: 200px;
   }
   
   .cta-buttons {
-    flex-direction: column !important;
-    align-items: center !important;
+    flex-direction: column;
+    align-items: center;
   }
   
   .packages-grid {
-    grid-template-columns: 1fr !important;
-    gap: 1.5rem !important;
-    max-width: 400px !important;
-  }
-  
-  .package-card {
-    min-height: 320px !important;
-    margin-bottom: 1.5rem !important;
-  }
-  
-  .packages-section {
-    padding: 3rem 0 4rem 0 !important;
+    grid-template-columns: 1fr;
+    max-width: 400px;
   }
 }
 
 @media (max-width: 480px) {
   .services-hero {
-    padding: 2rem 0 !important;
+    padding: var(--spacing-2xl) 0;
   }
   
   .category-filter {
-    padding: 1.5rem 0 !important;
+    padding: var(--spacing-lg) 0;
   }
   
   .service-card {
-    padding: 1rem !important;
-    min-height: 380px !important;
+    padding: var(--spacing-lg);
+    min-height: 400px;
   }
   
   .services-grid {
-    max-width: 100% !important;
-    grid-template-columns: 1fr !important;
+    max-width: 100%;
+    grid-template-columns: 1fr;
   }
   
   .cta-card {
-    padding: 2rem !important;
+    padding: var(--spacing-2xl);
   }
   
   .cta-card h2 {
-    font-size: 1.5rem !important;
-  }
-  
-  .suitable-for {
-    padding: 0.75rem !important;
-    margin-bottom: 1.5rem !important;
-  }
-  
-  .service-actions {
-    padding-top: 1rem !important;
+    font-size: var(--font-size-2xl);
   }
 }

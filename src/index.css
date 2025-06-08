@@ -1,153 +1,283 @@
-/* Import Global Styles */
-@import './styles/global.css';
-
-/* Root App Styles */
-#root {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
 }
 
-/* Main Content Area */
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Loading Screen */
-.app-loading {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-.app-loading .loading-content {
-  text-align: center;
-}
-
-.app-loading .spinner {
-  margin-bottom: var(--spacing-lg);
-}
-
-.app-loading p {
-  color: var(--text-secondary);
-  font-size: var(--font-size-lg);
-}
-
-/* Error Boundary Styles */
-.error-boundary {
-  padding: var(--spacing-3xl);
-  text-align: center;
-  background: var(--background-alt);
-  min-height: 50vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.error-boundary h1 {
-  color: var(--error);
-  margin-bottom: var(--spacing-lg);
-}
-
-.error-boundary p {
-  color: var(--text-secondary);
-  margin-bottom: var(--spacing-xl);
-  max-width: 500px;
-}
-
-/* Toast Notification Overrides */
-.Toastify__toast-container {
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   direction: rtl;
+  background-color: #FEFBFA;
+  color: #4A3429;
+  line-height: 1.6;
+  min-height: 100vh;
 }
 
-.Toastify__toast {
+/* CSS Variables */
+:root {
+  /* Colors */
+  --primary-color: #D4B5B0;
+  --primary-dark: #B89C94;
+  --primary-light: #E7D1CD;
+  --secondary-color: #8B6F66;
+  --text-primary: #4A3429;
+  --text-secondary: #8B6F66;
+  --text-muted: #B89C94;
+  --background: #FEFBFA;
+  --background-alt: #F5E6E3;
+  --white: #FFFFFF;
+  --border: #E7D1CD;
+  --border-light: #F0E4E1;
+  
+  /* Status Colors */
+  --error: #EF4444;
+  --error-light: #FEF2F2;
+  --success: #22C55E;
+  --success-light: #F0FDF4;
+  --warning: #F59E0B;
+  --warning-light: #FFFBEB;
+  --info: #3B82F6;
+  --info-light: #EFF6FF;
+
+  /* Spacing Scale */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 50%;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+
+  /* Typography */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+h1 { font-size: var(--font-size-3xl); }
+h2 { font-size: var(--font-size-2xl); }
+h3 { font-size: var(--font-size-xl); }
+
+p {
+  margin-bottom: var(--spacing-md);
+  color: var(--text-secondary);
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--primary-dark);
+}
+
+/* Layout */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+/* Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
   font-family: inherit;
+  font-weight: 500;
+  text-decoration: none;
+  border: none;
   border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  white-space: nowrap;
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: var(--font-size-base);
+}
+
+.btn--primary {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: 2px solid var(--primary-color);
+}
+
+.btn--primary:hover {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn--secondary {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+
+.btn--secondary:hover {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.btn--outline {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 2px solid var(--border);
+}
+
+.btn--outline:hover {
+  background-color: var(--background-alt);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn--small {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+}
+
+.btn--ghost {
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 2px solid transparent;
+}
+
+.btn--ghost:hover {
+  background-color: var(--background-alt);
+  color: var(--text-primary);
+}
+
+/* Card Styles */
+.card {
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  border: 1px solid var(--border);
+  padding: var(--spacing-xl);
+}
+
+.card:hover {
+  transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }
 
-.Toastify__toast--success {
-  background: var(--success);
+/* Spinner */
+.spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.Toastify__toast--error {
-  background: var(--error);
+.spinner__circle {
+  border-radius: 50%;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary-color);
+  animation: spin 1s linear infinite;
+  width: 24px;
+  height: 24px;
 }
 
-.Toastify__toast--warning {
-  background: var(--warning);
+.spinner--large .spinner__circle {
+  width: 40px;
+  height: 40px;
+  border-width: 4px;
 }
 
-/* Accessibility */
-.skip-link {
-  position: absolute;
-  top: -40px;
-  left: 6px;
-  background: var(--primary-color);
-  color: var(--white);
-  padding: 8px;
-  text-decoration: none;
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Form Elements */
+input, textarea, select {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 2px solid var(--border);
   border-radius: var(--radius-md);
-  z-index: 10000;
+  font-size: var(--font-size-base);
+  font-family: inherit;
+  transition: border-color var(--transition-fast);
+  background-color: var(--white);
 }
 
-.skip-link:focus {
-  top: 6px;
-}
-
-/* Focus Visible Polyfill */
-.js-focus-visible :focus:not(.focus-visible) {
+input:focus,
+textarea:focus,
+select:focus {
   outline: none;
+  border-color: var(--primary-color);
 }
 
-/* Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+label {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 
-/* High Contrast Mode */
-@media (prefers-contrast: high) {
-  :root {
-    --border: #000000;
-    --shadow: rgba(0, 0, 0, 0.5);
-  }
+/* Utilities */
+.text-center { text-align: center; }
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: var(--spacing-sm); }
+.mb-2 { margin-bottom: var(--spacing-md); }
+.mt-1 { margin-top: var(--spacing-sm); }
+.mt-2 { margin-top: var(--spacing-md); }
+
+/* Loading States */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-3xl);
+  text-align: center;
 }
 
-/* Print Styles */
-@media print {
-  .no-print {
-    display: none !important;
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-md);
   }
   
-  .app {
-    background: white !important;
-    color: black !important;
-  }
-  
-  .main-content {
-    padding: 0 !important;
-  }
+  h1 { font-size: var(--font-size-2xl); }
+  h2 { font-size: var(--font-size-xl); }
 }

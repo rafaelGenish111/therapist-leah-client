@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import Spinner from '../components/ui/Spinner';
+import './LoginPage.css';
 
 const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +15,8 @@ const LoginPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    setError
   } = useForm();
 
   // Redirect if already authenticated
@@ -28,7 +30,10 @@ const LoginPage = () => {
       await login(data);
       navigate('/admin');
     } catch (error) {
-      // Error is handled in AuthContext with toast
+      setError('root', {
+        type: 'manual',
+        message: error.message || 'שגיאה בהתחברות'
+      });
     } finally {
       setIsLoading(false);
     }
@@ -45,6 +50,12 @@ const LoginPage = () => {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="login-form">
+              {errors.root && (
+                <div className="error-message" style={{ textAlign: 'center', marginBottom: 'var(--spacing-lg)' }}>
+                  {errors.root.message}
+                </div>
+              )}
+
               <div className="form-group">
                 <label htmlFor="username">שם משתמש</label>
                 <input
@@ -59,6 +70,7 @@ const LoginPage = () => {
                   })}
                   className={errors.username ? 'error' : ''}
                   placeholder="הכנס שם משתמש"
+                  disabled={isLoading}
                 />
                 {errors.username && (
                   <span className="error-message">{errors.username.message}</span>
@@ -79,6 +91,7 @@ const LoginPage = () => {
                   })}
                   className={errors.password ? 'error' : ''}
                   placeholder="הכנס סיסמה"
+                  disabled={isLoading}
                 />
                 {errors.password && (
                   <span className="error-message">{errors.password.message}</span>
@@ -94,7 +107,7 @@ const LoginPage = () => {
               >
                 {isLoading ? (
                   <>
-                    <Spinner size="small" />
+                    <Spinner size="small" color="white" />
                     מתחבר...
                   </>
                 ) : (
@@ -104,7 +117,7 @@ const LoginPage = () => {
             </form>
 
             <div className="demo-info">
-              <p><strong>חשבון הדגמה:</strong></p>
+              <strong>חשבון הדגמה:</strong>
               <p>שם משתמש: demo</p>
               <p>סיסמה: 123456</p>
             </div>
