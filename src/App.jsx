@@ -1,7 +1,7 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Toaster } from 'react-hot-toast';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import HomePage from './pages/HomePage';
@@ -13,96 +13,85 @@ import LoginPage from './pages/LoginPage';
 import AdminPage from './pages/AdminPage';
 import PrivateRoute from './components/auth/PrivateRoute';
 
-// Create query client
+// Import ALL CSS files in the correct order
+import './styles/global.css';
+import './components/ui/Spinner.css';
+import './components/layout/Header.css';
+import './components/layout/Footer.css';
+import './components/admin/AdminSidebar.css';
+import './components/admin/AdminDashboard.css';
+import './pages/HomePage.css';
+import './pages/AboutPage.css';
+import './pages/ContantPage.css';
+import './pages/LoginPage.css';
+import './pages/AdminPage.css';
+
+// Create a client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 1,
       refetchOnWindowFocus: false,
-      staleTime: 5 * 60 * 1000, // 5 minutes
     },
   },
 });
-
-function AppContent() {
-  const { loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="app-loading">
-        <div className="loading-container">
-          <div className="spinner">
-            <div className="spinner__circle"></div>
-          </div>
-          <p>טוען...</p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="app">
-      <Header />
-      <main className="main-content">
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/articles" element={<ArticlesPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          
-          {/* Admin Routes */}
-          <Route 
-            path="/admin/*" 
-            element={
-              <PrivateRoute>
-                <AdminPage />
-              </PrivateRoute>
-            } 
-          />
-          
-          {/* Catch-all route */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </main>
-      <Footer />
-    </div>
-  );
-}
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <Router>
-          <AppContent />
-          <Toaster
-            position="top-center"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: '#fff',
-                color: '#4A3429',
-                fontSize: '14px',
-                fontFamily: 'inherit',
-                direction: 'rtl'
-              },
-              success: {
-                iconTheme: {
-                  primary: '#22C55E',
-                  secondary: '#fff',
+          <div className="app">
+            <Header />
+            
+            <main className="main-content">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/services" element={<ServicesPage />} />
+                <Route path="/articles" element={<ArticlesPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route 
+                  path="/admin/*" 
+                  element={
+                    <PrivateRoute>
+                      <AdminPage />
+                    </PrivateRoute>
+                  } 
+                />
+              </Routes>
+            </main>
+            
+            <Footer />
+            
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                duration: 4000,
+                style: {
+                  background: 'var(--white)',
+                  color: 'var(--text-primary)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--radius-lg)',
+                  fontFamily: 'inherit',
+                  fontSize: 'var(--font-size-sm)',
                 },
-              },
-              error: {
-                iconTheme: {
-                  primary: '#EF4444',
-                  secondary: '#fff',
+                success: {
+                  iconTheme: {
+                    primary: 'var(--success)',
+                    secondary: 'var(--white)',
+                  },
                 },
-              },
-            }}
-          />
+                error: {
+                  iconTheme: {
+                    primary: 'var(--error)',
+                    secondary: 'var(--white)',
+                  },
+                },
+              }}
+            />
+          </div>
         </Router>
       </AuthProvider>
     </QueryClientProvider>

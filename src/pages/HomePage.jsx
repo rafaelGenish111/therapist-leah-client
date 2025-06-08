@@ -1,148 +1,150 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, Navigate, useLocation } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { useAuth } from '../contexts/AuthContext';
-import Button from '../components/ui/Button';
-import Card from '../components/ui/Card';
-import Spinner from '../components/ui/Spinner';
+import { Link } from 'react-router-dom';
+import { Phone, Calendar, Heart, Star, ArrowLeft, Users, Award, Clock, Target } from 'lucide-react';
+import './HomePage.css';
 
-const LoginPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { login, isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-  
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setError
-  } = useForm();
-
-  // ✅ כשהמשתמש מתחבר בהצלחה, נווט לאדמין
-  useEffect(() => {
-    if (isAuthenticated) {
-      const from = location.state?.from?.pathname || '/admin';
-      navigate(from, { replace: true });
+const HomePage = () => {
+  const services = [
+    {
+      icon: <Heart size={48} />,
+      title: 'עיסוי שוודי קלאסי',
+      description: 'עיסוי מרגיע ומשחרר המותאם לכל גוף ומסייע בהפחתת מתח ולחץ יומיומי'
+    },
+    {
+      icon: <Target size={48} />,
+      title: 'עיסוי ספורטיבי',
+      description: 'טיפול מקצועי לספורטאים ופעילים המסייע במניעת פציעות ושיקום מהיר'
+    },
+    {
+      icon: <Star size={48} />,
+      title: 'עיסוי רקמות עמוקות',
+      description: 'שחרור מתחים עמוקים וכאבים כרוניים באמצעות טכניקות מתקדמות'
     }
-  }, [isAuthenticated, navigate, location.state?.from?.pathname]);
+  ];
 
-  // Redirect if already authenticated
-  if (isAuthenticated) {
-    return <Navigate to="/admin" replace />;
-  }
-
-  const onSubmit = async (data) => {
-    try {
-      setIsLoading(true);
-      console.log('Attempting login with:', data); // ✅ Debug
-      
-      await login(data);
-      console.log('Login successful!'); // ✅ Debug
-      
-      // ✅ הניווט יקרה ב-useEffect
-      
-    } catch (error) {
-      console.error('Login error:', error); // ✅ Debug
-      // ✅ הצגת שגיאה בטופס
-      setError('root', {
-        type: 'manual',
-        message: error.message || 'שגיאה בהתחברות'
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const stats = [
+    { number: '500+', label: 'מטופלים מרוצים', icon: <Users size={32} /> },
+    { number: '10+', label: 'שנות ניסיון', icon: <Award size={32} /> },
+    { number: '95%', label: 'שיפור מדווח', icon: <Target size={32} /> },
+    { number: '24/7', label: 'זמינות לשאלות', icon: <Clock size={32} /> }
+  ];
 
   return (
-    <div className="login-page">
-      <div className="container">
-        <div className="login-container">
-          <Card className="login-card">
-            <div className="login-header">
-              <h1>כניסה לאזור האישי</h1>
-              <p>אזור מוגבל למטפלת בלבד</p>
+    <div className="home-page">
+      {/* Hero Section */}
+      <section className="hero">
+        <div className="container">
+          <div className="hero-content">
+            <h1 className="hero-title">
+              <br />
+              <span className="highlight">לבחור להרגיש טוב</span>
+            </h1>
+            <p className="hero-description">
+            </p>
+            <div className="cta-buttons">
+              <a href="tel:050-123-4567" className="btn btn--primary btn--large">
+                <Phone size={20} />
+                קבע תור עכשיו
+              </a>
+              <Link to="/about" className="btn btn--secondary btn--large">
+                למד עוד עלינו
+                <ArrowLeft size={20} />
+              </Link>
             </div>
-
-            <form onSubmit={handleSubmit(onSubmit)} className="login-form">
-              <div className="form-group">
-                <label htmlFor="username">שם משתמש</label>
-                <input
-                  type="text"
-                  id="username"
-                  {...register('username', { 
-                    required: 'שם משתמש נדרש',
-                    minLength: {
-                      value: 3,
-                      message: 'שם משתמש חייב להכיל לפחות 3 תווים'
-                    }
-                  })}
-                  className={errors.username ? 'error' : ''}
-                  placeholder="הכנס שם משתמש"
-                  disabled={isLoading}
-                />
-                {errors.username && (
-                  <span className="error-message">{errors.username.message}</span>
-                )}
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="password">סיסמה</label>
-                <input
-                  type="password"
-                  id="password"
-                  {...register('password', { 
-                    required: 'סיסמה נדרשת',
-                    minLength: {
-                      value: 6,
-                      message: 'סיסמה חייבת להכיל לפחות 6 תווים'
-                    }
-                  })}
-                  className={errors.password ? 'error' : ''}
-                  placeholder="הכנס סיסמה"
-                  disabled={isLoading}
-                />
-                {errors.password && (
-                  <span className="error-message">{errors.password.message}</span>
-                )}
-              </div>
-
-              {/* ✅ הצגת שגיאות כלליות */}
-              {errors.root && (
-                <div className="form-group">
-                  <span className="error-message">{errors.root.message}</span>
-                </div>
-              )}
-
-              <Button
-                type="submit"
-                variant="primary"
-                size="large"
-                disabled={isLoading}
-                className="login-submit"
-              >
-                {isLoading ? (
-                  <>
-                    <Spinner size="small" />
-                    מתחבר...
-                  </>
-                ) : (
-                  'כניסה'
-                )}
-              </Button>
-            </form>
-
-            <div className="demo-info">
-              <p><strong>חשבון הדגמה:</strong></p>
-              <p>שם משתמש: demo</p>
-              <p>סיסמה: 123456</p>
-              <p><small>⚠️ זכור ליצור משתמש אמיתי עם npm run create-admin</small></p>
-            </div>
-          </Card>
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Services Section */}
+      <section className="services-section">
+        <div className="container">
+          <div className="section-header">
+            <h2>הטיפולים שלנו</h2>
+            <p>מגוון טיפולים מקצועיים המותאמים לצרכיך האישיים</p>
+          </div>
+          
+          <div className="services-grid">
+            {services.map((service, index) => (
+              <div key={index} className="service-card">
+                <div className="service-icon">
+                  {service.icon}
+                </div>
+                <h3>{service.title}</h3>
+                <p>{service.description}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="services-cta">
+            <Link to="/services" className="btn btn--outline btn--large">
+              צפה בכל הטיפולים
+              <ArrowLeft size={20} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* About Preview */}
+      <section className="about-preview">
+        <div className="container">
+          <div className="about-content">
+            <div className="about-text">
+              <h2>פגשו את ליאה גניש</h2>
+              <p>
+                מטפלת מוסמכת עם למעלה מ-10 שנות ניסיון בטיפולי עיסוי ורפואה משלימה. 
+                אני מאמינה כי כל אדם ייחודי ומגישה טיפול מותאם אישית המשלב טכניקות 
+                מסורתיות ומודרניות לקבלת התוצאות הטובות ביותר.
+              </p>
+              <p>
+                בקליניקה שלי במרכז תל אביב, אני יוצרת סביבה בטוחה ומרגיעה שבה תוכלו 
+                להרפות, להשתחרר ממתחים ולחזור למצב של איזון ורווחה מיטבית.
+              </p>
+              <Link to="/about" className="btn btn--primary">
+                קראו עוד עליי
+              </Link>
+            </div>
+            <div className="about-image">
+              <div className="placeholder-image">
+                <span>תמונה של ליאה גניש</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="stats-section">
+        <div className="container">
+          <div className="stats-grid">
+            {stats.map((stat, index) => (
+              <div key={index} className="stat-item">
+                <div className="stat-number">{stat.number}</div>
+                <div className="stat-label">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact CTA */}
+      <section className="contact-cta">
+        <div className="container">
+          <div className="cta-content">
+            <h2>מוכנים לקבוע טיפול?</h2>
+            <p>צרו קשר עוד היום ונתחיל את המסע שלכם לרווחה מיטבית</p>
+            <div className="cta-buttons">
+              <a href="tel:050-123-4567" className="btn btn--primary btn--large">
+                <Phone size={20} />
+                050-123-4567
+              </a>
+              <Link to="/contact" className="btn btn--outline btn--large">
+                יצירת קשר
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
 
-export default LoginPage;
+export default HomePage;
