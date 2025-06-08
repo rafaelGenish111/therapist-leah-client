@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { authApi } from '../services/api';
+import toast from 'react-hot-toast';
 
 const AuthContext = createContext();
 
@@ -14,20 +16,26 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Check for existing auth on mount
+  // ✅ בדיקת token בטעינה ראשונית - בלי React Query
   useEffect(() => {
-    const checkAuth = () => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem('authToken');
+      
+      if (!token) {
+        console.log('AuthContext: No token found');
+        setLoading(false);
+        return;
+      }
+
       try {
-        const savedUser = localStorage.getItem('authUser');
-        const token = localStorage.getItem('authToken');
-        
-        if (savedUser && token) {
-          setUser(JSON.parse(savedUser));
-        }
+        console.log('AuthContext: Verifying token...');
+        const data = await authApi.verifyToken();
+        console.log('AuthContext: Token valid, user:', data.user);
+        setUser(data.user);
       } catch (error) {
-        console.error('Error loading auth data:', error);
-        localStorage.removeItem('authUser');
+        console.log('AuthContext: Token invalid, removing');
         localStorage.removeItem('authToken');
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -36,33 +44,44 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
+  // ✅ Login function
   const login = async (credentials) => {
     try {
-      // Demo login - replace with real API call
-      if (credentials.username === 'demo' && credentials.password === '123456') {
-        const userData = { 
-          username: 'ליאה', 
-          role: 'admin',
-          id: '1'
-        };
-        
-        setUser(userData);
-        localStorage.setItem('authUser', JSON.stringify(userData));
-        localStorage.setItem('authToken', 'demo-token-123');
-        
-        return Promise.resolve();
-      }
+      console.log('AuthContext: Starting login...', credentials);
+      const data = await authApi.login(credentials);
+      console.log('AuthContext: Login API success:', data);
       
-      throw new Error('שם משתמש או סיסמה שגויים');
+      localStorage.setItem('authToken', data.token);
+      setUser(data.user);
+      
+      console.log('AuthContext: User set successfully');
+      toast.success(`ברוך הבא, ${data.user.username}!`);
+      
+      return data;
     } catch (error) {
+      console.error('AuthContext: Login error:', error);
+      toast.error(error.message || 'שגיאה בהתחברות');
       throw error;
     }
   };
 
+  // ✅ Logout function
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem('authUser');
+    console.log('AuthContext: Logging out');
     localStorage.removeItem('authToken');
+    setUser(null);
+    toast.success('התנתקת בהצלחה');
+  };
+
+  // ✅ Change password function
+  const changePassword = async (passwordData) => {
+    try {
+      await authApi.changePassword(passwordData);
+      toast.success('הסיסמה שונתה בהצלחה');
+    } catch (error) {
+      toast.error(error.message || 'שגיאה בשינוי הסיסמה');
+      throw error;
+    }
   };
 
   const value = {
@@ -70,8 +89,15 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: !!user,
     loading,
     login,
-    logout
+    logout,
+    changePassword,
   };
+
+  console.log('AuthContext render:', { 
+    user: user?.username || null, 
+    isAuthenticated: !!user, 
+    loading 
+  });
 
   return (
     <AuthContext.Provider value={value}>

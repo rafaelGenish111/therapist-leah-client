@@ -139,7 +139,7 @@ const GalleryManager = () => {
           <Card key={image._id} className="image-item">
             <div className="image-container">
               <img
-                src={`${process.env.REACT_APP_API_URL}/uploads/${image.filename}`}
+                src={`${process.env.VITE_API_URL}/uploads/${image.filename}`}
                 alt={image.originalName}
                 loading="lazy"
               />

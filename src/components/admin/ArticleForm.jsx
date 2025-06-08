@@ -45,7 +45,7 @@ const ArticleForm = ({ article, onClose, onSave }) => {
       }
       
       if (article.image) {
-        setImagePreview(`${process.env.REACT_APP_API_URL}/uploads/${article.image}`);
+        setImagePreview(`${process.env.VITE_API_URL}/uploads/${article.image}`);
       }
     }
   }, [article, reset]);

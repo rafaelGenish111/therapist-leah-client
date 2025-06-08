@@ -121,7 +121,7 @@ const ArticlesPage = () => {
                 <Card key={article._id} className="article-card" hover>
                   {article.image && (
                     <img
-                      src={`${process.env.REACT_APP_API_URL}/uploads/${article.image}`}
+                      src={`${process.env.VITE_API_URL}/uploads/${article.image}`}
                       alt={article.title}
                       className="article-image"
                     />
