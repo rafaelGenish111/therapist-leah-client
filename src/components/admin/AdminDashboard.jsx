@@ -1,97 +1,63 @@
+import { useState } from 'react';
 import { useQuery } from 'react-query';
-import { FileText, Image, Heart, Eye, Plus, Download, BarChart, Users } from 'lucide-react';
+import { FileText, Image, Heart, Eye, Plus, Download, BarChart, Bug } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { articlesApi, galleryApi, healthDeclarationsApi } from '../../services/api';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
 import Spinner from '../ui/Spinner';
-import './AdminDashboard.css';
+import DebugUpload from './DebugUpload';
 
 const AdminDashboard = () => {
   const { user } = useAuth();
-
-  // Get current time and date for welcome message
-  const getCurrentGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'בוקר טוב';
-    if (hour < 18) return 'שלום';
-    return 'ערב טוב';
-  };
+  const [showDebug, setShowDebug] = useState(false);
 
   // Fetch stats from different APIs
   const { data: articlesStats, isLoading: articlesLoading } = useQuery(
     'articlesStats',
     articlesApi.getStats,
-    { 
-      staleTime: 5 * 60 * 1000,
-      onError: () => {
-        // Handle error silently or provide mock data
-      }
-    }
+    { staleTime: 5 * 60 * 1000 }
   );
 
   const { data: galleryStats, isLoading: galleryLoading } = useQuery(
     'galleryStats',
     galleryApi.getStats,
-    { 
-      staleTime: 5 * 60 * 1000,
-      onError: () => {
-        // Handle error silently or provide mock data
-      }
-    }
+    { staleTime: 5 * 60 * 1000 }
   );
 
   const { data: declarationsStats, isLoading: declarationsLoading } = useQuery(
     'declarationsStats',
     healthDeclarationsApi.getStats,
-    { 
-      staleTime: 5 * 60 * 1000,
-      onError: () => {
-        // Handle error silently or provide mock data
-      }
-    }
+    { staleTime: 5 * 60 * 1000 }
   );
 
   const isLoading = articlesLoading || galleryLoading || declarationsLoading;
 
-  // Mock data for when API is not available
-  const mockStats = {
-    articles: { published: 20, total: 25, totalViews: 1245, popularArticles: [] },
-    gallery: { visible: 135, total: 150, recentImages: [] },
-    declarations: { thisWeek: 12, total: 89 }
-  };
-
-  const statsData = {
-    articles: articlesStats || mockStats.articles,
-    gallery: galleryStats || mockStats.gallery,
-    declarations: declarationsStats || mockStats.declarations
-  };
-
   const statsCards = [
     {
       title: 'מאמרים',
-      value: statsData.articles.published,
-      subtitle: `סה"כ ${statsData.articles.total} מאמרים`,
+      value: articlesStats?.published || 0,
+      subtitle: `סה"כ ${articlesStats?.total || 0} מאמרים`,
       icon: <FileText size={24} />,
       color: 'primary'
     },
     {
       title: 'צפיות במאמרים',
-      value: statsData.articles.totalViews,
+      value: articlesStats?.totalViews || 0,
       subtitle: 'צפיות כוללות',
       icon: <Eye size={24} />,
       color: 'success'
     },
     {
       title: 'תמונות בגלריה',
-      value: statsData.gallery.visible,
-      subtitle: `סה"כ ${statsData.gallery.total} תמונות`,
+      value: galleryStats?.visible || 0,
+      subtitle: `סה"כ ${galleryStats?.total || 0} תמונות`,
       icon: <Image size={24} />,
       color: 'info'
     },
     {
       title: 'הצהרות בריאות',
-      value: statsData.declarations.thisWeek,
+      value: declarationsStats?.thisWeek || 0,
       subtitle: 'השבוע',
       icon: <Heart size={24} />,
       color: 'warning'
@@ -103,14 +69,14 @@ const AdminDashboard = () => {
       title: 'כתיבת מאמר חדש',
       description: 'הוסף מאמר חדש לאתר',
       icon: <Plus size={20} />,
-      action: () => window.location.href = '/admin/articles',
+      action: () => console.log('Navigate to new article'),
       variant: 'primary'
     },
     {
       title: 'העלאת תמונות',
       description: 'הוסף תמונות לגלריה',
       icon: <Image size={20} />,
-      action: () => window.location.href = '/admin/gallery',
+      action: () => console.log('Navigate to gallery upload'),
       variant: 'secondary'
     },
     {
@@ -124,200 +90,70 @@ const AdminDashboard = () => {
       title: 'צפיה בדוחות',
       description: 'סטטיסטיקות מפורטות',
       icon: <BarChart size={20} />,
-      action: () => window.location.href = '/admin/stats',
+      action: () => console.log('View reports'),
       variant: 'outline'
     }
   ];
 
   return (
-    <div style={{
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '2rem',
-      fontFamily: 'system-ui, -apple-system, sans-serif',
-      direction: 'rtl'
-    }}>
-      {/* Welcome Section */}
-      <div style={{
-        background: 'linear-gradient(135deg, #D4B5B0 0%, #B89C94 100%)',
-        color: 'white',
-        padding: '3rem 2rem',
-        borderRadius: '1rem',
-        marginBottom: '3rem',
-        textAlign: 'center'
-      }}>
-        <h1 style={{
-          fontSize: '2rem',
-          marginBottom: '0.5rem',
-          fontWeight: '600'
-        }}>
-          {getCurrentGreeting()}, {user?.username}! 👋
-        </h1>
-        <p style={{
-          fontSize: '1.125rem',
-          margin: 0,
-          opacity: 0.9
-        }}>
-          ברוכה הבאה לאזור הניהול של הקליניקה
-        </p>
+    <div className="admin-dashboard">
+      <div className="dashboard-header">
+        <div>
+          <h1>שלום {user?.username}! 👋</h1>
+          <p>ברוכה הבאה לאזור הניהול של הקליניקה</p>
+        </div>
+        <div className="header-actions">
+          <Button 
+            variant={showDebug ? "danger" : "outline"} 
+            onClick={() => setShowDebug(!showDebug)}
+          >
+            <Bug size={16} />
+            {showDebug ? 'סגור Debug' : 'כלי Debug'}
+          </Button>
+          <Button variant="primary">
+            <Plus size={16} />
+            פעולה מהירה
+          </Button>
+        </div>
       </div>
 
+      {/* Debug Panel */}
+      {showDebug && <DebugUpload />}
+
       {isLoading ? (
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '3rem',
-          textAlign: 'center'
-        }}>
+        <div className="loading-container">
           <Spinner size="large" />
-          <p style={{ marginTop: '1rem', color: '#8B6F66' }}>טוען נתונים...</p>
+          <p>טוען נתונים...</p>
         </div>
       ) : (
         <>
           {/* Stats Grid */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: '2rem',
-            marginBottom: '3rem'
-          }}>
+          <div className="stats-grid">
             {statsCards.map((stat, index) => (
-              <div key={index} style={{
-                background: 'white',
-                padding: '2rem',
-                borderRadius: '1rem',
-                border: '1px solid #E7D1CD',
-                borderLeft: `4px solid ${
-                  stat.color === 'primary' ? '#D4B5B0' :
-                  stat.color === 'success' ? '#22C55E' :
-                  stat.color === 'info' ? '#3B82F6' :
-                  '#F59E0B'
-                }`,
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                transition: 'all 0.3s ease',
-                cursor: 'pointer'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = 'translateY(-4px)';
-                e.target.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
-              }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                  marginBottom: '1.5rem'
-                }}>
-                  <div style={{
-                    color: stat.color === 'primary' ? '#D4B5B0' :
-                           stat.color === 'success' ? '#22C55E' :
-                           stat.color === 'info' ? '#3B82F6' :
-                           '#F59E0B'
-                  }}>
-                    {stat.icon}
-                  </div>
-                  <h3 style={{
-                    margin: 0,
-                    fontSize: '1rem',
-                    color: '#8B6F66',
-                    fontWeight: '500'
-                  }}>
-                    {stat.title}
-                  </h3>
+              <Card key={index} className={`stat-card stat-card--${stat.color}`}>
+                <div className="stat-header">
+                  <div className="stat-icon">{stat.icon}</div>
+                  <h3>{stat.title}</h3>
                 </div>
-                <div>
-                  <div style={{
-                    fontSize: '2.5rem',
-                    fontWeight: '700',
-                    color: '#4A3429',
-                    marginBottom: '0.25rem',
-                    lineHeight: 1
-                  }}>
-                    {stat.value.toLocaleString()}
-                  </div>
-                  <div style={{
-                    color: '#B89C94',
-                    fontSize: '0.875rem'
-                  }}>
-                    {stat.subtitle}
-                  </div>
+                <div className="stat-content">
+                  <div className="stat-value">{stat.value.toLocaleString()}</div>
+                  <div className="stat-subtitle">{stat.subtitle}</div>
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
 
           {/* Quick Actions */}
-          <div style={{
-            background: 'white',
-            padding: '2rem',
-            borderRadius: '1rem',
-            border: '1px solid #E7D1CD',
-            marginBottom: '3rem'
-          }}>
-            <h2 style={{
-              marginBottom: '2rem',
-              color: '#4A3429',
-              fontSize: '1.5rem'
-            }}>
-              פעולות מהירות
-            </h2>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: '1.5rem'
-            }}>
+          <Card className="quick-actions-card">
+            <h2>פעולות מהירות</h2>
+            <div className="quick-actions-grid">
               {quickActions.map((action, index) => (
-                <div key={index} style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '1.5rem',
-                  border: '1px solid #E7D1CD',
-                  borderRadius: '0.75rem',
-                  transition: 'all 0.15s ease',
-                  cursor: 'pointer'
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.borderColor = '#D4B5B0';
-                  e.target.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.borderColor = '#E7D1CD';
-                  e.target.style.boxShadow = 'none';
-                }}>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '1rem'
-                  }}>
-                    <div style={{
-                      color: '#D4B5B0',
-                      background: '#F5E6E3',
-                      padding: '0.5rem',
-                      borderRadius: '0.5rem'
-                    }}>
-                      {action.icon}
-                    </div>
+                <div key={index} className="quick-action-item">
+                  <div className="action-content">
+                    <div className="action-icon">{action.icon}</div>
                     <div>
-                      <h4 style={{
-                        margin: '0 0 0.25rem 0',
-                        fontSize: '1rem',
-                        color: '#4A3429'
-                      }}>
-                        {action.title}
-                      </h4>
-                      <p style={{
-                        margin: 0,
-                        fontSize: '0.875rem',
-                        color: '#8B6F66'
-                      }}>
-                        {action.description}
-                      </p>
+                      <h4>{action.title}</h4>
+                      <p>{action.description}</p>
                     </div>
                   </div>
                   <Button 
@@ -330,141 +166,53 @@ const AdminDashboard = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </Card>
 
           {/* Recent Activity */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-            gap: '2rem'
-          }}>
-            <div style={{
-              background: 'white',
-              padding: '2rem',
-              borderRadius: '1rem',
-              border: '1px solid #E7D1CD'
-            }}>
-              <h3 style={{
-                marginBottom: '1.5rem',
-                color: '#4A3429',
-                fontSize: '1.25rem'
-              }}>
-                מאמרים פופולריים
-              </h3>
-              {statsData.articles.popularArticles?.length > 0 ? (
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1rem'
-                }}>
-                  {statsData.articles.popularArticles.map((article, index) => (
-                    <div key={article._id} style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      padding: '1rem',
-                      border: '1px solid #F0E4E1',
-                      borderRadius: '0.5rem'
-                    }}>
-                      <div style={{ flex: 1 }}>
-                        <h4 style={{
-                          margin: '0 0 0.25rem 0',
-                          fontSize: '0.875rem',
-                          color: '#4A3429'
-                        }}>
-                          {article.title}
-                        </h4>
-                        <span style={{
-                          fontSize: '0.75rem',
-                          color: '#8B6F66'
-                        }}>
+          <div className="dashboard-grid">
+            <Card className="recent-articles">
+              <h3>מאמרים פופולריים</h3>
+              {articlesStats?.popularArticles?.length > 0 ? (
+                <div className="articles-list">
+                  {articlesStats.popularArticles.map((article, index) => (
+                    <div key={article._id} className="article-item">
+                      <div className="article-info">
+                        <h4>{article.title}</h4>
+                        <span className="article-views">
                           {article.views} צפיות
                         </span>
                       </div>
-                      <span style={{
-                        fontSize: '0.75rem',
-                        color: '#B89C94'
-                      }}>
+                      <span className="article-date">
                         {new Date(article.createdAt).toLocaleDateString('he-IL')}
                       </span>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p style={{
-                  textAlign: 'center',
-                  color: '#8B6F66',
-                  fontStyle: 'italic',
-                  padding: '2rem'
-                }}>
-                  אין מאמרים עדיין
-                </p>
+                <p className="empty-state">אין מאמרים עדיין</p>
               )}
-            </div>
+            </Card>
 
-            <div style={{
-              background: 'white',
-              padding: '2rem',
-              borderRadius: '1rem',
-              border: '1px solid #E7D1CD'
-            }}>
-              <h3 style={{
-                marginBottom: '1.5rem',
-                color: '#4A3429',
-                fontSize: '1.25rem'
-              }}>
-                תמונות אחרונות
-              </h3>
-              {statsData.gallery.recentImages?.length > 0 ? (
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1rem'
-                }}>
-                  {statsData.gallery.recentImages.map((image, index) => (
-                    <div key={image._id} style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      padding: '1rem',
-                      border: '1px solid #F0E4E1',
-                      borderRadius: '0.5rem'
-                    }}>
-                      <div style={{ flex: 1 }}>
-                        <h4 style={{
-                          margin: '0 0 0.25rem 0',
-                          fontSize: '0.875rem',
-                          color: '#4A3429'
-                        }}>
-                          {image.originalName}
-                        </h4>
-                        <span style={{
-                          fontSize: '0.75rem',
-                          color: '#8B6F66'
-                        }}>
-                          {image.category}
-                        </span>
+            <Card className="recent-images">
+              <h3>תמונות אחרונות</h3>
+              {galleryStats?.recentImages?.length > 0 ? (
+                <div className="images-list">
+                  {galleryStats.recentImages.map((image, index) => (
+                    <div key={image._id} className="image-item">
+                      <div className="image-info">
+                        <h4>{image.originalName}</h4>
+                        <span className="image-category">{image.category}</span>
                       </div>
-                      <span style={{
-                        fontSize: '0.75rem',
-                        color: '#B89C94'
-                      }}>
+                      <span className="image-date">
                         {new Date(image.uploadedAt).toLocaleDateString('he-IL')}
                       </span>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p style={{
-                  textAlign: 'center',
-                  color: '#8B6F66',
-                  fontStyle: 'italic',
-                  padding: '2rem'
-                }}>
-                  אין תמונות עדיין
-                </p>
+                <p className="empty-state">אין תמונות עדיין</p>
               )}
-            </div>
+            </Card>
           </div>
         </>
       )}
