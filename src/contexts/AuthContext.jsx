@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { authApi } from '../services/api';
-import toast from 'react-hot-toast';
 
 const AuthContext = createContext();
 
@@ -16,72 +15,66 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ בדיקת token בטעינה ראשונית - בלי React Query
+  // Check for existing token on app load
   useEffect(() => {
-    const checkAuth = async () => {
+    const initAuth = async () => {
       const token = localStorage.getItem('authToken');
-      
-      if (!token) {
+      if (token) {
+        try {
+          console.log('AuthContext: Found token, verifying...');
+          const response = await authApi.verifyToken();
+          console.log('AuthContext: Token verified, user:', response.user);
+          setUser(response.user);
+        } catch (error) {
+          console.log('AuthContext: Token verification failed:', error.message);
+          localStorage.removeItem('authToken');
+        }
+      } else {
         console.log('AuthContext: No token found');
-        setLoading(false);
-        return;
       }
-
-      try {
-        console.log('AuthContext: Verifying token...');
-        const data = await authApi.verifyToken();
-        console.log('AuthContext: Token valid, user:', data.user);
-        setUser(data.user);
-      } catch (error) {
-        console.log('AuthContext: Token invalid, removing');
-        localStorage.removeItem('authToken');
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
+      setLoading(false);
     };
 
-    checkAuth();
+    initAuth();
   }, []);
 
-  // ✅ Login function
   const login = async (credentials) => {
     try {
-      console.log('AuthContext: Starting login...', credentials);
-      const data = await authApi.login(credentials);
-      console.log('AuthContext: Login API success:', data);
+      console.log('AuthContext: Attempting login with:', credentials);
+      const response = await authApi.login(credentials);
       
-      localStorage.setItem('authToken', data.token);
-      setUser(data.user);
+      console.log('AuthContext: Raw response:', response);
       
-      console.log('AuthContext: User set successfully');
-      toast.success(`ברוך הבא, ${data.user.username}!`);
+      if (!response || !response.token) {
+        throw new Error('לא התקבל טוקן מהשרת');
+      }
       
-      return data;
+      // Save token
+      localStorage.setItem('authToken', response.token);
+      console.log('AuthContext: Token saved to localStorage');
+      
+      // Set user
+      setUser(response.user);
+      
+      console.log('AuthContext: Login successful, user set:', response.user);
+      
+      return response;
     } catch (error) {
-      console.error('AuthContext: Login error:', error);
-      toast.error(error.message || 'שגיאה בהתחברות');
+      console.error('AuthContext: Login failed:', error);
+      
+      // Clean up any existing token on failed login
+      localStorage.removeItem('authToken');
+      setUser(null);
+      
+      // Re-throw the error so the component can handle it
       throw error;
     }
   };
 
-  // ✅ Logout function
   const logout = () => {
     console.log('AuthContext: Logging out');
     localStorage.removeItem('authToken');
     setUser(null);
-    toast.success('התנתקת בהצלחה');
-  };
-
-  // ✅ Change password function
-  const changePassword = async (passwordData) => {
-    try {
-      await authApi.changePassword(passwordData);
-      toast.success('הסיסמה שונתה בהצלחה');
-    } catch (error) {
-      toast.error(error.message || 'שגיאה בשינוי הסיסמה');
-      throw error;
-    }
   };
 
   const value = {
@@ -89,8 +82,7 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: !!user,
     loading,
     login,
-    logout,
-    changePassword,
+    logout
   };
 
   console.log('AuthContext render:', { 
