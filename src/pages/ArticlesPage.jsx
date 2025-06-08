@@ -22,7 +22,7 @@ const ArticlesPage = () => {
         title: 'יתרונות העיסוי השוודי לבריאות הגוף והנפש',
         content: 'העיסוי השוודי הוא אחד מסוגי העיסוי הפופולריים ביותר בעולם, והסיבה לכך היא התועלות הרבות שהוא מביא לגוף ולנפש. טכניקת העיסוי הזו פותחה בשוודיה במאה ה-19 ומאז התפשטה לכל העולם...',
         image: 'swedish-massage.jpg',
-        author: { username: 'ליאה גניש' },
+        author: { username: 'לאה גניש' },
         isPublished: true,
         tags: ['עיסוי שוודי', 'בריאות', 'רלקסציה'],
         views: 1250,
@@ -34,7 +34,7 @@ const ArticlesPage = () => {
         title: 'עיסוי ספורטיבי: מתי ולמה זה חיוני לספורטאים',
         content: 'עיסוי ספורטיבי הוא חלק בלתי נפרד מהשגרה של כל ספורטאי מקצועי. הוא עוזר לשקם את השרירים לאחר אימון אינטנסיבי, מונע פציעות ומשפר את הביצועים הספורטיביים...',
         image: 'sports-massage.jpg',
-        author: { username: 'ליאה גניש' },
+        author: { username: 'לאה גניש' },
         isPublished: true,
         tags: ['עיסוי ספורטיבי', 'ספורט', 'שיקום'],
         views: 890,
@@ -46,7 +46,7 @@ const ArticlesPage = () => {
         title: 'הכנת הגוף לעיסוי: טיפים חשובים לפני הטיפול',
         content: 'הכנה נכונה לטיפול עיסוי יכולה להשפיע משמעותית על יעילות הטיפול והתועלת שתפיקו ממנו. בפוסט הזה נלמד על הדרכים הטובות ביותר להתכונן לטיפול עיסוי...',
         image: 'preparation.jpg',
-        author: { username: 'ליאה גניש' },
+        author: { username: 'לאה גניש' },
         isPublished: true,
         tags: ['הכנה לטיפול', 'טיפים', 'הדרכה'],
         views: 567,
@@ -58,7 +58,7 @@ const ArticlesPage = () => {
         title: 'עיסוי במהלך ההריון: בטיחות ויתרונות',
         content: 'עיסוי בזמן ההריון יכול להיות מקור נוחות ורווחה עצום לנשים בהריון, אך חשוב לדעת אילו טכניקות בטוחות ומתי מומלץ להימנע מטיפול...',
         image: 'pregnancy-massage.jpg',
-        author: { username: 'ליאה גניש' },
+        author: { username: 'לאה גניש' },
         isPublished: true,
         tags: ['עיסוי הריון', 'נשים', 'בטיחות'],
         views: 743,
@@ -70,7 +70,7 @@ const ArticlesPage = () => {
         title: 'עיסוי רקמות עמוקות: מתי וכיצד מבצעים',
         content: 'עיסוי רקמות עמוקות הוא טכניקה מתקדמת המיועדת לטיפול בכאבים כרוניים ומתחים עמוקים בשרירים. למרות שהוא יכול להיות לא נוח במהלך הטיפול...',
         image: 'deep-tissue.jpg',
-        author: { username: 'ליאה גניש' },
+        author: { username: 'לאה גניש' },
         isPublished: true,
         tags: ['רקמות עמוקות', 'כאב כרוני', 'טיפול מתקדם'],
         views: 1180,
@@ -82,7 +82,7 @@ const ArticlesPage = () => {
         title: 'ארומתרפיה ועיסוי: שילוב מושלם לרווחה',
         content: 'שילוב של עיסוי מקצועי עם שמנים ארומתרפיים יוצר חוויה טיפולית יוצאת דופן. הארומתרפיה מוסיפה ממד של ריפוי נפשי ורגשי לטיפול הפיזי...',
         image: 'aromatherapy.jpg',
-        author: { username: 'ליאה גניש' },
+        author: { username: 'לאה גניש' },
         isPublished: true,
         tags: ['ארומתרפיה', 'שמנים אתריים', 'רווחה'],
         views: 623,
@@ -104,13 +104,13 @@ const ArticlesPage = () => {
   // Filter and sort articles
   const getFilteredAndSortedArticles = () => {
     let filtered = mockData.articles.filter(article => {
-      const matchesSearch = !searchTerm || 
+      const matchesSearch = !searchTerm ||
         article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         article.content.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesTags = selectedTags.length === 0 || 
+
+      const matchesTags = selectedTags.length === 0 ||
         selectedTags.some(tag => article.tags.includes(tag));
-      
+
       return matchesSearch && matchesTags;
     });
 
@@ -154,8 +154,8 @@ const ArticlesPage = () => {
   };
 
   const toggleTag = (tag) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
+    setSelectedTags(prev =>
+      prev.includes(tag)
         ? prev.filter(t => t !== tag)
         : [...prev, tag]
     );
@@ -365,7 +365,7 @@ const ArticlesPage = () => {
                         />
                       </div>
                     )}
-                    
+
                     <div className="article-info">
                       <div className="article-header">
                         <h3 className="article-title">{article.title}</h3>
@@ -376,11 +376,11 @@ const ArticlesPage = () => {
                           </div>
                         </div>
                       </div>
-                      
+
                       <p className="article-excerpt">
                         {truncateContent(article.content)}
                       </p>
-                      
+
                       <div className="article-tags">
                         {article.tags.map((tag, index) => (
                           <span key={index} className="article-tag">
@@ -388,14 +388,14 @@ const ArticlesPage = () => {
                           </span>
                         ))}
                       </div>
-                      
+
                       <div className="article-footer">
                         <div className="article-meta">
                           <div className="meta-item">
                             <Calendar size={16} />
                             <span>{formatDate(article.createdAt)}</span>
                           </div>
-                          
+
                           <div className="meta-item">
                             <User size={16} />
                             <span>{article.author.username}</span>
@@ -408,9 +408,9 @@ const ArticlesPage = () => {
                             </div>
                           )}
                         </div>
-                        
-                        <Button 
-                          variant="primary" 
+
+                        <Button
+                          variant="primary"
                           size="small"
                           onClick={() => viewArticle(article._id)}
                         >
@@ -463,11 +463,11 @@ const ArticlesPage = () => {
             >
               הקודם
             </Button>
-            
+
             <span className="page-info">
               עמוד {page} מתוך {pagination.pages}
             </span>
-            
+
             <Button
               variant="outline"
               disabled={page >= pagination.pages}

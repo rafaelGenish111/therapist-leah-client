@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { 
-  Save, 
-  User, 
-  Bell, 
-  Globe, 
-  Shield, 
+import {
+  Save,
+  User,
+  Bell,
+  Globe,
+  Shield,
   Database,
   Mail,
   Phone,
@@ -22,11 +22,11 @@ const Settings = () => {
   const [activeTab, setActiveTab] = useState('general');
   const [settings, setSettings] = useState({
     // General Settings
-    siteName: 'קליניקת ליאה גניש',
+    siteName: 'קליניקת לאה גניש',
     siteDescription: 'הבחירה להרגיש טוב',
-    siteKeywords: 'עיסוי, טיפול, קליניקה, ליאה גניש, תל אביב',
+    siteKeywords: 'עיסוי, טיפול, קליניקה, לאה גניש, תל אביב',
     logoFile: null,
-    
+
     // Contact Settings
     contactEmail: 'info@leahgenish.co.il',
     contactPhone: '050-123-4567',
@@ -41,7 +41,7 @@ const Settings = () => {
       friday: { open: '', close: '', enabled: false },
       saturday: { open: '', close: '', enabled: false }
     },
-    
+
     // Notification Settings
     emailNotifications: {
       newHealthDeclaration: true,
@@ -49,12 +49,12 @@ const Settings = () => {
       systemUpdates: false,
       weeklyReport: true
     },
-    
+
     // Privacy Settings
     dataRetention: '12', // months
     cookieConsent: true,
     analyticsEnabled: true,
-    
+
     // System Settings
     autoPublishArticles: false,
     enableComments: false,
@@ -103,17 +103,17 @@ const Settings = () => {
 
   const handlePasswordChange = (e) => {
     e.preventDefault();
-    
+
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       toast.error('הסיסמאות החדשות אינן תואמות');
       return;
     }
-    
+
     if (passwordData.newPassword.length < 6) {
       toast.error('הסיסמה החדשה חייבת להכיל לפחות 6 תווים');
       return;
     }
-    
+
     // Simulate API call
     setTimeout(() => {
       toast.success('הסיסמה שונתה בהצלחה!');
@@ -148,12 +148,12 @@ const Settings = () => {
     const dataStr = JSON.stringify(settings, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(dataBlob);
-    
+
     const link = document.createElement('a');
     link.href = url;
     link.download = 'clinic-settings.json';
     link.click();
-    
+
     toast.success('הגדרות יוצאו בהצלחה!');
   };
 
@@ -167,13 +167,13 @@ const Settings = () => {
   const renderGeneralSettings = () => (
     <div className="settings-section">
       <h3>הגדרות כלליות</h3>
-      
+
       <div className="form-group">
         <label>שם האתר</label>
         <input
           type="text"
           value={settings.siteName}
-          onChange={(e) => setSettings({...settings, siteName: e.target.value})}
+          onChange={(e) => setSettings({ ...settings, siteName: e.target.value })}
           placeholder="שם הקליניקה"
         />
       </div>
@@ -182,7 +182,7 @@ const Settings = () => {
         <label>תיאור האתר</label>
         <textarea
           value={settings.siteDescription}
-          onChange={(e) => setSettings({...settings, siteDescription: e.target.value})}
+          onChange={(e) => setSettings({ ...settings, siteDescription: e.target.value })}
           placeholder="תיאור קצר של הקליניקה"
           rows="3"
         />
@@ -193,7 +193,7 @@ const Settings = () => {
         <input
           type="text"
           value={settings.siteKeywords}
-          onChange={(e) => setSettings({...settings, siteKeywords: e.target.value})}
+          onChange={(e) => setSettings({ ...settings, siteKeywords: e.target.value })}
           placeholder="מילות מפתח מופרדות בפסיקים"
         />
       </div>
@@ -236,14 +236,14 @@ const Settings = () => {
   const renderContactSettings = () => (
     <div className="settings-section">
       <h3>פרטי יצירת קשר</h3>
-      
+
       <div className="form-row">
         <div className="form-group">
           <label>אימייל</label>
           <input
             type="email"
             value={settings.contactEmail}
-            onChange={(e) => setSettings({...settings, contactEmail: e.target.value})}
+            onChange={(e) => setSettings({ ...settings, contactEmail: e.target.value })}
             placeholder="info@example.co.il"
           />
         </div>
@@ -253,7 +253,7 @@ const Settings = () => {
           <input
             type="tel"
             value={settings.contactPhone}
-            onChange={(e) => setSettings({...settings, contactPhone: e.target.value})}
+            onChange={(e) => setSettings({ ...settings, contactPhone: e.target.value })}
             placeholder="050-123-4567"
           />
         </div>
@@ -265,7 +265,7 @@ const Settings = () => {
           <input
             type="tel"
             value={settings.whatsappNumber}
-            onChange={(e) => setSettings({...settings, whatsappNumber: e.target.value})}
+            onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })}
             placeholder="050-123-4567"
           />
         </div>
@@ -275,7 +275,7 @@ const Settings = () => {
           <input
             type="text"
             value={settings.address}
-            onChange={(e) => setSettings({...settings, address: e.target.value})}
+            onChange={(e) => setSettings({ ...settings, address: e.target.value })}
             placeholder="רחוב, עיר"
           />
         </div>
@@ -302,7 +302,7 @@ const Settings = () => {
                   {dayNames[day]}
                 </label>
               </div>
-              
+
               {hours.enabled && (
                 <div className="time-inputs">
                   <input
@@ -330,7 +330,7 @@ const Settings = () => {
                   />
                 </div>
               )}
-              
+
               {!hours.enabled && (
                 <div className="closed-indicator">סגור</div>
               )}
@@ -344,7 +344,7 @@ const Settings = () => {
   const renderNotificationSettings = () => (
     <div className="settings-section">
       <h3>הגדרות התראות</h3>
-      
+
       <div className="notifications-grid">
         <div className="notification-item">
           <div className="notification-info">
@@ -448,12 +448,12 @@ const Settings = () => {
   const renderPrivacySettings = () => (
     <div className="settings-section">
       <h3>הגדרות פרטיות</h3>
-      
+
       <div className="form-group">
         <label>תקופת שמירת נתונים (חודשים)</label>
         <select
           value={settings.dataRetention}
-          onChange={(e) => setSettings({...settings, dataRetention: e.target.value})}
+          onChange={(e) => setSettings({ ...settings, dataRetention: e.target.value })}
         >
           <option value="6">6 חודשים</option>
           <option value="12">12 חודשים</option>
@@ -472,7 +472,7 @@ const Settings = () => {
             <input
               type="checkbox"
               checked={settings.cookieConsent}
-              onChange={(e) => setSettings({...settings, cookieConsent: e.target.checked})}
+              onChange={(e) => setSettings({ ...settings, cookieConsent: e.target.checked })}
             />
             <span className="toggle-slider"></span>
           </label>
@@ -487,7 +487,7 @@ const Settings = () => {
             <input
               type="checkbox"
               checked={settings.analyticsEnabled}
-              onChange={(e) => setSettings({...settings, analyticsEnabled: e.target.checked})}
+              onChange={(e) => setSettings({ ...settings, analyticsEnabled: e.target.checked })}
             />
             <span className="toggle-slider"></span>
           </label>
@@ -499,7 +499,7 @@ const Settings = () => {
   const renderSystemSettings = () => (
     <div className="settings-section">
       <h3>הגדרות מערכת</h3>
-      
+
       <div className="system-toggles">
         <div className="system-item">
           <div className="system-info">
@@ -510,7 +510,7 @@ const Settings = () => {
             <input
               type="checkbox"
               checked={settings.autoPublishArticles}
-              onChange={(e) => setSettings({...settings, autoPublishArticles: e.target.checked})}
+              onChange={(e) => setSettings({ ...settings, autoPublishArticles: e.target.checked })}
             />
             <span className="toggle-slider"></span>
           </label>
@@ -525,7 +525,7 @@ const Settings = () => {
             <input
               type="checkbox"
               checked={settings.enableComments}
-              onChange={(e) => setSettings({...settings, enableComments: e.target.checked})}
+              onChange={(e) => setSettings({ ...settings, enableComments: e.target.checked })}
             />
             <span className="toggle-slider"></span>
           </label>
@@ -540,7 +540,7 @@ const Settings = () => {
             <input
               type="checkbox"
               checked={settings.maintenanceMode}
-              onChange={(e) => setSettings({...settings, maintenanceMode: e.target.checked})}
+              onChange={(e) => setSettings({ ...settings, maintenanceMode: e.target.checked })}
             />
             <span className="toggle-slider"></span>
           </label>
@@ -551,7 +551,7 @@ const Settings = () => {
         <label>תדירות גיבוי</label>
         <select
           value={settings.backupFrequency}
-          onChange={(e) => setSettings({...settings, backupFrequency: e.target.value})}
+          onChange={(e) => setSettings({ ...settings, backupFrequency: e.target.value })}
         >
           <option value="daily">יומי</option>
           <option value="weekly">שבועי</option>
@@ -575,7 +575,7 @@ const Settings = () => {
   const renderAccountSettings = () => (
     <div className="settings-section">
       <h3>הגדרות חשבון</h3>
-      
+
       <form onSubmit={handlePasswordChange} className="password-form">
         <div className="form-group">
           <label>סיסמה נוכחית</label>
@@ -583,7 +583,7 @@ const Settings = () => {
             <input
               type={showPasswords.current ? 'text' : 'password'}
               value={passwordData.currentPassword}
-              onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+              onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
               placeholder="הכנס סיסמה נוכחית"
               required
             />
@@ -603,7 +603,7 @@ const Settings = () => {
             <input
               type={showPasswords.new ? 'text' : 'password'}
               value={passwordData.newPassword}
-              onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+              onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
               placeholder="הכנס סיסמה חדשה"
               required
             />
@@ -623,7 +623,7 @@ const Settings = () => {
             <input
               type={showPasswords.confirm ? 'text' : 'password'}
               value={passwordData.confirmPassword}
-              onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+              onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
               placeholder="אשר סיסמה חדשה"
               required
             />

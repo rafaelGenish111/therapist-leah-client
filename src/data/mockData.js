@@ -1,17 +1,17 @@
 // src/data/mockData.js
 
 export const mockUser = {
-  username: 'ליאה גניש',
+  username: 'לאה גניש',
   role: 'admin',
   email: 'leah@example.co.il',
   lastLogin: '2025-01-08T14:30:00Z'
 };
 
 export const mockStats = {
-  articles: { 
-    total: 25, 
-    published: 20, 
-    drafts: 5, 
+  articles: {
+    total: 25,
+    published: 20,
+    drafts: 5,
     totalViews: 1245,
     popularArticles: [
       {
@@ -34,10 +34,10 @@ export const mockStats = {
       }
     ]
   },
-  gallery: { 
-    total: 150, 
-    visible: 135, 
-    hidden: 15, 
+  gallery: {
+    total: 150,
+    visible: 135,
+    hidden: 15,
     totalSize: 45.6,
     recentImages: [
       {
@@ -54,11 +54,11 @@ export const mockStats = {
       }
     ]
   },
-  declarations: { 
-    total: 89, 
-    thisWeek: 12, 
-    thisMonth: 45, 
-    today: 3 
+  declarations: {
+    total: 89,
+    thisWeek: 12,
+    thisMonth: 45,
+    today: 3
   }
 };
 
@@ -167,7 +167,7 @@ export const mockArticles = [
     updatedAt: '2025-01-03T09:00:00Z',
     author: {
       _id: 'user1',
-      username: 'ליאה גניש'
+      username: 'לאה גניש'
     },
     image: 'swedish-massage.jpg'
   },
@@ -182,7 +182,7 @@ export const mockArticles = [
     updatedAt: '2025-01-02T16:30:00Z',
     author: {
       _id: 'user1',
-      username: 'ליאה גניש'
+      username: 'לאה גניש'
     },
     image: null
   },
@@ -197,7 +197,7 @@ export const mockArticles = [
     updatedAt: '2024-12-28T11:15:00Z',
     author: {
       _id: 'user1',
-      username: 'ליאה גניש'
+      username: 'לאה גניש'
     },
     image: 'pregnancy-massage.jpg'
   },
@@ -212,7 +212,7 @@ export const mockArticles = [
     updatedAt: '2024-12-25T14:20:00Z',
     author: {
       _id: 'user1',
-      username: 'ליאה גניש'
+      username: 'לאה גניש'
     },
     image: 'deep-tissue.jpg'
   }
@@ -231,7 +231,7 @@ export const mockImages = [
     mimeType: 'image/jpeg',
     uploadedBy: {
       _id: 'user1',
-      username: 'ליאה גניש'
+      username: 'לאה גניש'
     }
   },
   {
@@ -246,7 +246,7 @@ export const mockImages = [
     mimeType: 'image/jpeg',
     uploadedBy: {
       _id: 'user1',
-      username: 'ליאה גניש'
+      username: 'לאה גניש'
     }
   },
   {
@@ -261,7 +261,7 @@ export const mockImages = [
     mimeType: 'image/jpeg',
     uploadedBy: {
       _id: 'user1',
-      username: 'ליאה גניש'
+      username: 'לאה גניש'
     }
   },
   {
@@ -276,7 +276,7 @@ export const mockImages = [
     mimeType: 'image/jpeg',
     uploadedBy: {
       _id: 'user1',
-      username: 'ליאה גניש'
+      username: 'לאה גניש'
     }
   },
   {
@@ -291,7 +291,7 @@ export const mockImages = [
     mimeType: 'image/jpeg',
     uploadedBy: {
       _id: 'user1',
-      username: 'ליאה גניש'
+      username: 'לאה גניש'
     }
   }
 ];
@@ -340,50 +340,50 @@ export const mockActivityData = [
 ];
 
 export const mockTopPages = [
-  { 
-    path: '/', 
-    title: 'עמוד הבית', 
-    views: 1245, 
+  {
+    path: '/',
+    title: 'עמוד הבית',
+    views: 1245,
     percentage: 35,
     bounceRate: '32%',
     avgTime: '4:23'
   },
-  { 
-    path: '/about', 
-    title: 'אודות', 
-    views: 890, 
+  {
+    path: '/about',
+    title: 'אודות',
+    views: 890,
     percentage: 25,
     bounceRate: '28%',
     avgTime: '3:45'
   },
-  { 
-    path: '/services', 
-    title: 'טיפולים', 
-    views: 567, 
+  {
+    path: '/services',
+    title: 'טיפולים',
+    views: 567,
     percentage: 16,
     bounceRate: '25%',
     avgTime: '5:12'
   },
-  { 
-    path: '/articles', 
-    title: 'מאמרים', 
-    views: 432, 
+  {
+    path: '/articles',
+    title: 'מאמרים',
+    views: 432,
     percentage: 12,
     bounceRate: '22%',
     avgTime: '6:34'
   },
-  { 
-    path: '/contact', 
-    title: 'יצירת קשר', 
-    views: 234, 
+  {
+    path: '/contact',
+    title: 'יצירת קשר',
+    views: 234,
     percentage: 7,
     bounceRate: '15%',
     avgTime: '2:56'
   },
-  { 
-    path: '/health-declaration', 
-    title: 'הצהרת בריאות', 
-    views: 156, 
+  {
+    path: '/health-declaration',
+    title: 'הצהרת בריאות',
+    views: 156,
     percentage: 5,
     bounceRate: '8%',
     avgTime: '8:12'
@@ -589,7 +589,7 @@ export const getHealthConditionLabel = (condition) => {
     pregnancy: 'הריון',
     otherMedicalIssues: 'בעיות רפואיות אחרות'
   };
-  
+
   return labels[condition] || condition;
 };
 
@@ -602,7 +602,7 @@ export const getActivityIcon = (type) => {
     gallery_view: 'Image',
     download: 'Download'
   };
-  
+
   return icons[type] || 'Activity';
 };
 
@@ -615,7 +615,7 @@ export const getStatusBadgeClass = (status) => {
     active: 'status-badge--active',
     inactive: 'status-badge--inactive'
   };
-  
+
   return `status-badge ${classes[status] || ''}`;
 };
 
@@ -641,7 +641,7 @@ export const generateMockPagination = (items, page = 1, limit = 10) => {
   const startIndex = (page - 1) * limit;
   const endIndex = startIndex + limit;
   const paginatedItems = items.slice(startIndex, endIndex);
-  
+
   return {
     items: paginatedItems,
     pagination: {
@@ -658,10 +658,10 @@ export const generateMockPagination = (items, page = 1, limit = 10) => {
 // Search and filter helpers
 export const filterItems = (items, searchTerm, searchFields = ['title', 'name']) => {
   if (!searchTerm) return items;
-  
+
   const term = searchTerm.toLowerCase();
-  return items.filter(item => 
-    searchFields.some(field => 
+  return items.filter(item =>
+    searchFields.some(field =>
       item[field] && item[field].toLowerCase().includes(term)
     )
   );
@@ -671,18 +671,18 @@ export const sortItems = (items, sortBy, sortOrder = 'desc') => {
   return [...items].sort((a, b) => {
     let aValue = a[sortBy];
     let bValue = b[sortBy];
-    
+
     // Handle dates
     if (sortBy.includes('At') || sortBy.includes('Date')) {
       aValue = new Date(aValue);
       bValue = new Date(bValue);
     }
-    
+
     // Handle numbers
     if (typeof aValue === 'number' && typeof bValue === 'number') {
       return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
     }
-    
+
     // Handle strings and dates
     if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
     if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;

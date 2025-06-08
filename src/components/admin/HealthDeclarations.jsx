@@ -1,25 +1,13 @@
 import { useState } from 'react';
-import { useQuery } from 'react-query';
-import { 
-  Download, 
-  Search, 
-  Filter, 
-  Eye, 
-  Heart, 
-  Calendar, 
-  Phone, 
-  User, 
-  MapPin,
-  Clock,
-  AlertTriangle,
-  CheckCircle,
-  FileText,
-  BarChart3
-} from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { Download, Search, Filter, Eye, Trash2, FileText, Calendar, Phone, User, Heart, AlertCircle, FileDown } from 'lucide-react';
 import { healthDeclarationsApi } from '../../services/api';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
 import Spinner from '../ui/Spinner';
+import toast from 'react-hot-toast';
+import { generateAllDeclarationsPDF, generateSingleDeclarationPDF } from '../../utils/PDFGenerator';
+import './HealthDeclarations.css';
 
 const HealthDeclarations = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -28,11 +16,13 @@ const HealthDeclarations = () => {
   const [selectedDeclaration, setSelectedDeclaration] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
+  const queryClient = useQueryClient();
+
   const { data: declarationsData, isLoading } = useQuery(
     ['health-declarations', page, searchTerm, dateRange],
     () => healthDeclarationsApi.getAll({
       page,
-      limit: 20,
+      limit: 12,
       search: searchTerm,
       fromDate: dateRange.from,
       toDate: dateRange.to
@@ -40,64 +30,52 @@ const HealthDeclarations = () => {
     { keepPreviousData: true }
   );
 
-  const { data: statsData } = useQuery(
-    'health-declarations-stats',
-    healthDeclarationsApi.getStats,
-    { staleTime: 5 * 60 * 1000 }
-  );
+  const deleteMutation = useMutation(healthDeclarationsApi.delete, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('health-declarations');
+      toast.success('ההצהרה נמחקה בהצלחה');
+    },
+    onError: (error) => {
+      toast.error(error.message || 'שגיאה במחיקת ההצהרה');
+    }
+  });
 
-  const handleExport = () => {
-    // Implementation for exporting data
-    console.log('Exporting declarations...');
-    // Here you would typically create a CSV or PDF export
+  const handleExport = async () => {
+    try {
+      toast.loading('יוצר קובץ PDF...');
+      const allDeclarations = await healthDeclarationsApi.getAll({ limit: 1000 });
+      await generateAllDeclarationsPDF(allDeclarations.declarations);
+      toast.dismiss();
+      toast.success('הקובץ הורד בהצלחה!');
+    } catch (error) {
+      toast.dismiss();
+      toast.error('שגיאה ביצירת הקובץ');
+      console.error('Export error:', error);
+    }
   };
 
-  const handleViewDeclaration = (declaration) => {
+  const handleSinglePDFDownload = async (declaration) => {
+    try {
+      toast.loading('יוצר קובץ PDF...');
+      await generateSingleDeclarationPDF(declaration);
+      toast.dismiss();
+      toast.success('הקובץ הורד בהצלחה!');
+    } catch (error) {
+      toast.dismiss();
+      toast.error('שגיאה ביצירת הקובץ');
+      console.error('PDF generation error:', error);
+    }
+  };
+
+  const viewDeclaration = (declaration) => {
     setSelectedDeclaration(declaration);
     setShowModal(true);
   };
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('he-IL', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const getConditionsCount = (healthConditions) => {
-    if (!healthConditions) return 0;
-    return Object.entries(healthConditions)
-      .filter(([key, value]) => {
-        if (typeof value === 'boolean') return value;
-        if (typeof value === 'object' && value !== null) {
-          return value.hasSurgeries || value.hasOtherIssues || false;
-        }
-        return false;
-      }).length;
-  };
-
-  const getRiskLevel = (conditionsCount) => {
-    if (conditionsCount === 0) return { level: 'low', label: 'נמוך', color: 'success' };
-    if (conditionsCount <= 3) return { level: 'medium', label: 'בינוני', color: 'warning' };
-    return { level: 'high', label: 'גבוה', color: 'error' };
-  };
-
-  const healthConditionLabels = {
-    skinDiseases: 'מחלות עור',
-    heartDiseases: 'מחלות לב',
-    diabetes: 'סוכרת',
-    bloodPressure: 'לחץ דם',
-    spineProblems: 'בעיות עמוד שדרה',
-    fracturesOrSprains: 'שברים או נקעים',
-    fluFeverInflammation: 'שפעת/חום/דלקת',
-    epilepsy: 'אפילפסיה',
-    surgeries: 'ניתוחים',
-    chronicMedications: 'תרופות כרוניות',
-    pregnancy: 'הריון',
-    otherMedicalIssues: 'בעיות רפואיות אחרות'
+  const handleDelete = (id) => {
+    if (window.confirm('האם אתה בטוח שברצונך למחוק את ההצהרה?')) {
+      deleteMutation.mutate(id);
+    }
   };
 
   if (isLoading) {
@@ -116,66 +94,19 @@ const HealthDeclarations = () => {
 
   return (
     <div className="declarations-manager">
-      {/* Header with Stats */}
       <div className="manager-header">
         <div className="header-content">
-          <div className="header-info">
-            <h1>
-              <Heart size={32} />
-              הצהרות בריאות
-            </h1>
-            <p>נהל ועקוב אחר הצהרות הבריאות של המטופלים</p>
+          <div>
+            <h1>הצהרות בריאות</h1>
+            <p>ניהול והצגת הצהרות בריאות של המטופלים</p>
           </div>
-          <Button variant="outline" onClick={handleExport} className="export-btn">
+          <Button variant="primary" onClick={handleExport}>
             <Download size={16} />
-            יצוא נתונים
+            יצוא כל ההצהרות
           </Button>
         </div>
-
-        {/* Stats Cards */}
-        {statsData && (
-          <div className="stats-overview">
-            <div className="stat-card-mini">
-              <div className="stat-icon">
-                <FileText size={20} />
-              </div>
-              <div className="stat-content">
-                <div className="stat-number">{statsData.total}</div>
-                <div className="stat-label">סה"כ הצהרות</div>
-              </div>
-            </div>
-            <div className="stat-card-mini">
-              <div className="stat-icon success">
-                <Calendar size={20} />
-              </div>
-              <div className="stat-content">
-                <div className="stat-number">{statsData.today}</div>
-                <div className="stat-label">היום</div>
-              </div>
-            </div>
-            <div className="stat-card-mini">
-              <div className="stat-icon info">
-                <Clock size={20} />
-              </div>
-              <div className="stat-content">
-                <div className="stat-number">{statsData.thisWeek}</div>
-                <div className="stat-label">השבוע</div>
-              </div>
-            </div>
-            <div className="stat-card-mini">
-              <div className="stat-icon warning">
-                <BarChart3 size={20} />
-              </div>
-              <div className="stat-content">
-                <div className="stat-number">{statsData.thisMonth}</div>
-                <div className="stat-label">החודש</div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
-      {/* Filters */}
       <Card className="filters-card">
         <div className="filters-container">
           <div className="search-input-group">
@@ -190,7 +121,6 @@ const HealthDeclarations = () => {
 
           <div className="date-filters">
             <div className="date-input-group">
-              <Calendar size={16} />
               <label>מתאריך:</label>
               <input
                 type="date"
@@ -199,7 +129,6 @@ const HealthDeclarations = () => {
               />
             </div>
             <div className="date-input-group">
-              <Calendar size={16} />
               <label>עד תאריך:</label>
               <input
                 type="date"
@@ -211,251 +140,271 @@ const HealthDeclarations = () => {
         </div>
       </Card>
 
-      {/* Declarations List */}
-      <div className="declarations-list">
-        {declarations.length === 0 ? (
-          <Card className="empty-state">
-            <div className="empty-content">
-              <Heart size={64} />
-              <h3>אין הצהרות להצגה</h3>
-              <p>
-                {searchTerm || dateRange.from || dateRange.to
-                  ? 'לא נמצאו הצהרות התואמות לחיפוש'
-                  : 'עדיין לא נשלחו הצהרות בריאות'
-                }
-              </p>
-            </div>
-          </Card>
-        ) : (
-          declarations.map((declaration) => {
-            const conditionsCount = getConditionsCount(declaration.healthConditions);
-            const riskLevel = getRiskLevel(conditionsCount);
-            
-            return (
-              <Card key={declaration._id} className="declaration-item">
-                <div className="declaration-header">
-                  <div className="patient-info">
-                    <div className="patient-main">
-                      <h3>{declaration.fullName}</h3>
-                      <div className="patient-details">
-                        <span className="detail-item">
-                          <User size={14} />
-                          ת.ז: {declaration.idNumber}
-                        </span>
-                        <span className="detail-item">
-                          <Phone size={14} />
-                          {declaration.phoneNumber}
-                        </span>
-                        {declaration.ipAddress && (
-                          <span className="detail-item">
-                            <MapPin size={14} />
-                            IP: {declaration.ipAddress}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="declaration-meta">
-                    <div className="submission-time">
-                      <Clock size={14} />
-                      {formatDate(declaration.createdAt)}
-                    </div>
-                    <div className={`risk-badge risk-${riskLevel.color}`}>
-                      {riskLevel.color === 'success' && <CheckCircle size={14} />}
-                      {riskLevel.color === 'warning' && <AlertTriangle size={14} />}
-                      {riskLevel.color === 'error' && <AlertTriangle size={14} />}
-                      סיכון {riskLevel.label}
-                    </div>
+      <div className="declarations-grid">
+        {declarations.map((declaration) => {
+          const hasConditions = Object.values(declaration.healthConditions).some(
+            condition => condition === true || 
+            (typeof condition === 'object' && (condition.hasSurgeries || condition.hasOtherIssues))
+          );
+
+          return (
+            <Card key={declaration._id} className="declaration-card" hover>
+              <div className="declaration-header">
+                <div className="patient-avatar">
+                  <User size={24} />
+                </div>
+                <div className="patient-details">
+                  <h3>{declaration.fullName}</h3>
+                  <div className="patient-meta">
+                    <span className="id-badge">
+                      <FileText size={14} />
+                      {declaration.idNumber}
+                    </span>
+                    <span className="phone-badge">
+                      <Phone size={14} />
+                      {declaration.phoneNumber}
+                    </span>
                   </div>
                 </div>
+                <div className="declaration-status">
+                  {hasConditions ? (
+                    <span className="status-badge warning">
+                      <AlertCircle size={14} />
+                      דורש תשומת לב
+                    </span>
+                  ) : (
+                    <span className="status-badge success">
+                      <Heart size={14} />
+                      תקין
+                    </span>
+                  )}
+                </div>
+              </div>
 
-                <div className="conditions-summary">
-                  <h4>
-                    <Heart size={16} />
-                    מצבים רפואיים ({conditionsCount} מתוך {Object.keys(healthConditionLabels).length})
-                  </h4>
-                  
-                  {conditionsCount > 0 ? (
-                    <div className="conditions-grid">
+              <div className="declaration-summary">
+                {hasConditions ? (
+                  <div className="conditions-preview">
+                    <h4>מצבים רפואיים:</h4>
+                    <div className="conditions-tags">
                       {Object.entries(declaration.healthConditions)
-                        .filter(([key, value]) => {
-                          if (typeof value === 'boolean') return value;
-                          if (typeof value === 'object' && value !== null) {
-                            return value.hasSurgeries || value.hasOtherIssues || false;
-                          }
-                          return false;
-                        })
-                        .slice(0, 6)
-                        .map(([condition, value]) => (
-                          <span key={condition} className="condition-tag">
-                            {healthConditionLabels[condition] || condition}
-                            {typeof value === 'object' && value.details && (
-                              <small>: {value.details.substring(0, 30)}...</small>
-                            )}
+                        .filter(([key, value]) => value === true || 
+                          (typeof value === 'object' && (value.hasSurgeries || value.hasOtherIssues)))
+                        .slice(0, 3)
+                        .map(([condition], index) => (
+                          <span key={index} className="condition-tag">
+                            {condition === 'skinDiseases' && 'מחלות עור'}
+                            {condition === 'heartDiseases' && 'מחלות לב'}
+                            {condition === 'diabetes' && 'סוכרת'}
+                            {condition === 'bloodPressure' && 'לחץ דם'}
+                            {condition === 'spineProblems' && 'בעיות עמוד שדרה'}
+                            {condition === 'fracturesOrSprains' && 'שברים/נקעים'}
+                            {condition === 'fluFeverInflammation' && 'שפעת/חום'}
+                            {condition === 'epilepsy' && 'אפילפסיה'}
+                            {condition === 'surgeries' && 'ניתוחים'}
+                            {condition === 'chronicMedications' && 'תרופות כרוניות'}
+                            {condition === 'pregnancy' && 'הריון'}
+                            {condition === 'otherMedicalIssues' && 'אחר'}
                           </span>
-                        ))
-                      }
-                      {conditionsCount > 6 && (
+                        ))}
+                      {Object.entries(declaration.healthConditions)
+                        .filter(([key, value]) => value === true || 
+                          (typeof value === 'object' && (value.hasSurgeries || value.hasOtherIssues)))
+                        .length > 3 && (
                         <span className="condition-tag more">
-                          +{conditionsCount - 6} נוספים
+                          +{Object.entries(declaration.healthConditions)
+                            .filter(([key, value]) => value === true || 
+                              (typeof value === 'object' && (value.hasSurgeries || value.hasOtherIssues)))
+                            .length - 3} נוספים
                         </span>
                       )}
                     </div>
-                  ) : (
-                    <div className="no-conditions">
-                      <CheckCircle size={16} />
-                      <span>לא דווחו מצבים רפואיים</span>
-                    </div>
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  <div className="no-conditions">
+                    <Heart size={20} />
+                    <p>לא דווחו מצבים רפואיים</p>
+                  </div>
+                )}
+              </div>
 
+              <div className="declaration-footer">
+                <div className="declaration-date">
+                  <Calendar size={14} />
+                  {new Date(declaration.createdAt).toLocaleDateString('he-IL', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </div>
                 <div className="declaration-actions">
                   <Button 
                     variant="outline" 
-                    size="small"
-                    onClick={() => handleViewDeclaration(declaration)}
+                    size="small" 
+                    onClick={() => viewDeclaration(declaration)}
                   >
                     <Eye size={14} />
-                    צפייה מלאה
+                    צפייה
                   </Button>
-                  <Button variant="outline" size="small">
-                    <Download size={14} />
-                    הורד PDF
+                  <Button 
+                    variant="outline" 
+                    size="small" 
+                    onClick={() => handleSinglePDFDownload(declaration)}
+                  >
+                    <FileDown size={14} />
+                    PDF
+                  </Button>
+                  <Button 
+                    variant="danger" 
+                    size="small" 
+                    onClick={() => handleDelete(declaration._id)}
+                    disabled={deleteMutation.isLoading}
+                  >
+                    <Trash2 size={14} />
+                    מחיקה
                   </Button>
                 </div>
-              </Card>
-            );
-          })
-        )}
+              </div>
+            </Card>
+          );
+        })}
       </div>
 
-      {/* Pagination */}
+      {declarations.length === 0 && (
+        <Card className="empty-state">
+          <div className="empty-content">
+            <FileText size={48} />
+            <h3>אין הצהרות זמינות</h3>
+            <p>לא נמצאו הצהרות בריאות בהתאם לחיפוש</p>
+          </div>
+        </Card>
+      )}
+
       {pagination.pages > 1 && (
         <div className="pagination">
           <Button
             variant="outline"
             disabled={page <= 1}
             onClick={() => setPage(page - 1)}
-            className="pagination-btn"
           >
             הקודם
           </Button>
-          <div className="pagination-info">
-            <span className="current-page">{page}</span>
-            <span className="separator">מתוך</span>
-            <span className="total-pages">{pagination.pages}</span>
-          </div>
+          <span className="page-info">
+            עמוד {page} מתוך {pagination.pages} ({pagination.total} הצהרות)
+          </span>
           <Button
             variant="outline"
             disabled={page >= pagination.pages}
             onClick={() => setPage(page + 1)}
-            className="pagination-btn"
           >
             הבא
           </Button>
         </div>
       )}
 
-      {/* Declaration Modal */}
+      {/* Modal for viewing declaration details */}
       {showModal && selectedDeclaration && (
-        <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>
-                <FileText size={24} />
-                הצהרת בריאות - {selectedDeclaration.fullName}
-              </h2>
-              <Button variant="ghost" onClick={() => setShowModal(false)}>
-                <X size={20} />
-              </Button>
-            </div>
+        <DeclarationModal 
+          declaration={selectedDeclaration}
+          onClose={() => setShowModal(false)}
+          onDownload={() => handleSinglePDFDownload(selectedDeclaration)}
+        />
+      )}
+    </div>
+  );
+};
 
-            <div className="modal-body">
-              <div className="patient-details-full">
-                <h3>פרטי המטופל</h3>
-                <div className="details-grid">
-                  <div className="detail-row">
-                    <span className="label">שם מלא:</span>
-                    <span className="value">{selectedDeclaration.fullName}</span>
+// Modal component for detailed view
+const DeclarationModal = ({ declaration, onClose, onDownload }) => {
+  const conditionLabels = {
+    skinDiseases: 'מחלות עור',
+    heartDiseases: 'מחלות לב', 
+    diabetes: 'סוכרת',
+    bloodPressure: 'לחץ דם גבוה',
+    spineProblems: 'בעיות עמוד שדרה',
+    fracturesOrSprains: 'שברים או נקעים',
+    fluFeverInflammation: 'שפעת, חום או דלקת',
+    epilepsy: 'אפילפסיה',
+    surgeries: 'ניתוחים בעבר',
+    chronicMedications: 'נטילת תרופות כרוניות',
+    pregnancy: 'הריון',
+    otherMedicalIssues: 'בעיות רפואיות אחרות'
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h2>הצהרת בריאות - {declaration.fullName}</h2>
+          <button className="modal-close" onClick={onClose}>×</button>
+        </div>
+        
+        <div className="modal-body">
+          <div className="patient-info-section">
+            <h3>פרטי המטופל</h3>
+            <div className="info-grid">
+              <div className="info-item">
+                <label>שם מלא:</label>
+                <span>{declaration.fullName}</span>
+              </div>
+              <div className="info-item">
+                <label>מספר זהות:</label>
+                <span>{declaration.idNumber}</span>
+              </div>
+              <div className="info-item">
+                <label>טלפון:</label>
+                <span>{declaration.phoneNumber}</span>
+              </div>
+              <div className="info-item">
+                <label>תאריך הצהרה:</label>
+                <span>{new Date(declaration.createdAt).toLocaleDateString('he-IL')}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="conditions-section">
+            <h3>מצבים רפואיים</h3>
+            <div className="conditions-list">
+              {Object.entries(declaration.healthConditions).map(([key, value]) => (
+                <div key={key} className={`condition-item ${value ? 'positive' : 'negative'}`}>
+                  <div className="condition-label">
+                    {value ? '✓' : '✗'} {conditionLabels[key]}
                   </div>
-                  <div className="detail-row">
-                    <span className="label">ת.ז:</span>
-                    <span className="value">{selectedDeclaration.idNumber}</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="label">טלפון:</span>
-                    <span className="value">{selectedDeclaration.phoneNumber}</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="label">תאריך שליחה:</span>
-                    <span className="value">{formatDate(selectedDeclaration.createdAt)}</span>
-                  </div>
-                  {selectedDeclaration.ipAddress && (
-                    <div className="detail-row">
-                      <span className="label">כתובת IP:</span>
-                      <span className="value">{selectedDeclaration.ipAddress}</span>
+                  {typeof value === 'object' && value.details && (
+                    <div className="condition-details">
+                      פרטים: {value.details}
                     </div>
                   )}
                 </div>
-              </div>
-
-              <div className="health-conditions-full">
-                <h3>מצבים רפואיים</h3>
-                <div className="conditions-list">
-                  {Object.entries(selectedDeclaration.healthConditions).map(([condition, value]) => {
-                    const isActive = typeof value === 'boolean' ? value : 
-                                   (typeof value === 'object' && value !== null) ? 
-                                   (value.hasSurgeries || value.hasOtherIssues || false) : false;
-                    
-                    return (
-                      <div key={condition} className={`condition-item ${isActive ? 'active' : 'inactive'}`}>
-                        <div className="condition-header">
-                          {isActive ? <CheckCircle size={16} /> : <div className="empty-circle" />}
-                          <span className="condition-name">
-                            {healthConditionLabels[condition] || condition}
-                          </span>
-                        </div>
-                        {typeof value === 'object' && value !== null && value.details && (
-                          <div className="condition-details">
-                            <p>{value.details}</p>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="declaration-confirmation">
-                <h3>אישור הצהרה</h3>
-                <div className="confirmation-item">
-                  <CheckCircle size={16} color="green" />
-                  <span>המטופל אישר כי המידע שמסר נכון ומדויק</span>
-                </div>
-                {selectedDeclaration.signature && (
-                  <div className="signature-section">
-                    <h4>חתימה דיגיטלית:</h4>
-                    <div className="signature-display">
-                      <img src={selectedDeclaration.signature} alt="חתימה דיגיטלית" />
-                    </div>
-                  </div>
-                )}
-              </div>
+              ))}
             </div>
+          </div>
 
-            <div className="modal-footer">
-              <Button variant="primary">
-                <Download size={16} />
-                הורד PDF
-              </Button>
-              <Button variant="outline" onClick={() => setShowModal(false)}>
-                סגור
-              </Button>
+          <div className="declaration-confirmation">
+            <div className="confirmation-item">
+              <strong>אישור הצהרה:</strong> 
+              <span className={declaration.declarationConfirmed ? 'confirmed' : 'not-confirmed'}>
+                {declaration.declarationConfirmed ? 'אושר' : 'לא אושר'}
+              </span>
+            </div>
+            <div className="confirmation-item">
+              <strong>חתימה דיגיטלית:</strong>
+              <span>{declaration.signature ? 'קיימת' : 'חסרה'}</span>
             </div>
           </div>
         </div>
-      )}
+
+        <div className="modal-footer">
+          <Button variant="primary" onClick={() => handleSinglePDFDownload(declaration)}>
+            <FileDown size={16} />
+            הורד PDF
+          </Button>
+          <Button variant="outline" onClick={onClose}>
+            סגור
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

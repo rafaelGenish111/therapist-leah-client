@@ -36,8 +36,8 @@ const Footer = () => {
     { to: '/about', label: 'אודות' },
     { to: '/services', label: 'טיפולים' },
     { to: '/articles', label: 'מאמרים' },
-    {to: '/gallery', label: 'גלריה'},
-    {to: '/health-declaration', label: 'הצהרת בריאות'},
+    { to: '/gallery', label: 'גלריה' },
+    { to: '/health-declaration', label: 'הצהרת בריאות' },
     { to: '/contact', label: 'יצירת קשר' }
   ];
 
@@ -67,12 +67,12 @@ const Footer = () => {
               <div className="footer-logo">
                 <div className="logo-circle">ל</div>
                 <div className="logo-text">
-                  <h3>ליאה גניש</h3>
+                  <h3>לאה גניש</h3>
                   <p>הבחירה להרגיש טוב</p>
                 </div>
               </div>
               <p className="footer-description">
-                קליניקה מקצועית לטיפולי עיסוי ורפואה משלימה במרכז תל אביב. 
+                קליניקה מקצועית לטיפולי עיסוי ורפואה משלימה במרכז תל אביב.
                 אנו מתמחים בטיפולים אישיים המותאמים לכל מטופל ומטופלת.
               </p>
               <div className="footer-features">
@@ -144,12 +144,12 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Footer Bottom */}
         <div className="footer-bottom">
           <div className="footer-bottom-content">
             <div className="copyright">
-              <p>&copy; {currentYear} ליאה גניש. כל הזכויות שמורות.</p>
+              <p>&copy; {currentYear} לאה גניש. כל הזכויות שמורות.</p>
             </div>
             <div className="footer-links">
               <Link to="/privacy" className="footer-bottom-link">מדיניות פרטיות</Link>

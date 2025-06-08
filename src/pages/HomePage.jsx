@@ -59,15 +59,15 @@ const HomePage = () => {
           <h2>גלריית התמונות שלנו</h2>
           <p>הציצו בקליניקה, בטיפולים ובאווירה המיוחדת שלנו</p>
         </div>
-        
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: '1rem',
           marginBottom: '2rem'
         }}>
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="card" style={{ 
+            <div key={i} className="card" style={{
               aspectRatio: '1',
               background: 'linear-gradient(45deg, var(--primary-color), var(--primary-dark))',
               display: 'flex',
@@ -79,8 +79,8 @@ const HomePage = () => {
               📸
             </div>
           ))}
-        </div>     
-</section>
+        </div>
+      </section>
       {/* Services Section */}
       <section className="services-section">
         <div className="container">
@@ -88,7 +88,7 @@ const HomePage = () => {
             <h2>הטיפולים שלנו</h2>
             <p>מגוון טיפולים מקצועיים המותאמים לצרכיך האישיים</p>
           </div>
-          
+
           <div className="services-grid">
             {services.map((service, index) => (
               <div key={index} className="service-card">
@@ -115,14 +115,14 @@ const HomePage = () => {
         <div className="container">
           <div className="about-content">
             <div className="about-text">
-              <h2>פגשו את ליאה גניש</h2>
+              <h2>פגשו את לאה גניש</h2>
               <p>
-                מטפלת מוסמכת עם למעלה מ-10 שנות ניסיון בטיפולי עיסוי ורפואה משלימה. 
-                אני מאמינה כי כל אדם ייחודי ומגישה טיפול מותאם אישית המשלב טכניקות 
+                מטפלת מוסמכת עם למעלה מ-10 שנות ניסיון בטיפולי עיסוי ורפואה משלימה.
+                אני מאמינה כי כל אדם ייחודי ומגישה טיפול מותאם אישית המשלב טכניקות
                 מסורתיות ומודרניות לקבלת התוצאות הטובות ביותר.
               </p>
               <p>
-                בקליניקה שלי במרכז תל אביב, אני יוצרת סביבה בטוחה ומרגיעה שבה תוכלו 
+                בקליניקה שלי במרכז תל אביב, אני יוצרת סביבה בטוחה ומרגיעה שבה תוכלו
                 להרפות, להשתחרר ממתחים ולחזור למצב של איזון ורווחה מיטבית.
               </p>
               <Link to="/about" className="btn btn--primary">
@@ -131,7 +131,7 @@ const HomePage = () => {
             </div>
             <div className="about-image">
               <div className="placeholder-image">
-                <span>תמונה של ליאה גניש</span>
+                <span>תמונה של לאה גניש</span>
               </div>
             </div>
           </div>

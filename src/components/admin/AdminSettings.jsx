@@ -30,9 +30,9 @@ const AdminSettings = () => {
   // Site Settings Form
   const siteForm = useForm({
     defaultValues: {
-      siteName: 'קליניקת ליאה גניש',
+      siteName: 'קליניקת לאה גניש',
       siteDescription: 'הבחירה להרגיש טוב - טיפולי עיסוי מקצועיים ורפואה משלימה',
-      siteKeywords: 'עיסוי, טיפול, קליניקה, ליאה גניש, תל אביב, רפואה משלימה',
+      siteKeywords: 'עיסוי, טיפול, קליניקה, לאה גניש, תל אביב, רפואה משלימה',
       contactEmail: 'info@leahgenish.co.il',
       contactPhone: '050-123-4567',
       address: 'רחוב הרצל 123, תל אביב-יפו',

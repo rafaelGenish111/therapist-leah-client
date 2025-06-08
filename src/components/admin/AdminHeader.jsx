@@ -42,7 +42,7 @@ const AdminHeader = ({ onToggleSidebar, onToggleMobileSidebar, sidebarCollapsed 
               <div className="logo-circle">ל</div>
               <div className="logo-text">
                 <h1>אזור ניהול</h1>
-                <span>קליניקת ליאה גניש</span>
+                <span>קליניקת לאה גניש</span>
               </div>
             </Link>
           </div>

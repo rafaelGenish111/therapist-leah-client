@@ -15,7 +15,7 @@ const GalleryManager = () => {
   const [selectedImages, setSelectedImages] = useState([]);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
   const [showBulkActions, setShowBulkActions] = useState(false);
-  
+
   const queryClient = useQueryClient();
 
   // Mock data במקום API call שנכשל
@@ -31,7 +31,7 @@ const GalleryManager = () => {
         mimeType: 'image/jpeg',
         uploadedAt: new Date().toISOString(),
         isVisible: true,
-        uploadedBy: { username: 'ליאה' }
+        uploadedBy: { username: 'לאה' }
       },
       {
         _id: '2',
@@ -43,7 +43,7 @@ const GalleryManager = () => {
         mimeType: 'image/jpeg',
         uploadedAt: new Date().toISOString(),
         isVisible: true,
-        uploadedBy: { username: 'ליאה' }
+        uploadedBy: { username: 'לאה' }
       },
       {
         _id: '3',
@@ -55,7 +55,7 @@ const GalleryManager = () => {
         mimeType: 'image/jpeg',
         uploadedAt: new Date().toISOString(),
         isVisible: false,
-        uploadedBy: { username: 'ליאה' }
+        uploadedBy: { username: 'לאה' }
       },
       {
         _id: '4',
@@ -67,7 +67,7 @@ const GalleryManager = () => {
         mimeType: 'image/jpeg',
         uploadedAt: new Date().toISOString(),
         isVisible: true,
-        uploadedBy: { username: 'ליאה' }
+        uploadedBy: { username: 'לאה' }
       },
       {
         _id: '5',
@@ -79,7 +79,7 @@ const GalleryManager = () => {
         mimeType: 'image/jpeg',
         uploadedAt: new Date().toISOString(),
         isVisible: true,
-        uploadedBy: { username: 'ליאה' }
+        uploadedBy: { username: 'לאה' }
       },
       {
         _id: '6',
@@ -91,7 +91,7 @@ const GalleryManager = () => {
         mimeType: 'image/jpeg',
         uploadedAt: new Date().toISOString(),
         isVisible: true,
-        uploadedBy: { username: 'ליאה' }
+        uploadedBy: { username: 'לאה' }
       }
     ],
     pagination: {
@@ -111,12 +111,12 @@ const GalleryManager = () => {
   const filteredData = {
     ...mockData,
     images: mockData.images.filter(image => {
-      const matchesSearch = !searchTerm || 
+      const matchesSearch = !searchTerm ||
         image.originalName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         image.description.toLowerCase().includes(searchTerm.toLowerCase());
-      
+
       const matchesCategory = !selectedCategory || image.category === selectedCategory;
-      
+
       return matchesSearch && matchesCategory;
     })
   };
@@ -187,7 +187,7 @@ const GalleryManager = () => {
 
       uploadMutation.mutate(formData);
     }
-    
+
     // Reset input
     event.target.value = '';
   };
@@ -296,9 +296,9 @@ const GalleryManager = () => {
             id="image-upload"
             multiple
           />
-          <Button 
-            variant="primary" 
-            as="label" 
+          <Button
+            variant="primary"
+            as="label"
             htmlFor="image-upload"
             disabled={uploadMutation.isLoading}
           >
@@ -349,7 +349,7 @@ const GalleryManager = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            
+
             <div className="category-filter">
               <Filter size={20} />
               <select
@@ -450,8 +450,8 @@ const GalleryManager = () => {
               <Upload size={48} />
               <h3>אין תמונות{searchTerm || selectedCategory ? ' שמתאימות לחיפוש' : ' עדיין'}</h3>
               <p>
-                {searchTerm || selectedCategory 
-                  ? 'נסה לשנות את פרמטרי החיפוש' 
+                {searchTerm || selectedCategory
+                  ? 'נסה לשנות את פרמטרי החיפוש'
                   : 'העלה את התמונה הראשונה שלך'
                 }
               </p>
@@ -469,8 +469,8 @@ const GalleryManager = () => {
                 {viewMode === 'grid' && (
                   <div className="image-container">
                     <div className="image-placeholder">
-                      <img 
-                        src={`https://picsum.photos/300/200?random=${image._id}`} 
+                      <img
+                        src={`https://picsum.photos/300/200?random=${image._id}`}
                         alt={image.originalName}
                         loading="lazy"
                       />
@@ -482,8 +482,8 @@ const GalleryManager = () => {
                       <Button variant="outline" size="small" title="עריכה">
                         <Edit size={14} />
                       </Button>
-                      <Button 
-                        variant="danger" 
+                      <Button
+                        variant="danger"
                         size="small"
                         onClick={() => handleDelete(image._id)}
                         title="מחיקה"
@@ -500,7 +500,7 @@ const GalleryManager = () => {
                     </div>
                   </div>
                 )}
-                
+
                 <div className="image-info">
                   <div className="info-header">
                     <h4>{image.originalName}</h4>
@@ -510,11 +510,11 @@ const GalleryManager = () => {
                       </span>
                     </div>
                   </div>
-                  
+
                   <p className="image-description">
                     {image.description || 'ללא תיאור'}
                   </p>
-                  
+
                   <div className="image-meta">
                     <div className="meta-row">
                       <span className="meta-label">קטגוריה:</span>
@@ -553,8 +553,8 @@ const GalleryManager = () => {
                       <Edit size={14} />
                       עריכה
                     </Button>
-                    <Button 
-                      variant="danger" 
+                    <Button
+                      variant="danger"
                       size="small"
                       onClick={() => handleDelete(image._id)}
                     >

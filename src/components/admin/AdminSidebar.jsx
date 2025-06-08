@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
   Home, 
@@ -80,7 +79,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOp
             {!isCollapsed && (
               <div className="logo-text">
                 <h3>אזור ניהול</h3>
-                <p>קליניקת ליאה גניש</p>
+                <p>קליניקת לאה גניש</p>
               </div>
             )}
           </div>

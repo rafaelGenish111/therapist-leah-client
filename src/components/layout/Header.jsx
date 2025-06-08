@@ -49,7 +49,7 @@ const Header = () => {
           <Link to="/" className="logo" onClick={closeMobileMenu}>
             <div className="logo-circle">ל</div>
             <div className="logo-text">
-              <h1>ליאה גניש</h1>
+              <h1>לאה גניש</h1>
               <p>הבחירה להרגיש טוב</p>
             </div>
           </Link>
@@ -65,7 +65,7 @@ const Header = () => {
                 {item.label}
               </Link>
             ))}
-            
+
             {isAuthenticated ? (
               <div className="user-menu">
                 <span className="user-greeting">
@@ -107,7 +107,7 @@ const Header = () => {
                 {item.label}
               </Link>
             ))}
-            
+
             {isAuthenticated ? (
               <div className="mobile-user-menu">
                 <span className="mobile-user-greeting">
