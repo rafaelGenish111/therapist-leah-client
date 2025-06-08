@@ -1,15 +1,26 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// Base URL configuration
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE_URL = `${BASE_URL}/api`;
+
+// Debug logging
+console.log('🔧 Environment Variables:');
+console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
+console.log('BASE_URL:', BASE_URL);
+console.log('API_BASE_URL:', API_BASE_URL);
 
 // Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 30000, // הגדלת timeout ל-30 שניות בגלל העלאת קבצים
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
+
+// Export base URL for file access
+export const getFileUrl = (filename) => `${BASE_URL}/uploads/${filename}`;
 
 // Add auth token to requests
 api.interceptors.request.use(
@@ -18,49 +29,22 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
-    // לוג לבקשות העלאת קבצים
-    if (config.data instanceof FormData) {
-      console.log('Uploading file...', {
-        url: config.url,
-        method: config.method,
-        hasFile: config.data.has('image')
-      });
-    }
-    
     return config;
   },
   (error) => {
-    console.error('Request interceptor error:', error);
     return Promise.reject(error);
   }
 );
 
 // Handle response errors
 api.interceptors.response.use(
-  (response) => {
-    // לוג להעלאות מוצלחות
-    if (response.config.data instanceof FormData) {
-      console.log('File upload successful:', response.data);
-    }
-    return response.data;
-  },
+  (response) => response.data,
   (error) => {
-    console.error('API Error:', {
-      url: error.config?.url,
-      method: error.config?.method,
-      status: error.response?.status,
-      data: error.response?.data,
-      message: error.message
-    });
-    
     const message = error.response?.data?.message || 'שגיאה בתקשורת עם השרת';
     
     if (error.response?.status === 401) {
       localStorage.removeItem('authToken');
-      if (window.location.pathname !== '/login') {
-        window.location.href = '/login';
-      }
+      window.location.href = '/login';
     }
     
     return Promise.reject(new Error(message));
@@ -80,12 +64,10 @@ export const articlesApi = {
   getAll: (params) => api.get('/articles', { params }),
   getById: (id) => api.get(`/articles/${id}`),
   create: (formData) => api.post('/articles', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-    timeout: 60000 // 60 שניות להעלאות
+    headers: { 'Content-Type': 'multipart/form-data' }
   }),
   update: (id, formData) => api.put(`/articles/${id}`, formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-    timeout: 60000
+    headers: { 'Content-Type': 'multipart/form-data' }
   }),
   delete: (id) => api.delete(`/articles/${id}`),
   getStats: () => api.get('/articles/stats/summary'),
@@ -96,30 +78,14 @@ export const articlesApi = {
 export const galleryApi = {
   getAll: (params) => api.get('/gallery', { params }),
   getById: (id) => api.get(`/gallery/${id}`),
-  upload: async (formData) => {
-    try {
-      console.log('Starting file upload...');
-      const response = await api.post('/gallery', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        timeout: 60000, // 60 שניות
-        onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          console.log(`Upload progress: ${percentCompleted}%`);
-        }
-      });
-      console.log('Upload completed successfully:', response);
-      return response;
-    } catch (error) {
-      console.error('Upload failed:', error);
-      throw error;
-    }
-  },
+  upload: (formData) => api.post('/gallery', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
   update: (id, data) => api.put(`/gallery/${id}`, data),
   delete: (id) => api.delete(`/gallery/${id}`),
   bulkAction: (data) => api.post('/gallery/bulk', data),
   getStats: () => api.get('/gallery/stats/summary'),
   getAllAdmin: (params) => api.get('/gallery/admin/all', { params }),
-  debugUploads: () => api.get('/gallery/debug/uploads'),
 };
 
 // Health Declarations API
@@ -129,26 +95,6 @@ export const healthDeclarationsApi = {
   getById: (id) => api.get(`/health-declarations/${id}`),
   delete: (id) => api.delete(`/health-declarations/${id}`),
   getStats: () => api.get('/health-declarations/stats/summary'),
-};
-
-// Utility function to get image URL
-export const getImageUrl = (filename) => {
-  if (!filename) return null;
-  const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  return `${baseUrl.replace('/api', '')}/uploads/${filename}`;
-};
-
-// Test API connection
-export const testConnection = async () => {
-  try {
-    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-    const response = await axios.get(`${baseUrl.replace('/api', '')}/health`);
-    console.log('API connection test successful:', response.data);
-    return response.data;
-  } catch (error) {
-    console.error('API connection test failed:', error);
-    throw error;
-  }
 };
 
 export default api;
