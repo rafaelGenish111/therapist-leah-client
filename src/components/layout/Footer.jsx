@@ -1,87 +1,163 @@
-import { Link, useLocation } from 'react-router-dom';
-import { Phone, Mail, MapPin, Clock } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Phone, Mail, MapPin, Clock, Heart, Star, Award } from 'lucide-react';
+import './Footer.css';
 
 const Footer = () => {
-  const location = useLocation();
   const currentYear = new Date().getFullYear();
 
-  // Don't render footer on admin pages
-  if (location.pathname.startsWith('/admin')) {
-    return null;
-  }
+  const contactInfo = [
+    {
+      icon: <Phone size={18} />,
+      label: 'טלפון',
+      value: '050-123-4567',
+      link: 'tel:050-123-4567'
+    },
+    {
+      icon: <Mail size={18} />,
+      label: 'אימייל',
+      value: 'info@leahgenish.co.il',
+      link: 'mailto:info@leahgenish.co.il'
+    },
+    {
+      icon: <MapPin size={18} />,
+      label: 'כתובת',
+      value: 'רחוב הרצל 123, תל אביב',
+      link: 'https://maps.google.com'
+    }
+  ];
 
-  const footerSections = [
+  const workingHours = [
+    { day: 'ראשון - רביעי', hours: '9:00-20:00' },
+    { day: 'חמישי', hours: '9:00-16:00' },
+    { day: 'שישי - שבת', hours: 'סגור' }
+  ];
+
+  const quickLinks = [
+    { to: '/about', label: 'אודות' },
+    { to: '/services', label: 'טיפולים' },
+    { to: '/articles', label: 'מאמרים' },
+    { to: '/gallery', label: 'גלריה' },
+    { to: '/health-declaration', label: 'הצהרת בריאות' },
+    { to: '/contact', label: 'יצירת קשר' }
+  ];
+
+  const features = [
     {
-      title: 'ליאה גניש',
-      content: (
-        <p>קליניקה מקצועית לטיפולי עיסוי ורפואה משלימה במרכז תל אביב</p>
-      )
+      icon: <Heart size={20} />,
+      text: 'טיפול אישי ומקצועי'
     },
     {
-      title: 'יצירת קשר',
-      content: (
-        <div className="contact-info">
-          <div className="contact-item">
-            <Phone size={16} />
-            <span>050-123-4567</span>
-          </div>
-          <div className="contact-item">
-            <Mail size={16} />
-            <span>info@leahgenish.co.il</span>
-          </div>
-          <div className="contact-item">
-            <MapPin size={16} />
-            <span>רחוב הרצל 123, תל אביב</span>
-          </div>
-        </div>
-      )
+      icon: <Star size={20} />,
+      text: 'ניסיון של למעלה מ-10 שנים'
     },
     {
-      title: 'שעות פעילות',
-      content: (
-        <div className="hours-info">
-          <div className="hours-item">
-            <Clock size={16} />
-            <div>
-              <div>ראשון - רביעי: 9:00-20:00</div>
-              <div>חמישי: 9:00-16:00</div>
-              <div>שישי - שבת: סגור</div>
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      title: 'קישורים מהירים',
-      content: (
-        <div className="quick-links">
-          <Link to="/about">אודות</Link>
-          <Link to="/services">טיפולים</Link>
-          <Link to="/articles">מאמרים</Link>
-          <Link to="/contact">יצירת קשר</Link>
-        </div>
-      )
+      icon: <Award size={20} />,
+      text: 'מטפלת מוסמכת ומנוסה'
     }
   ];
 
   return (
     <footer className="footer">
       <div className="container">
-        <div className="footer-content">
-          {footerSections.map((section, index) => (
-            <div key={index} className="footer-section">
-              <h3>{section.title}</h3>
-              {section.content}
+        {/* Main Footer Content */}
+        <div className="footer-main">
+          <div className="footer-grid">
+            {/* Brand Section */}
+            <div className="footer-section footer-brand">
+              <div className="footer-logo">
+                <div className="logo-circle">ל</div>
+                <div className="logo-text">
+                  <h3>לאה גניש</h3>
+                  <p>הבחירה להרגיש טוב</p>
+                </div>
+              </div>
+              <p className="footer-description">
+                קליניקה מקצועית לטיפולי עיסוי ורפואה משלימה במרכז תל אביב.
+                אנו מתמחים בטיפולים אישיים המותאמים לכל מטופל ומטופלת.
+              </p>
+              <div className="footer-features">
+                {features.map((feature, index) => (
+                  <div key={index} className="feature-item">
+                    <div className="feature-icon">{feature.icon}</div>
+                    <span>{feature.text}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
+
+            {/* Quick Links */}
+            <div className="footer-section">
+              <h4>קישורים מהירים</h4>
+              <div className="quick-links">
+                {quickLinks.map((link, index) => (
+                  <Link key={index} to={link.to} className="footer-link">
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Contact Info */}
+            <div className="footer-section">
+              <h4>יצירת קשר</h4>
+              <div className="contact-info">
+                {contactInfo.map((info, index) => (
+                  <div key={index} className="contact-item">
+                    <div className="contact-icon">{info.icon}</div>
+                    <div className="contact-details">
+                      <span className="contact-label">{info.label}</span>
+                      {info.link ? (
+                        <a href={info.link} className="contact-value">
+                          {info.value}
+                        </a>
+                      ) : (
+                        <span className="contact-value">{info.value}</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Working Hours */}
+            <div className="footer-section">
+              <h4>שעות פעילות</h4>
+              <div className="hours-info">
+                <div className="hours-icon">
+                  <Clock size={18} />
+                </div>
+                <div className="hours-list">
+                  {workingHours.map((schedule, index) => (
+                    <div key={index} className="hours-item">
+                      <span className="day">{schedule.day}</span>
+                      <span className="hours">{schedule.hours}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="emergency-note">
+                <p>
+                  <strong>מקרי חירום:</strong><br />
+                  למקרי דחיפות ניתן להתקשר גם מחוץ לשעות הפעילות
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        
+
+        {/* Footer Bottom */}
         <div className="footer-bottom">
           <div className="footer-bottom-content">
-            <p>&copy; {currentYear} ליאה גניש. כל הזכויות שמורות.</p>
+            <div className="copyright">
+              <p>&copy; {currentYear} לאה גניש. כל הזכויות שמורות.</p>
+            </div>
             <div className="footer-links">
-              <Link to="/privacy">מדיניות פרטיות</Link>
-              <Link to="/terms">תנאי שימוש</Link>
+              <Link to="/privacy" className="footer-bottom-link">מדיניות פרטיות</Link>
+              <Link to="/terms" className="footer-bottom-link">תנאי שימוש</Link>
+              <Link to="/accessibility" className="footer-bottom-link">נגישות</Link>
+            </div>
+            <div className="developed-by">
+              <p>פותח באהבה למען הרווחה שלכם</p>
             </div>
           </div>
         </div>

@@ -36,6 +36,8 @@ import './components/layout/AdminLayout.css';
 import './components/admin/AdminDashboard.css';
 import './components/admin/AdminSidebar.css';
 import './components/admin/AdminStats.css';
+import './pages/ArticlesPage.css';
+import ArticleEditor from './components/admin/ArticleEditor';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -122,11 +124,16 @@ function App() {
                 </PrivateRoute>
               }>
                 <Route index element={<AdminDashboard />} />
-                <Route path="articles" element={<ArticlesManager />} />
                 <Route path="gallery" element={<GalleryManager />} />
                 <Route path="declarations" element={<HealthDeclarations />} />
                 <Route path="stats" element={<AdminStats />} />
                 <Route path="settings" element={<AdminDashboard />} />
+
+                                  {/* Articles Management */}
+                  <Route path="articles" element={<ArticlesManager />} />
+                  <Route path="articles/new" element={<ArticleEditor />} />
+                  <Route path="articles/edit/:id" element={<ArticleEditor />} />
+
               </Route>
             </Routes>
 
