@@ -12,10 +12,8 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { articlesApi, galleryApi, healthDeclarationsApi } from '../../services/api';
-import Card from '../ui/Card';
-import Button from '../ui/Button';
 import Spinner from '../ui/Spinner';
-import './StatsPage.css';
+import './AdminStats.css';
 
 const StatsPage = () => {
   const [dateRange, setDateRange] = useState('30'); // Last 30 days

@@ -9,6 +9,11 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Don't render header on admin pages
+  if (location.pathname.startsWith('/admin')) {
+    return null;
+  }
+
   const handleLogout = () => {
     logout();
     navigate('/');
@@ -27,19 +32,9 @@ const Header = () => {
     { path: '/', label: 'בית' },
     { path: '/about', label: 'אודות' },
     { path: '/services', label: 'טיפולים' },
-    { path: '/gallery', label: 'גלריה' },
     { path: '/articles', label: 'מאמרים' },
     { path: '/contact', label: 'יצירת קשר' },
   ];
-
-  const adminNavItems = [
-    { path: '/admin', label: 'לוח בקרה' },
-    { path: '/admin/articles', label: 'ניהול מאמרים' },
-    { path: '/admin/gallery', label: 'ניהול גלריה' },
-    { path: '/admin/declarations', label: 'הצהרות בריאות' },
-  ];
-
-  const navItems = isAuthenticated ? adminNavItems : publicNavItems;
 
   return (
     <header className="header">
@@ -49,14 +44,14 @@ const Header = () => {
           <Link to="/" className="logo" onClick={closeMobileMenu}>
             <div className="logo-circle">ל</div>
             <div className="logo-text">
-              <h1>לאה גניש</h1>
+              <h1>ליאה גניש</h1>
               <p>הבחירה להרגיש טוב</p>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="desktop-nav">
-            {navItems.map((item) => (
+            {publicNavItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
@@ -65,9 +60,12 @@ const Header = () => {
                 {item.label}
               </Link>
             ))}
-
+            
             {isAuthenticated ? (
               <div className="user-menu">
+                <Link to="/admin" className="admin-link">
+                  אזור ניהול
+                </Link>
                 <span className="user-greeting">
                   שלום {user?.username}
                 </span>
@@ -97,7 +95,7 @@ const Header = () => {
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <nav className="mobile-nav">
-            {navItems.map((item) => (
+            {publicNavItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
@@ -107,9 +105,12 @@ const Header = () => {
                 {item.label}
               </Link>
             ))}
-
+            
             {isAuthenticated ? (
               <div className="mobile-user-menu">
+                <Link to="/admin" className="mobile-admin-link" onClick={closeMobileMenu}>
+                  אזור ניהול
+                </Link>
                 <span className="mobile-user-greeting">
                   שלום {user?.username}
                 </span>
