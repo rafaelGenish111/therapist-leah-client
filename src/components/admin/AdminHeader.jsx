@@ -28,7 +28,7 @@ const AdminHeader = ({ onMenuToggle, sidebarOpen }) => {
             <div className="logo-circle">ל</div>
             <div className="logo-text">
               <h1>אזור ניהול</h1>
-              <p>קליניקת ליאה גניש</p>
+              <p> לאה גניש</p>
             </div>
           </Link>
         </div>

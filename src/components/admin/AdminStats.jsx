@@ -14,6 +14,8 @@ import {
 import { articlesApi, galleryApi, healthDeclarationsApi } from '../../services/api';
 import Spinner from '../ui/Spinner';
 import './AdminStats.css';
+import Button from '../ui/Button';
+import Card from '../ui/Card';
 
 const StatsPage = () => {
   const [dateRange, setDateRange] = useState('30'); // Last 30 days
