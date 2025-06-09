@@ -1,10 +1,10 @@
 import { NavLink } from 'react-router-dom';
-import { 
-  Home, 
-  FileText, 
-  Image, 
-  Heart, 
-  Settings, 
+import {
+  Home,
+  FileText,
+  Image,
+  Heart,
+  Settings,
   BarChart3,
   ChevronLeft,
   ChevronRight,
@@ -51,7 +51,7 @@ const AdminSidebar = ({ isOpen, isCollapsed, onClose, onToggleCollapse }) => {
     <aside className={`admin-sidebar ${isCollapsed ? 'collapsed' : ''} ${isOpen ? 'open' : ''}`}>
       {/* Sidebar Header */}
       <div className="sidebar-header">
-        <button 
+        <button
           className="collapse-btn desktop-only"
           onClick={onToggleCollapse}
           title={isCollapsed ? 'הרחב תפריט' : 'כווץ תפריט'}
@@ -59,7 +59,7 @@ const AdminSidebar = ({ isOpen, isCollapsed, onClose, onToggleCollapse }) => {
           {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
         </button>
 
-        <button 
+        <button
           className="close-btn mobile-only"
           onClick={onClose}
           title="סגור תפריט"
@@ -76,7 +76,7 @@ const AdminSidebar = ({ isOpen, isCollapsed, onClose, onToggleCollapse }) => {
               <NavLink
                 to={item.path}
                 end={item.exact}
-                className={({ isActive }) => 
+                className={({ isActive }) =>
                   `nav-link ${isActive ? 'active' : ''}`
                 }
                 onClick={() => window.innerWidth <= 768 && onClose()}
@@ -95,7 +95,7 @@ const AdminSidebar = ({ isOpen, isCollapsed, onClose, onToggleCollapse }) => {
         {!isCollapsed && (
           <div className="footer-info">
             <p>גירסה 1.0.0</p>
-            <p>© 2024 ליאה גניש</p>
+            <p>© 2024 לאה גניש</p>
           </div>
         )}
       </div>

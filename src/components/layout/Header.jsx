@@ -42,7 +42,7 @@ const Header = () => {
         <div className="header-content">
           {/* Logo */}
           <Link to="/" className="logo" onClick={closeMobileMenu}>
-            <img className='logo-circle' src="../../../public/images/favicon.ico" alt="" />
+            <img className='logo-circle' src="/images/favicon.ico" alt="" />
             <div className="logo-text">
               <h1>לאה גניש</h1>
               <p>הבחירה להרגיש טוב</p>
@@ -60,7 +60,7 @@ const Header = () => {
                 {item.label}
               </Link>
             ))}
-            
+
             {isAuthenticated ? (
               <div className="user-menu">
                 <Link to="/admin" className="admin-link">
@@ -75,10 +75,11 @@ const Header = () => {
                 </button>
               </div>
             ) : (
-              <Link to="/login" className="login-btn">
-                <User size={16} />
-                כניסה למטפלת
-              </Link>
+              // <Link to="/login" className="login-btn">
+              //   <User size={16} />
+              //   כניסה למטפלת
+              // </Link>
+              <div></div>
             )}
           </nav>
 
@@ -105,7 +106,7 @@ const Header = () => {
                 {item.label}
               </Link>
             ))}
-            
+
             {isAuthenticated ? (
               <div className="mobile-user-menu">
                 <Link to="/admin" className="mobile-admin-link" onClick={closeMobileMenu}>

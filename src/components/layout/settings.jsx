@@ -24,14 +24,14 @@ const Settings = () => {
     // General Settings
     siteName: 'קליניקת לאה גניש',
     siteDescription: 'הבחירה להרגיש טוב',
-    siteKeywords: 'עיסוי, טיפול, קליניקה, לאה גניש, תל אביב',
+    siteKeywords: 'עיסוי, טיפול, קליניקה, לאה גניש, פתח תקווה',
     logoFile: null,
 
     // Contact Settings
     contactEmail: 'info@leahgenish.co.il',
     contactPhone: '054-9414947',
     whatsappNumber: '054-9414947',
-    address: 'רחוב הרצל 123, תל אביב',
+    address: 'רחוב הרצל 123, פתח תקווה',
     workingHours: {
       sunday: { open: '09:00', close: '20:00', enabled: true },
       monday: { open: '09:00', close: '20:00', enabled: true },

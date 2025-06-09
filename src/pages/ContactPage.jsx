@@ -96,7 +96,7 @@ const ContactPage = () => {
     {
       icon: '📍',
       title: 'כתובת',
-      details: ['רחוב הרצל 123', 'תל אביב-יפו', 'קומה 3, דירה 12']
+      details: ['רחוב הרצל 123', 'פתח תקווה-יפו', 'קומה 3, דירה 12']
     },
     {
       icon: '🕐',

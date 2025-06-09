@@ -54,20 +54,20 @@ const AboutPage = () => {
         <section className="about-hero">
           <div className="hero-content">
             <div className="hero-text">
-              <h1>אודות ליאה גניש</h1>
+              <h1>אודות לאה גניש</h1>
               <p className="hero-subtitle">
                 מטפלת מוסמכת עם ניסיון של למעלה מ-10 שנים בתחום הטיפולי עיסוי והרפואה המשלימה
               </p>
               <p className="hero-description">
-                ברוכים הבאים לקליניקה שלי! אני ליאה גניש, מטפלת מוסמכת המתמחה בטיפולי עיסוי ורפואה משלימה.
-                בקליניקה שלי במרכז תל אביב, אני מספקת טיפולים מותאמים אישית המשלבים טכניקות מסורתיות ומודרניות
+                ברוכים הבאים לקליניקה שלי! אני לאה גניש, מטפלת מוסמכת המתמחה בטיפולי עיסוי ורפואה משלימה.
+                בקליניקה שלי במרכז פתח תקווה, אני מספקת טיפולים מותאמים אישית המשלבים טכניקות מסורתיות ומודרניות
                 כדי לעזור לכם להשיג רווחה מיטבית.
               </p>
             </div>
             <div className="hero-image">
               <div className="profile-image">
                 <div className="image-placeholder">
-                  <span>תמונה של ליאה גניש</span>
+                  <span>תמונה של לאה גניש</span>
                 </div>
               </div>
             </div>
@@ -80,7 +80,7 @@ const AboutPage = () => {
             <h2>המומחיות שלי</h2>
             <p>השכלה, ניסיון וגישה מקצועית</p>
           </div>
-          
+
           <div className="credentials-grid">
             {credentials.map((credential, index) => (
               <Card key={index} className="credential-card">
@@ -114,7 +114,7 @@ const AboutPage = () => {
           <div className="section-header">
             <h2>הערכים שמנחים אותי</h2>
           </div>
-          
+
           <div className="values-grid">
             {values.map((value, index) => (
               <Card key={index} className="value-card">
