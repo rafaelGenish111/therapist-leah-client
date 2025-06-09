@@ -1,145 +1,159 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, Bell, Search, Settings, User, LogOut, Home } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { Menu, X, User, LogOut } from 'lucide-react';
 
-const AdminHeader = ({ onToggleSidebar, onToggleMobileSidebar, sidebarCollapsed }) => {
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const { user, logout } = useAuth();
+const Header = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, logout, isAuthenticated } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    setUserMenuOpen(false);
+    navigate('/');
+    setMobileMenuOpen(false);
   };
 
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
+  const isActivePath = (path) => {
+    return location.pathname === path;
+  };
+
+  // Close mobile menu when window is resized
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (mobileMenuOpen && 
+          !event.target.closest('.mobile-nav') && 
+          !event.target.closest('.mobile-menu-toggle')) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [mobileMenuOpen]);
+
+  const publicNavItems = [
+    { path: '/', label: 'בית' },
+    { path: '/about', label: 'אודות' },
+    { path: '/services', label: 'טיפולים' },
+    { path: '/articles', label: 'מאמרים' },
+    { path: '/contact', label: 'יצירת קשר' },
+  ];
+
+  const adminNavItems = [
+    { path: '/admin', label: 'לוח בקרה' },
+    { path: '/admin/articles', label: 'ניהול מאמרים' },
+    { path: '/admin/gallery', label: 'גלריה' },
+    { path: '/admin/declarations', label: 'הצהרות בריאות' },
+  ];
+
+  const navItems = isAuthenticated ? adminNavItems : publicNavItems;
+
   return (
-    <header className="admin-header">
-      <div className="admin-header-content">
-        {/* Left Side - Menu & Search */}
-        <div className="header-left">
-          {/* Desktop Sidebar Toggle */}
-          <button 
-            className="sidebar-toggle desktop-only"
-            onClick={onToggleSidebar}
-            title={sidebarCollapsed ? 'הרחב תפריט' : 'כווץ תפריט'}
-          >
-            <Menu size={20} />
-          </button>
+    <header className="header">
+      <div className="container">
+        <div className="header-content">
+          {/* Logo */}
+          <Link to="/" className="logo" onClick={closeMobileMenu}>
+            <div className="logo-circle">ל</div>
+            <div className="logo-text">
+              <h1>ליאה גניש</h1>
+              <p>הבחירה להרגיש טוב</p>
+            </div>
+          </Link>
 
-          {/* Mobile Sidebar Toggle */}
-          <button 
-            className="sidebar-toggle mobile-only"
-            onClick={onToggleMobileSidebar}
-            title="פתח תפריט"
-          >
-            <Menu size={20} />
-          </button>
-
-          {/* Logo & Title */}
-          <div className="admin-logo">
-            <Link to="/admin" className="logo-link">
-              <div className="logo-circle">ל</div>
-              <div className="logo-text">
-                <h1>אזור ניהול</h1>
-                <span>קליניקת לאה גניש</span>
-              </div>
-            </Link>
-          </div>
-        </div>
-
-        {/* Center - Search */}
-        <div className="header-center">
-          <div className={`search-container ${searchOpen ? 'open' : ''}`}>
-            <button 
-              className="search-toggle"
-              onClick={() => setSearchOpen(!searchOpen)}
-            >
-              <Search size={20} />
-            </button>
-            {searchOpen && (
-              <input
-                type="text"
-                placeholder="חיפוש..."
-                className="search-input"
-                autoFocus
-                onBlur={() => setSearchOpen(false)}
-              />
-            )}
-          </div>
-        </div>
-
-        {/* Right Side - Actions & User */}
-        <div className="header-right">
-          {/* Quick Actions */}
-          <div className="quick-actions">
-            <Link to="/" className="action-btn" title="חזרה לאתר">
-              <Home size={20} />
-            </Link>
+          {/* Desktop Navigation */}
+          <nav className="desktop-nav">
+            {navItems.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`nav-btn ${isActivePath(item.path) ? 'active' : ''}`}
+              >
+                {item.label}
+              </Link>
+            ))}
             
-            <button className="action-btn" title="התראות">
-              <Bell size={20} />
-              <span className="notification-badge">3</span>
-            </button>
-            
-            <button className="action-btn" title="הגדרות">
-              <Settings size={20} />
-            </button>
-          </div>
-
-          {/* User Menu */}
-          <div className="user-menu">
-            <button 
-              className="user-menu-trigger"
-              onClick={() => setUserMenuOpen(!userMenuOpen)}
-            >
-              <div className="user-avatar">
-                <User size={20} />
-              </div>
-              <div className="user-info">
-                <span className="user-name">{user?.username}</span>
-                <span className="user-role">מנהלת</span>
-              </div>
-            </button>
-
-            {userMenuOpen && (
-              <div className="user-menu-dropdown">
-                <div className="dropdown-header">
-                  <div className="user-avatar large">
-                    <User size={24} />
-                  </div>
-                  <div>
-                    <div className="user-name">{user?.username}</div>
-                    <div className="user-email">admin@leahgenish.co.il</div>
-                  </div>
-                </div>
-                
-                <div className="dropdown-divider"></div>
-                
-                <div className="dropdown-menu">
-                  <button className="dropdown-item">
-                    <User size={16} />
-                    פרופיל אישי
-                  </button>
-                  <button className="dropdown-item">
-                    <Settings size={16} />
-                    הגדרות חשבון
-                  </button>
-                </div>
-                
-                <div className="dropdown-divider"></div>
-                
-                <button className="dropdown-item logout" onClick={handleLogout}>
+            {isAuthenticated ? (
+              <div className="user-menu">
+                <span className="user-greeting">
+                  שלום {user?.username}
+                </span>
+                <button className="logout-btn" onClick={handleLogout}>
                   <LogOut size={16} />
-                  התנתק
+                  יציאה
                 </button>
               </div>
+            ) : (
+              <Link to="/login" className="login-btn">
+                <User size={16} />
+                כניסה למטפלת
+              </Link>
             )}
-          </div>
+          </nav>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            className="mobile-menu-toggle"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="תפריט ניווט"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
+
+        {/* Mobile Navigation */}
+        {mobileMenuOpen && (
+          <nav className="mobile-nav">
+            {navItems.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`mobile-nav-btn ${isActivePath(item.path) ? 'active' : ''}`}
+                onClick={closeMobileMenu}
+              >
+                {item.label}
+              </Link>
+            ))}
+            
+            {isAuthenticated ? (
+              <div className="mobile-user-menu">
+                <span className="mobile-user-greeting">
+                  שלום {user?.username}
+                </span>
+                <button className="mobile-logout-btn" onClick={handleLogout}>
+                  <LogOut size={16} />
+                  יציאה
+                </button>
+              </div>
+            ) : (
+              <Link to="/login" className="mobile-login-btn" onClick={closeMobileMenu}>
+                <User size={16} />
+                כניסה למטפלת
+              </Link>
+            )}
+          </nav>
+        )}
       </div>
     </header>
   );
 };
 
-export default AdminHeader;
+export default Header;

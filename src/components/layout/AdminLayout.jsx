@@ -1,68 +1,84 @@
-import { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import AdminHeader from '../admin/AdminHeader';
+import { useState, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 import AdminSidebar from '../admin/AdminSidebar';
-import AdminDashboard from '../admin/AdminDashboard';
-import ArticlesManager from '../admin/ArticlesManager';
-import GalleryManager from '../admin/GalleryManager';
-import HealthDeclarations from '../admin/HealthDeclarations';
-import StatsPage from '../admin/StatsPage';
-import SettingsPage from '../admin/SettingsPage';
-import './AdminLayout.css';
+import { Menu } from 'lucide-react';
 
 const AdminLayout = () => {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+  // Close mobile menu when window is resized to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsMobileOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const toggleSidebar = () => {
-    setSidebarCollapsed(!sidebarCollapsed);
+    setIsCollapsed(!isCollapsed);
   };
 
-  const toggleMobileSidebar = () => {
-    setMobileSidebarOpen(!mobileSidebarOpen);
-  };
-
-  const closeMobileSidebar = () => {
-    setMobileSidebarOpen(false);
+  const toggleMobileMenu = () => {
+    setIsMobileOpen(!isMobileOpen);
   };
 
   return (
-    <div className="admin-layout">
-      {/* Admin Header */}
-      <AdminHeader 
-        onToggleSidebar={toggleSidebar}
-        onToggleMobileSidebar={toggleMobileSidebar}
-        sidebarCollapsed={sidebarCollapsed}
-      />
-
-      {/* Mobile Overlay */}
-      {mobileSidebarOpen && (
-        <div 
-          className="mobile-sidebar-overlay"
-          onClick={closeMobileSidebar}
+    <div className="admin-page">
+      <div className="admin-container">
+        {/* Sidebar */}
+        <AdminSidebar 
+          isCollapsed={isCollapsed}
+          setIsCollapsed={setIsCollapsed}
+          isMobileOpen={isMobileOpen}
+          setIsMobileOpen={setIsMobileOpen}
         />
-      )}
 
-      {/* Admin Sidebar */}
-      <AdminSidebar 
-        collapsed={sidebarCollapsed}
-        mobileOpen={mobileSidebarOpen}
-        onClose={closeMobileSidebar}
-      />
+        {/* Main Content */}
+        <main className={`admin-main ${isCollapsed ? 'sidebar-collapsed' : ''}`}>
+          {/* Top Bar with Menu Button */}
+          <div className="admin-top-bar">
+            {/* Desktop Sidebar Toggle */}
+            <button 
+              className="sidebar-toggle-btn desktop-only"
+              onClick={toggleSidebar}
+              title={isCollapsed ? 'הרחב תפריט' : 'כווץ תפריט'}
+            >
+              <Menu size={20} />
+            </button>
 
-      {/* Main Content Area */}
-      <main className={`admin-main ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
-        <div className="admin-content">
-          <Routes>
-            <Route index element={<AdminDashboard />} />
-            <Route path="articles" element={<ArticlesManager />} />
-            <Route path="gallery" element={<GalleryManager />} />
-            <Route path="declarations" element={<HealthDeclarations />} />
-            <Route path="stats" element={<StatsPage />} />
-            <Route path="settings" element={<SettingsPage />} />
-          </Routes>
-        </div>
-      </main>
+            {/* Mobile Menu Toggle */}
+            <button 
+              className="mobile-menu-toggle mobile-only"
+              onClick={toggleMobileMenu}
+              aria-label="פתח תפריט"
+            >
+              <Menu size={24} />
+            </button>
+
+            <div className="page-title">
+              <h1>אזור ניהול</h1>
+            </div>
+          </div>
+
+          {/* Page Content */}
+          <div className="admin-content">
+            <Outlet />
+          </div>
+        </main>
+
+        {/* Mobile Overlay */}
+        {isMobileOpen && (
+          <div 
+            className="mobile-sidebar-overlay"
+            onClick={() => setIsMobileOpen(false)}
+          />
+        )}
+      </div>
     </div>
   );
 };

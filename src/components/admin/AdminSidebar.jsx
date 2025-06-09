@@ -12,9 +12,13 @@ import {
   LogOut
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import './AdminSidebar.css';
 
-const AdminSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOpen }) => {
+const AdminSidebar = ({ 
+  isCollapsed, 
+  setIsCollapsed,
+  isMobileOpen, 
+  setIsMobileOpen 
+}) => {
   const { user, logout } = useAuth();
 
   const menuItems = [
@@ -53,23 +57,25 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOp
 
   const handleLogout = () => {
     logout();
-    setIsMobileOpen(false);
+    if (setIsMobileOpen) {
+      setIsMobileOpen(false);
+    }
   };
 
   const closeMobileMenu = () => {
-    setIsMobileOpen(false);
+    if (setIsMobileOpen) {
+      setIsMobileOpen(false);
+    }
+  };
+
+  const toggleSidebar = () => {
+    if (setIsCollapsed) {
+      setIsCollapsed(!isCollapsed);
+    }
   };
 
   return (
     <>
-      {/* Mobile Overlay */}
-      {isMobileOpen && (
-        <div 
-          className="mobile-sidebar-overlay"
-          onClick={closeMobileMenu}
-        />
-      )}
-
       {/* Sidebar */}
       <aside className={`admin-sidebar ${isCollapsed ? 'collapsed' : ''} ${isMobileOpen ? 'mobile-open' : ''}`}>
         {/* Sidebar Header */}
@@ -79,7 +85,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOp
             {!isCollapsed && (
               <div className="logo-text">
                 <h3>אזור ניהול</h3>
-                <p>קליניקת לאה גניש</p>
+                <p>קליניקת ליאה גניש</p>
               </div>
             )}
           </div>
@@ -87,7 +93,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOp
           {/* Desktop Collapse Toggle */}
           <button 
             className="sidebar-toggle desktop-only"
-            onClick={() => setIsCollapsed(!isCollapsed)}
+            onClick={toggleSidebar}
             aria-label={isCollapsed ? 'הרחב תפריט' : 'כווץ תפריט'}
           >
             <Menu size={20} />
