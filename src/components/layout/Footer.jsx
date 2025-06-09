@@ -21,6 +21,7 @@ const Footer = () => {
     { to: '/about', label: 'אודות לאה' },
     { to: '/services', label: 'טיפולים' },
     { to: '/articles', label: 'מאמרים' },
+    { to: '/declarations', label: 'הצהרת בריאות' },
     { to: '/contact', label: 'יצירת קשר' }
   ];
 
