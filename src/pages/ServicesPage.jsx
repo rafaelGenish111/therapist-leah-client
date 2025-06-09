@@ -101,8 +101,8 @@ const ServicesPage = () => {
     }
   ];
 
-  const filteredServices = selectedCategory === 'all' 
-    ? services 
+  const filteredServices = selectedCategory === 'all'
+    ? services
     : services.filter(service => service.category === selectedCategory);
 
   const cardStyle = {
@@ -146,12 +146,12 @@ const ServicesPage = () => {
   return (
     <div style={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Hero Section */}
-      <section style={{ 
-        textAlign: 'center', 
-        padding: '60px 40px', 
-        background: 'linear-gradient(135deg, #F5E6E3 0%, #F0E0DD 100%)', 
-        borderRadius: '12px', 
-        marginBottom: '40px' 
+      <section style={{
+        textAlign: 'center',
+        padding: '60px 40px',
+        background: 'linear-gradient(135deg, #F5E6E3 0%, #F0E0DD 100%)',
+        borderRadius: '12px',
+        marginBottom: '40px'
       }}>
         <h1 style={{ fontSize: '2.5rem', marginBottom: '16px', color: '#4A3429' }}>
           הטיפולים שלנו
@@ -163,10 +163,10 @@ const ServicesPage = () => {
 
       {/* Category Filter */}
       <section style={{ padding: '40px 0', textAlign: 'center' }}>
-        <div style={{ 
-          display: 'flex', 
-          gap: '8px', 
-          justifyContent: 'center', 
+        <div style={{
+          display: 'flex',
+          gap: '8px',
+          justifyContent: 'center',
           flexWrap: 'wrap',
           padding: '24px',
           background: 'white',
@@ -186,44 +186,44 @@ const ServicesPage = () => {
       </section>
 
       {/* Services Grid */}
-      <section style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', 
-        gap: '32px', 
-        margin: '60px 0' 
+      <section style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+        gap: '32px',
+        margin: '60px 0'
       }}>
         {filteredServices.map((service) => (
           <div key={service.id} style={{
             ...cardStyle,
             ':hover': { transform: 'translateY(-8px)', borderColor: '#D4B5B0' }
           }}>
-            <div style={{ 
-              marginBottom: '24px', 
-              borderBottom: '1px solid #F5E6E3', 
-              paddingBottom: '24px' 
+            <div style={{
+              marginBottom: '24px',
+              borderBottom: '1px solid #F5E6E3',
+              paddingBottom: '24px'
             }}>
-              <div style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'flex-start', 
-                marginBottom: '16px' 
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                marginBottom: '16px'
               }}>
                 <h3 style={{ margin: '0', fontSize: '1.25rem', color: '#4A3429' }}>
                   {service.title}
                 </h3>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ 
-                    fontSize: '1.5rem', 
-                    fontWeight: '700', 
-                    color: '#D4B5B0' 
+                  <div style={{
+                    fontSize: '1.5rem',
+                    fontWeight: '700',
+                    color: '#D4B5B0'
                   }}>
                     {service.price}
                   </div>
-                  <div style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: '4px', 
-                    fontSize: '0.875rem', 
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    fontSize: '0.875rem',
                     color: '#B89C94',
                     background: '#F5E6E3',
                     padding: '4px 8px',
@@ -236,35 +236,35 @@ const ServicesPage = () => {
               </div>
             </div>
 
-            <p style={{ 
-              fontSize: '1rem', 
-              lineHeight: '1.7', 
-              marginBottom: '24px', 
-              color: '#8B6F66' 
+            <p style={{
+              fontSize: '1rem',
+              lineHeight: '1.7',
+              marginBottom: '24px',
+              color: '#8B6F66'
             }}>
               {service.description}
             </p>
 
-            <div style={{ 
+            <div style={{
               marginBottom: '24px',
               padding: '24px',
               background: '#F5E6E3',
               borderRadius: '12px',
               borderRight: '4px solid #D4B5B0'
             }}>
-              <h4 style={{ 
-                fontSize: '1.125rem', 
-                marginBottom: '16px', 
-                color: '#4A3429' 
+              <h4 style={{
+                fontSize: '1.125rem',
+                marginBottom: '16px',
+                color: '#4A3429'
               }}>
                 יתרונות הטיפול
               </h4>
               <ul style={{ listStyle: 'none', padding: '0', margin: '0' }}>
                 {service.benefits.map((benefit, index) => (
-                  <li key={index} style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: '8px', 
+                  <li key={index} style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
                     marginBottom: '8px',
                     fontSize: '0.875rem',
                     color: '#8B6F66'
@@ -276,7 +276,7 @@ const ServicesPage = () => {
               </ul>
             </div>
 
-            <div style={{ 
+            <div style={{
               fontSize: '0.875rem',
               color: '#8B6F66',
               background: '#F5E6E3',
@@ -287,10 +287,10 @@ const ServicesPage = () => {
               <strong style={{ color: '#D4B5B0' }}>מתאים עבור:</strong> {service.suitableFor}
             </div>
 
-            <div style={{ 
-              display: 'flex', 
-              gap: '16px', 
-              justifyContent: 'space-between' 
+            <div style={{
+              display: 'flex',
+              gap: '16px',
+              justifyContent: 'space-between'
             }}>
               <button style={{ ...primaryButtonStyle, flex: '1' }}>
                 <Phone size={16} />
@@ -305,7 +305,7 @@ const ServicesPage = () => {
       </section>
 
       {/* Packages Section */}
-      <section style={{ 
+      <section style={{
         padding: '60px 40px',
         background: 'linear-gradient(135deg, #F5E6E3 0%, white 100%)',
         borderRadius: '16px',
@@ -320,10 +320,10 @@ const ServicesPage = () => {
           </p>
         </div>
 
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-          gap: '32px' 
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '32px'
         }}>
           {packages.map((pkg, index) => (
             <div key={index} style={{
@@ -349,21 +349,21 @@ const ServicesPage = () => {
                 <Star size={16} />
                 חסכון של {pkg.saving}
               </div>
-              
+
               <h3 style={{ margin: '40px 0 16px 0', color: '#4A3429' }}>
                 {pkg.title}
               </h3>
               <p style={{ color: '#8B6F66', marginBottom: '24px' }}>
                 {pkg.description}
               </p>
-              
-              <div style={{ 
+
+              <div style={{
                 margin: '24px 0',
                 padding: '24px',
                 background: '#F5E6E3',
                 borderRadius: '12px'
               }}>
-                <span style={{ 
+                <span style={{
                   textDecoration: 'line-through',
                   color: '#B89C94',
                   fontSize: '1.125rem',
@@ -372,7 +372,7 @@ const ServicesPage = () => {
                 }}>
                   {pkg.originalPrice}
                 </span>
-                <span style={{ 
+                <span style={{
                   fontSize: '1.875rem',
                   fontWeight: '700',
                   color: '#D4B5B0',
@@ -381,15 +381,15 @@ const ServicesPage = () => {
                   {pkg.discountPrice}
                 </span>
               </div>
-              
-              <div style={{ 
+
+              <div style={{
                 marginBottom: '24px',
                 fontSize: '0.875rem',
                 color: '#8B6F66'
               }}>
                 תוקף: {pkg.validity}
               </div>
-              
+
               <button style={{
                 ...primaryButtonStyle,
                 width: '100%',
@@ -406,11 +406,11 @@ const ServicesPage = () => {
       {/* FAQ Section */}
       <section style={{ padding: '60px 0' }}>
         <div style={{ ...cardStyle, maxWidth: '800px', margin: '0 auto' }}>
-          <h2 style={{ 
-            textAlign: 'center', 
-            marginBottom: '32px', 
-            color: '#4A3429', 
-            fontSize: '1.875rem' 
+          <h2 style={{
+            textAlign: 'center',
+            marginBottom: '32px',
+            color: '#4A3429',
+            fontSize: '1.875rem'
           }}>
             שאלות נפוצות
           </h2>
@@ -422,17 +422,17 @@ const ServicesPage = () => {
                 borderRadius: '12px',
                 background: 'white'
               }}>
-                <h4 style={{ 
-                  color: '#4A3429', 
-                  marginBottom: '16px', 
-                  fontSize: '1.125rem' 
+                <h4 style={{
+                  color: '#4A3429',
+                  marginBottom: '16px',
+                  fontSize: '1.125rem'
                 }}>
                   {item.question}
                 </h4>
-                <p style={{ 
-                  color: '#8B6F66', 
-                  margin: '0', 
-                  lineHeight: '1.7' 
+                <p style={{
+                  color: '#8B6F66',
+                  margin: '0',
+                  lineHeight: '1.7'
                 }}>
                   {item.answer}
                 </p>
@@ -453,18 +453,18 @@ const ServicesPage = () => {
           <h2 style={{ color: 'white', marginBottom: '16px', fontSize: '1.875rem' }}>
             מוכנים לקבוע טיפול?
           </h2>
-          <p style={{ 
-            color: 'rgba(255, 255, 255, 0.9)', 
-            marginBottom: '32px', 
-            fontSize: '1.125rem' 
+          <p style={{
+            color: 'rgba(255, 255, 255, 0.9)',
+            marginBottom: '32px',
+            fontSize: '1.125rem'
           }}>
             צרו קשר עוד היום ונתחיל את המסע שלכם לרווחה מיטבית
           </p>
-          <div style={{ 
-            display: 'flex', 
-            gap: '24px', 
-            justifyContent: 'center', 
-            flexWrap: 'wrap' 
+          <div style={{
+            display: 'flex',
+            gap: '24px',
+            justifyContent: 'center',
+            flexWrap: 'wrap'
           }}>
             <button style={{
               ...buttonStyle,
@@ -475,7 +475,7 @@ const ServicesPage = () => {
               minWidth: '180px'
             }}>
               <Phone size={20} />
-              050-123-4567
+              054-9414947
             </button>
             <button style={{
               ...buttonStyle,

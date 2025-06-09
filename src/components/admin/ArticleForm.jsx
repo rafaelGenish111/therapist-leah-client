@@ -13,7 +13,7 @@ const ArticleForm = ({ article, onClose, onSave }) => {
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const queryClient = useQueryClient();
 
   const {
@@ -39,13 +39,13 @@ const ArticleForm = ({ article, onClose, onSave }) => {
         content: article.content,
         isPublished: article.isPublished,
       });
-      
+
       if (article.tags) {
         setTags(article.tags);
       }
-      
+
       if (article.image) {
-        setImagePreview(`${process.env.VITE_API_URL}/uploads/${article.image}`);
+        setImagePreview(`${import.meta.env.VITE_API_URL}/uploads/${article.image}`);
       }
     }
   }, [article, reset]);
@@ -78,7 +78,7 @@ const ArticleForm = ({ article, onClose, onSave }) => {
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
-    
+
     try {
       const formData = new FormData();
       formData.append('title', data.title);
@@ -316,7 +316,7 @@ const ArticleForm = ({ article, onClose, onSave }) => {
               >
                 ביטול
               </Button>
-              
+
               <Button
                 type="button"
                 variant="ghost"
@@ -325,7 +325,7 @@ const ArticleForm = ({ article, onClose, onSave }) => {
                 <Eye size={16} />
                 תצוגה מקדימה
               </Button>
-              
+
               <Button
                 type="submit"
                 variant="primary"

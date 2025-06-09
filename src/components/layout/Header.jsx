@@ -42,9 +42,9 @@ const Header = () => {
         <div className="header-content">
           {/* Logo */}
           <Link to="/" className="logo" onClick={closeMobileMenu}>
-            <div className="logo-circle">ל</div>
+            <img className='logo-circle' src="../../../public/images/favicon.ico" alt="" />
             <div className="logo-text">
-              <h1>ליאה גניש</h1>
+              <h1>לאה גניש</h1>
               <p>הבחירה להרגיש טוב</p>
             </div>
           </Link>

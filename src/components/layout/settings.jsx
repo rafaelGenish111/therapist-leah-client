@@ -29,8 +29,8 @@ const Settings = () => {
 
     // Contact Settings
     contactEmail: 'info@leahgenish.co.il',
-    contactPhone: '050-123-4567',
-    whatsappNumber: '050-123-4567',
+    contactPhone: '054-9414947',
+    whatsappNumber: '054-9414947',
     address: 'רחוב הרצל 123, תל אביב',
     workingHours: {
       sunday: { open: '09:00', close: '20:00', enabled: true },
@@ -254,7 +254,7 @@ const Settings = () => {
             type="tel"
             value={settings.contactPhone}
             onChange={(e) => setSettings({ ...settings, contactPhone: e.target.value })}
-            placeholder="050-123-4567"
+            placeholder="054-9414947"
           />
         </div>
       </div>
@@ -266,7 +266,7 @@ const Settings = () => {
             type="tel"
             value={settings.whatsappNumber}
             onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })}
-            placeholder="050-123-4567"
+            placeholder="054-9414947"
           />
         </div>
 

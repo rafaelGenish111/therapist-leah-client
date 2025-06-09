@@ -9,8 +9,8 @@ const Footer = () => {
     {
       icon: <Phone size={18} />,
       label: 'טלפון',
-      value: '050-123-4567',
-      link: 'tel:050-123-4567'
+      value: '054-9414947',
+      link: 'tel:054-9414947'
     },
     {
       icon: <Mail size={18} />,

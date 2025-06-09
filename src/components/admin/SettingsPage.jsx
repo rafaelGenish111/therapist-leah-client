@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { 
-  User, 
-  Lock, 
-  Bell, 
-  Globe, 
-  Database, 
+import {
+  User,
+  Lock,
+  Bell,
+  Globe,
+  Database,
   Shield,
   Save,
   Upload,
@@ -28,7 +28,7 @@ const SettingsPage = () => {
   const [activeTab, setActiveTab] = useState('profile');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const {
     register,
     handleSubmit,
@@ -39,7 +39,7 @@ const SettingsPage = () => {
     defaultValues: {
       username: user?.username || '',
       email: 'admin@leahgenish.co.il',
-      phone: '050-123-4567',
+      phone: '054-9414947',
       notifications: {
         email: true,
         browser: true,
@@ -80,7 +80,7 @@ const SettingsPage = () => {
     try {
       // Mock backup creation
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       // Create a mock backup file
       const backupData = {
         date: new Date().toISOString(),
@@ -90,7 +90,7 @@ const SettingsPage = () => {
         declarations: 'backed up',
         settings: 'backed up'
       };
-      
+
       const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -100,7 +100,7 @@ const SettingsPage = () => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      
+
       toast.success('הגיבוי נוצר בהצלחה');
     } catch (error) {
       toast.error('שגיאה ביצירת הגיבוי');
@@ -141,7 +141,7 @@ const SettingsPage = () => {
                 <input
                   type="email"
                   id="email"
-                  {...register('email', { 
+                  {...register('email', {
                     required: 'אימייל נדרש',
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -200,7 +200,7 @@ const SettingsPage = () => {
         return (
           <div className="tab-content">
             <h3>אבטחה וסיסמה</h3>
-            
+
             <Card className="security-status">
               <div className="status-header">
                 <Shield size={24} />
@@ -258,7 +258,7 @@ const SettingsPage = () => {
                   type="password"
                   id="confirmPassword"
                   {...register('confirmPassword', {
-                    validate: value => 
+                    validate: value =>
                       value === watch('newPassword') || 'הסיסמאות אינן תואמות'
                   })}
                   className={errors.confirmPassword ? 'error' : ''}
@@ -285,7 +285,7 @@ const SettingsPage = () => {
         return (
           <div className="tab-content">
             <h3>הגדרות התראות</h3>
-            
+
             <div className="notifications-section">
               <h4>התראות אימייל</h4>
               <div className="toggle-group">
@@ -338,7 +338,7 @@ const SettingsPage = () => {
         return (
           <div className="tab-content">
             <h3>הגדרות כלליות</h3>
-            
+
             <div className="form-grid">
               <div className="form-group">
                 <label htmlFor="language">שפה</label>
@@ -382,7 +382,7 @@ const SettingsPage = () => {
         return (
           <div className="tab-content">
             <h3>גיבויים ושחזור</h3>
-            
+
             <Card className="backup-status">
               <div className="backup-info">
                 <Database size={24} />
@@ -400,8 +400,8 @@ const SettingsPage = () => {
               <div className="action-group">
                 <h4>יצירת גיבוי</h4>
                 <p>צור גיבוי מלא של כל הנתונים</p>
-                <Button 
-                  variant="primary" 
+                <Button
+                  variant="primary"
                   onClick={handleBackup}
                   disabled={isLoading}
                 >
@@ -439,24 +439,24 @@ const SettingsPage = () => {
         return (
           <div className="tab-content">
             <h3>מידע מערכת</h3>
-            
+
             <div className="system-info">
               <div className="info-grid">
                 <div className="info-item">
                   <h4>גירסת מערכת</h4>
                   <p>1.0.0</p>
                 </div>
-                
+
                 <div className="info-item">
                   <h4>סביבה</h4>
                   <p>ייצור</p>
                 </div>
-                
+
                 <div className="info-item">
                   <h4>עדכון אחרון</h4>
                   <p>15/05/2024</p>
                 </div>
-                
+
                 <div className="info-item">
                   <h4>מקום אחסון</h4>
                   <p>75% בשימוש</p>
@@ -470,19 +470,19 @@ const SettingsPage = () => {
                 אזור מסוכן
               </h4>
               <p>פעולות אלו עלולות להשפיע על פעולת המערכת</p>
-              
+
               <div className="danger-actions">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={handleResetSettings}
                   className="danger-btn"
                 >
                   <Trash2 size={16} />
                   אפס הגדרות
                 </Button>
-                
-                <Button 
-                  variant="outline" 
+
+                <Button
+                  variant="outline"
                   className="danger-btn"
                   onClick={() => {
                     if (window.confirm('האם אתה בטוח? פעולה זו תמחק את כל הנתונים!')) {
@@ -530,12 +530,12 @@ const SettingsPage = () => {
           <Card className="content-card">
             <form onSubmit={handleSubmit(onSubmit)}>
               {renderTabContent()}
-              
+
               {activeTab !== 'system' && activeTab !== 'backup' && (
                 <div className="form-actions">
-                  <Button 
-                    type="submit" 
-                    variant="primary" 
+                  <Button
+                    type="submit"
+                    variant="primary"
                     disabled={isLoading}
                   >
                     {isLoading ? (
@@ -550,9 +550,9 @@ const SettingsPage = () => {
                       </>
                     )}
                   </Button>
-                  
-                  <Button 
-                    type="button" 
+
+                  <Button
+                    type="button"
                     variant="outline"
                     onClick={() => reset()}
                   >

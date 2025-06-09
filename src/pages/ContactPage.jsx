@@ -28,7 +28,7 @@ const ContactPage = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.firstName.trim()) newErrors.firstName = 'שם פרטי נדרש';
     if (!formData.lastName.trim()) newErrors.lastName = 'שם משפחה נדרש';
     if (!formData.email.trim()) {
@@ -38,28 +38,28 @@ const ContactPage = () => {
     }
     if (!formData.message.trim()) newErrors.message = 'הודעה נדרשת';
     if (!formData.consent) newErrors.consent = 'יש לאשר את תנאי השימוש';
-    
+
     return newErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validateForm();
-    
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
 
     setIsSubmitting(true);
-    
+
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       console.log('Form data:', formData);
       setIsSubmitted(true);
-      
+
       // Reset form
       setFormData({
         firstName: '',
@@ -70,7 +70,7 @@ const ContactPage = () => {
         message: '',
         consent: false
       });
-      
+
       // Reset success state after 5 seconds
       setTimeout(() => setIsSubmitted(false), 5000);
     } catch (error) {
@@ -84,7 +84,7 @@ const ContactPage = () => {
     {
       icon: '📞',
       title: 'טלפון',
-      details: ['050-123-4567', '03-123-4567'],
+      details: ['054-9414947', '03-123-4567'],
       link: 'tel:0501234567'
     },
     {
@@ -161,10 +161,10 @@ const ContactPage = () => {
   return (
     <div style={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Page Header */}
-      <div style={{ 
-        textAlign: 'center', 
-        padding: '40px 20px', 
-        background: '#F5E6E3', 
+      <div style={{
+        textAlign: 'center',
+        padding: '40px 20px',
+        background: '#F5E6E3',
         borderRadius: '12px',
         marginBottom: '40px'
       }}>
@@ -208,7 +208,7 @@ const ContactPage = () => {
             <h2 style={{ textAlign: 'center', marginBottom: '32px', color: '#4A3429' }}>
               שלחו לנו הודעה
             </h2>
-            
+
             {isSubmitted ? (
               <div style={{ textAlign: 'center', padding: '40px' }}>
                 <div style={{ fontSize: '3rem', marginBottom: '16px' }}>✅</div>
@@ -241,7 +241,7 @@ const ContactPage = () => {
                       </span>
                     )}
                   </div>
-                  
+
                   <div>
                     <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#8B6F66' }}>
                       שם משפחה *
@@ -282,7 +282,7 @@ const ContactPage = () => {
                       </span>
                     )}
                   </div>
-                  
+
                   <div>
                     <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#8B6F66' }}>
                       טלפון
@@ -292,7 +292,7 @@ const ContactPage = () => {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      placeholder="050-123-4567"
+                      placeholder="054-9414947"
                       style={inputStyle}
                     />
                   </div>
@@ -340,10 +340,10 @@ const ContactPage = () => {
 
                 {/* Consent */}
                 <div style={{ marginBottom: '24px' }}>
-                  <label style={{ 
-                    display: 'flex', 
-                    alignItems: 'flex-start', 
-                    gap: '8px', 
+                  <label style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '8px',
                     cursor: 'pointer',
                     fontSize: '14px',
                     lineHeight: '1.4'
@@ -398,8 +398,8 @@ const ContactPage = () => {
                         {info.details.map((detail, idx) => (
                           <div key={idx} style={{ fontSize: '14px', color: '#8B6F66' }}>
                             {info.link && idx === 0 ? (
-                              <a 
-                                href={info.link} 
+                              <a
+                                href={info.link}
                                 style={{ color: '#D4B5B0', textDecoration: 'none', fontWeight: '500' }}
                               >
                                 {detail}
@@ -423,8 +423,8 @@ const ContactPage = () => {
               <h2 style={{ marginBottom: '20px', color: '#4A3429' }}>שעות פעילות</h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {workingHours.map((day, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     style={{
                       display: 'flex',
                       justifyContent: 'space-between',
@@ -440,10 +440,10 @@ const ContactPage = () => {
                   </div>
                 ))}
               </div>
-              <div style={{ 
-                marginTop: '16px', 
-                padding: '12px', 
-                background: '#F5E6E3', 
+              <div style={{
+                marginTop: '16px',
+                padding: '12px',
+                background: '#F5E6E3',
                 borderRadius: '8px',
                 fontSize: '14px',
                 color: '#8B6F66'
@@ -492,7 +492,7 @@ const ContactPage = () => {
             }}>
               <div style={{ fontSize: '3rem' }}>🗺️</div>
               <p>מפה תוטמע כאן</p>
-              <button 
+              <button
                 style={{
                   background: 'transparent',
                   color: '#D4B5B0',
@@ -506,34 +506,34 @@ const ContactPage = () => {
                 פתח במפות גוגל
               </button>
             </div>
-            
+
             <div>
               <h3 style={{ marginBottom: '16px', color: '#4A3429' }}>הגעה לקליניקה</h3>
               <div style={{ display: 'grid', gap: '12px' }}>
-                <div style={{ 
-                  padding: '12px', 
-                  background: '#F5E6E3', 
-                  borderRadius: '8px' 
+                <div style={{
+                  padding: '12px',
+                  background: '#F5E6E3',
+                  borderRadius: '8px'
                 }}>
                   <strong style={{ color: '#4A3429' }}>תחבורה ציבורית:</strong>
                   <p style={{ fontSize: '14px', color: '#8B6F66', margin: '4px 0 0 0' }}>
                     אוטובוסים: 4, 18, 61, 142 - עצירה: הרצל/אלנבי
                   </p>
                 </div>
-                <div style={{ 
-                  padding: '12px', 
-                  background: '#F5E6E3', 
-                  borderRadius: '8px' 
+                <div style={{
+                  padding: '12px',
+                  background: '#F5E6E3',
+                  borderRadius: '8px'
                 }}>
                   <strong style={{ color: '#4A3429' }}>חניה:</strong>
                   <p style={{ fontSize: '14px', color: '#8B6F66', margin: '4px 0 0 0' }}>
                     חניון תשלום ברחוב הרצל, חניה ברחובות הסמוכים
                   </p>
                 </div>
-                <div style={{ 
-                  padding: '12px', 
-                  background: '#F5E6E3', 
-                  borderRadius: '8px' 
+                <div style={{
+                  padding: '12px',
+                  background: '#F5E6E3',
+                  borderRadius: '8px'
                 }}>
                   <strong style={{ color: '#4A3429' }}>נגישות:</strong>
                   <p style={{ fontSize: '14px', color: '#8B6F66', margin: '4px 0 0 0' }}>

@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { 
-  Save, 
-  RefreshCw, 
-  Shield, 
-  Bell, 
-  Globe, 
-  Mail, 
-  Phone, 
+import {
+  Save,
+  RefreshCw,
+  Shield,
+  Bell,
+  Globe,
+  Mail,
+  Phone,
   MapPin,
   Upload,
   Trash2,
@@ -34,13 +34,13 @@ const AdminSettings = () => {
       siteDescription: 'הבחירה להרגיש טוב - טיפולי עיסוי מקצועיים ורפואה משלימה',
       siteKeywords: 'עיסוי, טיפול, קליניקה, לאה גניש, תל אביב, רפואה משלימה',
       contactEmail: 'info@leahgenish.co.il',
-      contactPhone: '050-123-4567',
+      contactPhone: '054-9414947',
       address: 'רחוב הרצל 123, תל אביב-יפו',
       workingHours: 'ראשון-רביעי: 9:00-20:00, חמישי: 9:00-16:00',
       googleMapsUrl: '',
       facebookUrl: '',
       instagramUrl: '',
-      whatsappNumber: '050-123-4567'
+      whatsappNumber: '054-9414947'
     }
   });
 
@@ -112,7 +112,7 @@ const AdminSettings = () => {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       toast.success(`הגדרות ${formType} נשמרו בהצלחה!`);
       console.log(`${formType} settings:`, data);
     } catch (error) {
@@ -168,7 +168,7 @@ const AdminSettings = () => {
     <form onSubmit={siteForm.handleSubmit((data) => handleSaveSettings(data, 'כלליות'))}>
       <div className="form-section">
         <h3>פרטי האתר</h3>
-        
+
         <div className="form-group">
           <label>שם האתר</label>
           <input
@@ -200,7 +200,7 @@ const AdminSettings = () => {
 
       <div className="form-section">
         <h3>פרטי יצירת קשר</h3>
-        
+
         <div className="form-row">
           <div className="form-group">
             <label>אימייל</label>
@@ -208,7 +208,7 @@ const AdminSettings = () => {
               <Mail size={16} />
               <input
                 type="email"
-                {...siteForm.register('contactEmail', { 
+                {...siteForm.register('contactEmail', {
                   required: 'אימייל נדרש',
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -230,7 +230,7 @@ const AdminSettings = () => {
               <input
                 type="tel"
                 {...siteForm.register('contactPhone', { required: 'מספר טלפון נדרש' })}
-                placeholder="050-123-4567"
+                placeholder="054-9414947"
               />
             </div>
             {siteForm.formState.errors.contactPhone && (
@@ -261,7 +261,7 @@ const AdminSettings = () => {
 
       <div className="form-section">
         <h3>קישורים חיצוניים</h3>
-        
+
         <div className="form-group">
           <label>קישור למפות גוגל</label>
           <input
@@ -292,7 +292,7 @@ const AdminSettings = () => {
           <label>מספר וואטסאפ</label>
           <input
             {...siteForm.register('whatsappNumber')}
-            placeholder="050-123-4567"
+            placeholder="054-9414947"
           />
         </div>
       </div>
@@ -314,7 +314,7 @@ const AdminSettings = () => {
     <form onSubmit={notificationForm.handleSubmit((data) => handleSaveSettings(data, 'התראות'))}>
       <div className="form-section">
         <h3>התראות אימייל</h3>
-        
+
         <div className="form-group">
           <label>כתובת אימייל להתראות</label>
           <div className="input-with-icon">
@@ -368,7 +368,7 @@ const AdminSettings = () => {
 
       <div className="form-section">
         <h3>דוחות תקופתיים</h3>
-        
+
         <div className="checkbox-group">
           <label className="checkbox-label">
             <input
@@ -405,7 +405,7 @@ const AdminSettings = () => {
       <form onSubmit={securityForm.handleSubmit(handlePasswordChange)}>
         <div className="form-section">
           <h3>שינוי סיסמה</h3>
-          
+
           <div className="form-group">
             <label>סיסמה נוכחית</label>
             <div className="input-with-icon">
@@ -430,7 +430,7 @@ const AdminSettings = () => {
               <label>סיסמה חדשה</label>
               <input
                 type="password"
-                {...securityForm.register('newPassword', { 
+                {...securityForm.register('newPassword', {
                   required: 'סיסמה חדשה נדרשת',
                   minLength: {
                     value: 6,
@@ -465,7 +465,7 @@ const AdminSettings = () => {
       <form onSubmit={securityForm.handleSubmit((data) => handleSaveSettings(data, 'אבטחה'))}>
         <div className="form-section">
           <h3>הגדרות אבטחה</h3>
-          
+
           <div className="form-row">
             <div className="form-group">
               <label>זמן פקיעת הפעלה (שעות)</label>
@@ -522,7 +522,7 @@ const AdminSettings = () => {
     <form onSubmit={systemForm.handleSubmit((data) => handleSaveSettings(data, 'מערכת'))}>
       <div className="form-section">
         <h3>הגדרות תוכן</h3>
-        
+
         <div className="checkbox-group">
           <label className="checkbox-label">
             <input
@@ -555,7 +555,7 @@ const AdminSettings = () => {
 
       <div className="form-section">
         <h3>הגדרות מערכת</h3>
-        
+
         <div className="form-group">
           <label>גודל מקסימלי להעלאה (MB)</label>
           <select {...systemForm.register('maxUploadSize')}>
@@ -591,7 +591,7 @@ const AdminSettings = () => {
 
       <div className="form-section">
         <h3>מצבי מערכת</h3>
-        
+
         <div className="checkbox-group">
           <label className="checkbox-label">
             <input
