@@ -33,6 +33,7 @@ const Header = () => {
     { path: '/about', label: 'אודות' },
     { path: '/services', label: 'טיפולים' },
     { path: '/articles', label: 'מאמרים' },
+    { path: '/gallery', label: 'גלריה' },
     { path: '/contact', label: 'יצירת קשר' },
   ];
 

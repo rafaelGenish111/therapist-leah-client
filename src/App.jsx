@@ -10,6 +10,7 @@ import ServicesPage from './pages/ServicesPage';
 import ArticlesPage from './pages/ArticlesPage';
 import ContactPage from './pages/ContactPage';
 import HealthDeclarationPage from './pages/HealthDeclarationPage';
+import GalleryPage from './pages/GalleryPage';
 import LoginPage from './pages/LoginPage';
 
 // Admin Components
@@ -113,6 +114,15 @@ function App() {
                   <Header />
                   <main className="main-content">
                     <HealthDeclarationPage />
+                  </main>
+                  <Footer />
+                </>
+              } />
+              <Route path="/gallery" element={
+                <>
+                  <Header />
+                  <main className="main-content">
+                    <GalleryPage />
                   </main>
                   <Footer />
                 </>
